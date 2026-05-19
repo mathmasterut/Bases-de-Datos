@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecosistema de Aprendizaje: Bases de Datos</title>
+    <style>
+        /* CONFIGURACIÓN Y COLORES CORE */
+        :root {
+            --primary: #2c3e50;
+            --secondary: #16a085;
+            --accent: #9b59b6;
+            --bg: #f4f7f6;
+            --text: #34495e;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--bg);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* JUMBOTRON / ENCABEZADO */
+        header {
+            background: linear-gradient(135deg, #2c3e50 0%, #117a65 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            margin: 10px 0 0 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* TITULARES DE LAS UNIDADES */
+        .unidad-titulo {
+            font-size: 1.8rem;
+            color: var(--primary);
+            border-bottom: 4px solid var(--secondary);
+            padding-bottom: 8px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .unidad-badge {
+            background-color: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            font-size: 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .unidad-titulo.u2 .unidad-badge {
+            background-color: var(--accent);
+        }
+        .unidad-titulo.u2 {
+            border-bottom-color: var(--accent);
+        }
+
+        /* DISEÑO DE REJILLA (GRID SYSTEM) */
+        .temas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        /* TARJETAS DE CONTENIDO (CARDS) */
+        .tema-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-left: 5px solid var(--secondary);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .u2-card {
+            border-left-color: var(--accent);
+        }
+
+        .tema-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .tema-meta {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .tema-name {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin: 0 0 10px 0;
+            font-weight: 700;
+        }
+
+        .tema-desc {
+            font-size: 0.95rem;
+            color: #5d6d7e;
+            margin: 0 0 20px 0;
+        }
+
+        /* BOTONES E INTERACCIONES */
+        .links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .btn-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: #ebf5fb;
+            color: #2980b9;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+
+        .btn-link:hover {
+            background-color: #2980b9;
+            color: white;
+        }
+
+        .btn-saber {
+            background-color: #e8f8f5;
+            color: #117a65;
+        }
+
+        .btn-saber:hover {
+            background-color: #117a65;
+            color: white;
+        }
+
+        .u2-card .btn-saber {
+            background-color: #f5eef8;
+            color: #8e44ad;
+        }
+
+        .u2-card .btn-saber:hover {
+            background-color: #8e44ad;
+            color: white;
+        }
+
+        .badge-tipo {
+            font-size: 0.75rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: rgba(0,0,0,0.05);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 25px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            background-color: #eaeded;
+            border-top: 1px solid #d5dbdb;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Consola de Aprendizaje Estudiantil</h1>
+        <p>Estructura Curricular y Módulos de Evaluación Continua Interactiva</p>
+    </header>
+
+    <div class="main-container">
+
+        <div class="unidad-titulo">
+            <span class="unidad-badge">UNIDAD I</span>
+            <span>Fundamentos de Bases de Datos</span>
+        </div>
+
+        <div class="temas-grid">
+            <div class="tema-card">
+                <div>
+                    <div class="tema-meta">Conceptos Teóricos</div>
+                    <h3 class="tema-name">1. Introducción y Características</h3>
+                    <p class="tema-desc">Estudio integral del concepto de base de datos, redundancia, consistencia y ventajas sobre sistemas de archivos.</p>
+                </div>
+                <div class="links-container">
+                    <a href="fundamentos.html" class="btn-link">
+                        <span>📖 Contenido y Diagnóstico</span>
+                        <span class="badge-tipo">HTML</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="tema-card">
+                <div>
+                    <div class="tema-meta">Arquitectura de Componentes</div>
+                    <h3 class="tema-name">2. Componentes del Sistema</h3>
+                    <p class="tema-desc">Análisis del Hardware, Software, Procedimientos y el espectro de Datos Dinámicos, Estáticos y Metadatos.</p>
+                </div>
+                <div class="links-container">
+                    <a href="componentes_bd.html" class="btn-link">
+                        <span>📖 Contenido y Flujos</span>
+                        <span class="badge-tipo">HTML</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="unidad-titulo u2">
+            <span class="unidad-badge">UNIDAD II</span>
+            <span>Modelado de Bases de Datos</span>
+        </div>
+
+        <div class="temas-grid">
+            <div class="tema-card u2-card">
+                <div>
+                    <div class="tema-meta">Paradigma Relacional</div>
+                    <h3 class="tema-name">1. Bases de Datos Relacionales</h3>
+                    <p class="tema-desc">Principios teóricos del modelo relacional, tablas, tuplas, atributos y propiedades fundamentales.</p>
+                </div>
+                <div class="links-container">
+                    <a href="1bd_relacionales.html" class="btn-link">
+                        <span>📖 Estudio del Modelo</span>
+                        <span class="badge-tipo">HTML</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="tema-card u2-card">
+                <div>
+                    <div class="tema-meta">Diseño Conceptual</div>
+                    <h3 class="tema-name">2. Modelo Entidad-Relación</h3>
+                    <p class="tema-desc">Abstracción de diagramas comerciales y modelado gráfico de entidades, atributos y relaciones.</p>
+                </div>
+                <div class="links-container">
+                    <a href="2modelo_er.html" class="btn-link">
+                        <span>📖 Teoría E-R</span>
+                        <span class="badge-tipo">HTML</span>
+                    </a>
+                    <a href="2.1saber_er.html" class="btn-link btn-saber">
+                        <span>⚡ Saber Hacer: Práctica Principal</span>
+                        <span class="badge-tipo">Interactiva</span>
+                    </a>
+                    <a href="2.1saber_er_copia.html" class="btn-link btn-saber" style="opacity: 0.8;">
+                        <span>⚡ Práctica: Variante A (Copia)</span>
+                        <span class="badge-tipo">Interactiva</span>
+                    </a>
+                    <a href="2.1saber_er_copia_copia.html" class="btn-link btn-saber" style="opacity: 0.6;">
+                        <span>⚡ Práctica: Variante B (Refuerzo)</span>
+                        <span class="badge-tipo">Interactiva</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="tema-card u2-card">
+                <div>
+                    <div class="tema-meta">Mapeo Físico</div>
+                    <h3 class="tema-name">3. Transformación Relacional</h3>
+                    <p class="tema-desc">Reglas para convertir diagramas conceptuales a tablas relacionales físicas y migración de llaves primarias y foráneas.</p>
+                </div>
+                <div class="links-container">
+                    <a href="3modelo_relacional.html" class="btn-link">
+                        <span>📖 Teoría de Mapeo</span>
+                        <span class="badge-tipo">HTML</span>
+                    </a>
+                    <a href="3.1_saber_modelo_relacional.html" class="btn-link btn-saber">
+                        <span>⚡ Saber Hacer: Romper N:M y Llaves</span>
+                        <span class="badge-tipo">Interactiva</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="tema-card u2-card">
+                <div>
+                    <div class="tema-meta">Diccionario Estándar</div>
+                    <h3 class="tema-name">4. Simbología Técnica</h3>
+                    <p class="tema-desc">Compendio completo de notaciones para modelado de datos conceptuales, lógicos y físicos.</p>
+                </div>
+                <div class="links-container">
+                    <a href="4simbologia.html" class="btn-link">
+                        <span>📖 Consultar Catálogo gráfico</span>
+                        <span class="badge-tipo">HTML</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="tema-card u2-card">
+                <div>
+                    <div class="tema-meta">Casos de Estudio</div>
+                    <h3 class="tema-name">5. Compendio General</h3>
+                    <p class="tema-desc">Integración y lectura de problemáticas complejas de negocio resueltas de inicio a fin.</p>
+                </div>
+                <div class="links-container">
+                    <a href="5compendio.html" class="btn-link">
+                        <span>📖 Consultar Repositorio</span>
+                        <span class="badge-tipo">HTML</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="tema-card u2-card">
+                <div>
+                    <div class="tema-meta">Nuevos Paradigmas</div>
+                    <h3 class="tema-name">6. Bases de Datos No Relacionales</h3>
+                    <p class="tema-desc">Introducción a ecosistemas NoSQL: Almacenamiento orientado a documentos, clave-valor y grafos.</p>
+                </div>
+                <div class="links-container">
+                    <a href="6bd_no_relacionales.html" class="btn-link">
+                        <span>📖 Explorar Tecnologías NoSQL</span>
+                        <span class="badge-tipo">HTML</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="tema-card u2-card">
+                <div>
+                    <div class="tema-meta">Metadatos Corporativos</div>
+                    <h3 class="tema-name">7. Diccionarios de Datos</h3>
+                    <p class="tema-desc">Documentación precisa de campos, tipos de datos óptimos (CHAR vs VARCHAR), longitudes y restricciones lógicas.</p>
+                </div>
+                <div class="links-container">
+                    <a href="7diccionario_datos.html" class="btn-link">
+                        <span>📖 Teoría de Metadatos</span>
+                        <span class="badge-tipo">HTML</span>
+                    </a>
+                    <a href="7.1_saber_diccionario_datos.html" class="btn-link btn-saber">
+                        <span>⚡ Saber Hacer: Documentar Tablas</span>
+                        <span class="badge-tipo">Interactiva</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>© 2026 - Sistema de Control y Seguimiento Académico | Módulos Interactivos de Bases de Datos - Prohibida su reproducción con fines comerciales.</p>
+    </footer>
+
+</body>
+</html>

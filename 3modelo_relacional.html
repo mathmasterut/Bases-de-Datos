@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tema: Modelo Relacional y Transformación Lógica</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f7f6;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        h1 { margin: 0; font-size: 24px; }
+        h2 { color: #2c3e50; border-bottom: 2px solid #e67e22; padding-bottom: 5px; margin-top: 35px; }
+        h3 { color: #d35400; margin-bottom: 10px; }
+        .intro { background-color: #fdf2e9; padding: 15px; border-left: 5px solid #e67e22; border-radius: 4px; margin-bottom: 30px; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .step-block { background-color: #fff; border-left: 4px solid #3498db; padding: 15px; margin-bottom: 15px; border-radius: 0 8px 8px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .step-title { font-weight: bold; color: #2980b9; font-size: 16px; margin-bottom: 5px; }
+        .formula { font-family: 'Courier New', Courier, monospace; background-color: #eaeded; padding: 4px 8px; border-radius: 4px; font-weight: bold; }
+        .example-box { background-color: #f9f9f9; border-left: 3px solid #2ecc71; padding: 10px; margin-top: 8px; font-style: italic; }
+        footer { text-align: center; margin-top: 40px; color: #7f8c8d; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Tema 3: Modelo Relacional y Proceso de Transformación</h1>
+        <p>Paso del Modelo Conceptual (MER) al Modelo Lógico (Tablas)</p>
+    </header>
+
+    <div class="intro">
+        <p><strong>¿Qué aprenderemos aquí?</strong> Diseñar un Diagrama Entidad-Relación (conceptual) es solo la mitad del trabajo. Para construir la base de datos real, debemos aplicar un conjunto de reglas matemáticas y lógicas para transformar esos diagramas en un <strong>Modelo Relacional (lógico)</strong> estándar, garantizando que no se pierda información ni consistencia en el proceso.</p>
+    </div>
+
+    <h2>1. Características y Restricciones del Modelo Relacional</h2>
+    <p>A diferencia del modelo conceptual, el modelo relacional es mucho más estricto. Toda tabla (relación) legítima debe cumplir con las siguientes reglas estructurales:</p>
+    
+    <div class="card">
+        <ul>
+            <li><strong>Atomicidad:</strong> Cada celda (intersección de una fila y una columna) debe contener un <strong>único valor simple</strong>. No se permiten listas ni conjuntos de datos dentro de una celda.</li>
+            <li><strong>Unicidad de Columnas:</strong> Cada columna en una tabla debe tener un nombre único.</li>
+            <li><strong>Unicidad de Tuplas:</strong> No pueden existir dos filas exactamente idénticas en una misma tabla; de ahí la obligación de definir una Llave Primaria (PK).</li>
+            <li><strong>El orden es irrelevante:</strong> El orden físico de las filas o de las columnas no altera el significado ni el comportamiento de los datos.</li>
+        </ul>
+    </div>
+
+    <h2>2. Procedimiento de Transformación (Mapeo de MER a Tablas)</h2>
+    <p>Para convertir un diagrama Entidad-Relación en tablas relacionales, se sigue un algoritmo estandarizado de 5 pasos clave:</p>
+
+    <div class="step-block">
+        <div class="step-title">Paso 1: Transformación de Entidades Fuertes</div>
+        <p>Cada entidad fuerte del diagrama se convierte directamente en una <strong>tabla independiente</strong>. Los atributos simples de la entidad se convierten en las columnas de la tabla, y el atributo llave se define como la <strong>Llave Primaria (PK)</strong>.</p>
+        <div class="example-box">
+            <strong>Ejemplo:</strong> La entidad <code>ALUMNO</code> con llave <code>Matricula</code> y atributo <code>Nombre</code> se convierte en:<br>
+            <span class="formula">ALUMNO (<span style="text-decoration: underline;">Matricula</span>, Nombre)</span>
+        </div>
+    </div>
+
+    <div class="step-block">
+        <div class="step-title">Paso 2: Transformación de Entidades Débiles</div>
+        <p>Cada entidad débil se convierte en una <strong>tabla</strong>. Sus columnas serán sus propios atributos más la **Llave Primaria de la entidad fuerte** de la que depende. Esta clave copiada actuará como Llave Foránea (FK), y la unión de ambas claves formará la Llave Primaria compuesta de la nueva tabla.</p>
+        <div class="example-box">
+            <strong>Ejemplo:</strong> La entidad débil <code>DEPENDIENTE</code> (hijo de un empleado) depende de <code>EMPLEADO</code>:<br>
+            <span class="formula">DEPENDIENTE (<span style="text-decoration: underline;">ID_Empleado (FK), NombreHijo</span>, Parentesco)</span>
+        </div>
+    </div>
+
+    <div class="step-block">
+        <div class="step-title">Paso 3: Transformación de Relaciones 1:N (Uno a Muchos)</div>
+        <p>En este tipo de relación <strong>no se crea una tabla nueva</strong>. En su lugar, la Llave Primaria de la entidad del lado "Uno" se copia y se pega dentro de la tabla del lado "Muchos" (N) en forma de <strong>Llave Foránea (FK)</strong>. Si la relación tenía atributos propios, estos también se mudan al lado "Muchos".</p>
+        <div class="example-box">
+            <strong>Ejemplo:</strong> Un <code>DEPARTAMENTO</code> (1) tiene muchos <code>EMPLEADOS</code> (N).<br>
+            La clave <code>ID_Depto</code> viaja a la tabla de empleados:<br>
+            <span class="formula">EMPLEADO (<span style="text-decoration: underline;">ID_Empleado</span>, Nombre, ID_Depto (FK))</span>
+        </div>
+    </div>
+
+    <div class="step-block">
+        <div class="step-title">Paso 4: Transformación de Relaciones N:M (Muchos a Muchos)</div>
+        <p>Toda relación Muchos a Muchos <strong>se transforma obligatoriamente en una nueva tabla independiente</strong> (a menudo llamada tabla intermedia o asociativa). Su Llave Primaria será compuesta, formada por la combinación de las Llaves Primarias de las dos entidades participantes. Si la relación tenía atributos propios, se añaden a esta nueva tabla.</p>
+        <div class="example-box">
+            <strong>Ejemplo:</strong> Muchos <code>ALUMNOS</code> (N) cursan muchas <code>MATERIAS</code> (M). Se genera la tabla intermedia <code>INSCRIPCION</code>:<br>
+            <span class="formula">INSCRIPCION (<span style="text-decoration: underline;">Matricula (FK), ID_Materia (FK)</span>, CalificacionFinal)</span>
+        </div>
+    </div>
+
+    <div class="step-block">
+        <div class="step-title">Paso 5: Tratamiento de Atributos Multivalorados</div>
+        <p>Como el modelo relacional prohíbe guardar listas de datos en una sola celda (regla de atomicidad), cada atributo multivalorado <strong>se convierte en una tabla independiente</strong>. Esta tabla contendrá el atributo en sí y la Llave Primaria de la entidad original para poder saber a quién le pertenece ese dato.</p>
+        <div class="example-box">
+            <strong>Ejemplo:</strong> Si la entidad <code>EMPLEADO</code> tiene el atributo multivalorado <code>Telefono</code>, se crea la tabla:<br>
+            <span class="formula">TELEFONOS_EMPLEADO (<span style="text-decoration: underline;">ID_Empleado (FK), NumeroTelefono</span>)</span>
+        </div>
+    </div>
+
+    <h2>3. Resumen de Reglas de Relación (Mapeo Rápido)</h2>
+    <div class="card">
+        <p>Para recordarlo de forma mnemotécnica antes de un examen o proyecto:</p>
+        <ul>
+            <li><strong>Relación 1 : 1</strong> → La clave de una entidad pasa a la otra como FK (preferentemente a la que tenga participación total).</li>
+            <li><strong>Relación 1 : N</strong> → La clave del "1" viaja al "N" como FK. (<em>"El fuerte adopta al débil"</em>).</li>
+            <li><strong>Relación N : M</strong> → <strong>¡Alerta!</strong> Rombo se destruye y nace una nueva tabla intermedia con claves combinadas.</li>
+        </ul>
+    </div>
+
+    <footer>
+        <p>© 2026 - Material educativo digital de Bases de Datos. Prohibida su reproducción con fines comerciales.</p>
+    </footer>
+
+</body>
+</html>

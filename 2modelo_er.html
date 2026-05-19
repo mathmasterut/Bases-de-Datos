@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tema: Modelo Entidad-Relación</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f7f6;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        h1 { margin: 0; font-size: 24px; }
+        h2 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #2980b9; margin-bottom: 5px; }
+        .intro { background-color: #e8f4f8; padding: 15px; border-left: 5px solid #3498db; border-radius: 4px; margin-bottom: 30px; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .concept-block { margin-bottom: 15px; padding-left: 15px; border-left: 3px solid #bdc3c7; }
+        .example-box { background-color: #f9f9f9; border-left: 3px solid #2ecc71; padding: 10px; margin-top: 5px; font-style: italic; }
+        .badge { background-color: #34495e; color: white; padding: 3px 8px; border-radius: 3px; font-size: 12px; font-weight: bold; }
+        footer { text-align: center; margin-top: 40px; color: #7f8c8d; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Tema 2: El Modelo Entidad-Relación (MER)</h1>
+        <p>Fundamentos, características y modelado conceptual de datos</p>
+    </header>
+
+    <div class="intro">
+        <p><strong>¿Qué es el Modelo Entidad-Relación?</strong> Es un modelo de datos de alto nivel que se emplea para diseñar la estructura conceptual de una base de datos. Sirve como un "puente" o plano arquitectónico que permite traducir los requerimientos del mundo real de una empresa hacia una estructura lógica que una computadora pueda entender (las tablas).</p>
+    </div>
+
+    <h2>1. Características Principales del MER</h2>
+    <div class="card">
+        <p>El Modelo Entidad-Relación destaca en el diseño de software por las siguientes propiedades:</p>
+        <ul>
+            <li><strong>Abstracción de Alto Nivel:</strong> No se preocupa por cómo se guardarán los archivos en el disco, ni por qué gestor de base de datos (MySQL, PostgreSQL, Oracle) se usará. Se enfoca puramente en la semántica de los datos.</li>
+            <li><strong>Comprensión Universal:</strong> Al ser un modelo visual y semántico, funciona como una excelente herramienta de comunicación entre los ingenieros de sistemas y los clientes o usuarios finales.</li>
+            <li><strong>Base para el Modelo Relacional:</strong> Existe una transición casi directa y matemática para convertir un Modelo Entidad-Relación en tablas relacionales.</li>
+        </ul>
+    </div>
+
+    <h2>2. Elementos Esenciales del Modelo</h2>
+    <p>Para construir cualquier diagrama conceptual bajo esta metodología, debemos identificar y clasificar tres elementos fundamentales del entorno que estamos analizando:</p>
+
+    <div class="card">
+        <h3>1. Entidades y Conjuntos de Entidades</h3>
+        <p>Una <strong>entidad</strong> es cualquier objeto o concepto identificable del mundo real. Un <strong>conjunto de entidades</strong> es el grupo de entidades del mismo tipo que comparten las mismas propiedades.</p>
+        
+        <div class="concept-block">
+            <strong>A. Entidades Fuertes (o Regulares):</strong> Tienen existencia propia y poseen suficientes atributos para identificar de forma única cada uno de sus registros mediante una clave primaria.
+            <div class="example-box">Ejemplo: Un <code>CLIENTE</code> o un <code>PRODUCTO</code>.</div>
+        </div>
+
+        <div class="concept-block">
+            <strong>B. Entidades Débiles:</strong> No pueden identificarse por sí mismas; dependen de una entidad fuerte para existir y su clave se compone de la combinación de la clave de la entidad fuerte más un discriminador propio.
+            <div class="example-box">Ejemplo: Las <code>PARCIALIDADES</code> de un pago. No existen pagos parciales si no se genera primero una <code>FACTURA</code> principal.</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>2. Atributos y sus Clasificaciones</h3>
+        <p>Son las características que describen o califican a una entidad. Dentro del MER, los atributos se categorizan según su estructura y comportamiento:</p>
+
+        <div class="concept-block">
+            <strong>A. Atributo Simple (Atómico):</strong> No se puede dividir en partes más pequeñas con significado propio.
+            <div class="example-box">Ejemplo: La <code>Edad</code> o el <code>Precio</code> de un artículo.</div>
+        </div>
+
+        <div class="concept-block">
+            <strong>B. Atributo Compuesto:</strong> Se puede desglosar en componentes más pequeños que sí tienen significado independiente.
+            <div class="example-box">Ejemplo: El atributo <code>NombreCompleto</code> (dividido en Nombre, Apellido Paterno, Apellido Materno).</div>
+        </div>
+
+        <div class="concept-block">
+            <strong>C. Atributo Monovalor:</strong> Tiene un único valor para una entidad en particular.
+            <div class="example-box">Ejemplo: El número de <code>CURP</code> de una persona (solo se tiene uno).</div>
+        </div>
+
+        <div class="concept-block">
+            <strong>D. Atributo Multivalorado:</strong> Puede almacenar una colección o lista de valores para una misma celda o registro.
+            <div class="example-box">Ejemplo: Los <code>CorreosElectrónicos</code> de un cliente (puede tener dos o tres).</div>
+        </div>
+
+        <div class="concept-block">
+            <strong>E. Atributo Derivado (o Calculado):</strong> Su valor se extrae o deduce a partir de otros atributos existentes mediante una operación.
+            <div class="example-box">Ejemplo: La <code>Antigüedad</code> de un empleado calculada con base en su Fecha de Contratación.</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>3. Relaciones y Grados de Relación</h3>
+        <p>Una <strong>relación</strong> es la asociación existente entre dos o más entidades. El número de entidades que participan en una relación define su <strong>grado</strong>:</p>
+
+        <div class="concept-block">
+            <strong>Relación Unaria (Recursiva):</strong> Una entidad se relaciona consigo misma.
+            <div class="example-box">Ejemplo: Un <code>EMPLEADO</code> supervisa a otros <code>EMPLEADOS</code>.</div>
+        </div>
+
+        <div class="concept-block">
+            <strong>Relación Binaria (Grado 2):</strong> Participan exactamente dos entidades. Es el tipo más común en el diseño de bases de datos.
+            <div class="example-box">Ejemplo: Un <code>CLIENTE</code> realiza una <code>COMPRA</code>.</div>
+        </div>
+
+        <div class="concept-block">
+            <strong>Relación Ternaria (Grado 3):</strong> Involucra de forma simultánea a tres entidades distintas en un solo evento.
+            <div class="example-box">Ejemplo: Un <code>PROVEEDOR</code> suministra un <code>COMPONENTE</code> a un <code>PROYECTO</code> específico.</div>
+        </div>
+    </div>
+
+    <h2>3. Restricciones del Modelo: Mapeo y Participación</h2>
+    <div class="card">
+        <p>Para asegurar la precisión del modelo, el MER impone límites sobre cómo interactúan los datos:</p>
+        
+        <h3>A. Razón de Mapeo (Cardinalidad)</h3>
+        <p>Expresa el número de entidades con las que otra entidad puede asociarse a través de un conjunto de relaciones. Como vimos en la simbología básica, se dividen en:</p>
+        <ul>
+            <li>Uno a Uno <span class="badge">1:1</span></li>
+            <li>Uno a Muchos <span class="badge">1:N</span></li>
+            <li>Muchos a Muchos <span class="badge">N:M</span></li>
+        </ul>
+
+        <h3>B. Restricciones de Participación</h3>
+        <ul>
+            <li><strong>Participación Total (Dependencia de existencia):</strong> Cada entidad en el conjunto <em>debe</em> participar obligatoriamente en al menos una relación del conjunto. (Se suele dibujar con doble línea).</li>
+            <li><strong>Participación Parcial:</strong> Algunas entidades del conjunto pueden o no participar en la relación.</li>
+        </ul>
+    </div>
+
+    <footer>
+        <p>© 2026 - Material educativo digital de Bases de Datos. Prohibida su reproducción con fines comerciales.</p>
+    </footer>
+
+</body>
+</html>

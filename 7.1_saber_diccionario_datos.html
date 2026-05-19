@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saber Hacer: Construcción de Diccionarios de Datos</title>
+    <style>
+        /* ESTILO VISUAL UNIFICADO */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f7f6;
+        }
+        header {
+            background-color: #7b1fa2;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        h2 { color: #7b1fa2; border-bottom: 3px solid #9c27b0; padding-bottom: 5px; margin-top: 40px; }
+        .intro { background-color: #f3e5f5; padding: 20px; border-left: 5px solid #9b59b6; border-radius: 4px; margin-bottom: 30px; }
+        
+        .activity-card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); margin-bottom: 30px; border-top: 4px solid #7b1fa2; }
+        .problem-statement { background-color: #f8f9fa; border: 1px solid #e2e8f0; padding: 15px; border-radius: 6px; font-style: italic; margin-bottom: 20px; }
+        
+        /* ESTILOS DRAG & DROP Y PALETA */
+        .palette { display: flex; gap: 10px; background: #f5eef8; padding: 15px; border-radius: 6px; margin-bottom: 20px; justify-content: center; flex-wrap: wrap; border: 1px solid #d7bde2; }
+        .drag-item { padding: 8px 12px; background: white; border: 2px solid #8e44ad; font-weight: bold; cursor: grab; font-size: 13px; user-select: none; color: #7b1fa2; border-radius: 4px; }
+        
+        /* DISEÑO DE TABLA DEL DICCIONARIO */
+        .diccionario-table { width: 100%; border-collapse: collapse; margin: 20px 0; background: white; font-size: 14px; }
+        .diccionario-table th { background-color: #7b1fa2; color: white; padding: 12px; text-align: left; }
+        .diccionario-table td { padding: 10px; border: 1px solid #ddd; vertical-align: middle; }
+        .diccionario-table tr:nth-child(even) { background-color: #f9f9f9; }
+
+        .drop-slot { min-width: 100px; min-height: 40px; border: 2px dashed #95a5a6; display: inline-flex; justify-content: center; align-items: center; background: #fff; font-size: 11px; color: #7f8c8d; text-align: center; padding: 2px; width: 100%; box-sizing: border-box; }
+        .drop-slot.hovered { background: #e8f8f5; border-color: #2ecc71; }
+
+        /* BOTONES Y FEEDBACK */
+        .btn-evaluar { background-color: #9c27b0; color: white; border: none; padding: 12px 20px; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; width: 100%; transition: 0.2s; margin-top: 15px; }
+        .btn-evaluar:hover { background-color: #7b1fa2; }
+        .feedback-box { margin-top: 20px; padding: 15px; border-radius: 6px; display: none; }
+        .feedback-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .feedback-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        
+        footer { text-align: center; margin-top: 50px; color: #7f8c8d; font-size: 14px; border-top: 1px solid #bdc3c7; padding-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Saber Hacer: Elaboración Técnica de Diccionarios de Datos</h1>
+        <p>Documenta con precisión quirúrgica la estructura e integridad de tus bases de datos</p>
+    </header>
+
+    <div class="intro">
+        <p><strong>¿Qué estamos evaluando?:</strong> Diseñar un diagrama es solo el inicio. Para que la organización pueda construir el sistema, necesitas definir los metadatos exactos. Aquí demostrarás tu habilidad para seleccionar tipos de datos eficientes, longitudes óptimas y restricciones que protejan la información corporativa.</p>
+    </div>
+
+    <h2>Desafío 1: Optimización de Tipos de Datos y Almacenamiento</h2>
+    <div class="activity-card">
+        <div class="problem-statement">
+            <strong>Caso de Negocio:</strong> "La cadena de tiendas requiere documentar la tabla <code>CLIENTES</code>. El Director de TI te pide optimizar el almacenamiento: el RFC debe ocupar un espacio fijo (13 caracteres), el Nombre puede variar y el crédito disponible requiere centavos exactos para auditorías financieras. Completa el diccionario."
+        </div>
+        
+        <div class="palette">
+            <div class="drag-item" draggable="true" id="dic1-char" ondragstart="drag(event)">CHAR(13)</div>
+            <div class="drag-item" draggable="true" id="dic1-varchar" ondragstart="drag(event)">VARCHAR(100)</div>
+            <div class="drag-item" draggable="true" id="dic1-decimal" ondragstart="drag(event)">DECIMAL(10,2)</div>
+            <div class="drag-item" draggable="true" id="dic1-float" ondragstart="drag(event)">FLOAT</div>
+        </div>
+
+        <table class="diccionario-table">
+            <thead>
+                <tr>
+                    <th>Nombre Campo</th>
+                    <th>Descripción Clave</th>
+                    <th>Tipo de Dato Requerido</th>
+                    <th>Restricción / Llave</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>rfc_cliente</strong></td>
+                    <td>Identificación fiscal de tamaño único e inmutable (13 caracteres).</td>
+                    <td><div class="drop-slot" id="dic1-s1" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Arrastra aquí ]</div></td>
+                    <td>UNIQUE</td>
+                </tr>
+                <tr>
+                    <td><strong>nombre_completo</strong></td>
+                    <td>Nombre y apellidos del cliente (longitud variable).</td>
+                    <td><div class="drop-slot" id="dic1-s2" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Arrastra aquí ]</div></td>
+                    <td>NOT NULL</td>
+                </tr>
+                <tr>
+                    <td><strong>limite_credito</strong></td>
+                    <td>Monto monetario asignado. Exige precisión contable matemática absoluta.</td>
+                    <td><div class="drop-slot" id="dic1-s3" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Arrastra aquí ]</div></td>
+                    <td>DEFAULT 0.00</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button class="btn-evaluar" onclick="validarDic1()">Validar Especificación Técnica</button>
+        <div class="feedback-box" id="f-dic1"></div>
+    </div>
+
+    <h2>Desafío 2: Restricciones de Integridad y Reglas de Negocio</h2>
+    <div class="activity-card">
+        <div class="problem-statement">
+            <strong>Caso de Negocio:</strong> "En la tabla <code>EMPLEADOS</code>, la organización establece 3 reglas estrictas: 1) Nadie puede registrarse sin correo electrónico, 2) El correo no puede repetirse jamás en otro empleado, y 3) La fecha de contratación debe registrarse de forma automática con el día exacto del sistema en el momento de la inserción."
+        </div>
+        
+        <div class="palette">
+            <div class="drag-item" draggable="true" id="dic2-nn" ondragstart="drag(event)">NOT NULL</div>
+            <div class="drag-item" draggable="true" id="dic2-uq" ondragstart="drag(event)">UNIQUE</div>
+            <div class="drag-item" draggable="true" id="dic2-df" ondragstart="drag(event)">DEFAULT CURRENT_DATE</div>
+            <div class="drag-item" draggable="true" id="dic2-pk" ondragstart="drag(event)">PRIMARY KEY</div>
+        </div>
+
+        <table class="diccionario-table">
+            <thead>
+                <tr>
+                    <th>Nombre Campo</th>
+                    <th>Tipo de Dato</th>
+                    <th>Regla / Metadato Requerido</th>
+                    <th>Propósito Organizacional</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>id_empleado</strong></td>
+                    <td>INT</td>
+                    <td>PRIMARY KEY</td>
+                    <td>Identificador incremental de la tupla.</td>
+                </tr>
+                <tr>
+                    <td><strong>correo_corp</strong></td>
+                    <td>VARCHAR(120)</td>
+                    <td><div class="drop-slot" id="dic2-s1" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Restricción A ]</div></td>
+                    <td>Evita cuentas de comunicación institucional duplicadas.</td>
+                </tr>
+                <tr>
+                    <td><strong>puesto</strong></td>
+                    <td>VARCHAR(50)</td>
+                    <td><div class="drop-slot" id="dic2-s2" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Restricción B ]</div></td>
+                    <td>Obliga a capturar el cargo del empleado; no se admiten vacíos.</td>
+                </tr>
+                <tr>
+                    <td><strong>fecha_alta</strong></td>
+                    <td>DATE</td>
+                    <td><div class="drop-slot" id="dic2-s3" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Restricción C ]</div></td>
+                    <td>Automatiza el registro temporal sin intervención del usuario.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button class="btn-evaluar" onclick="validarDic2()">Evaluar Diccionario Corporativo</button>
+        <div class="feedback-box" id="f-dic2"></div>
+    </div>
+
+    <footer>
+        <p>© 2026 - Módulo de Evaluación Continua Interactiva | Material educativo digital de Bases de Datos. Prohibida su reproducción con fines comerciales.</p>
+    </footer>
+
+    <script>
+        // CONTROL SEGURO DE DRAG & DROP
+        function allowDrop(ev) { 
+            ev.preventDefault(); 
+            if (ev.currentTarget.classList.contains('drop-slot')) {
+                ev.currentTarget.classList.add('hovered'); 
+            }
+        }
+        
+        function dragLeave(ev) { 
+            ev.currentTarget.classList.remove('hovered'); 
+        }
+        
+        function drag(ev) { 
+            ev.dataTransfer.setData("text", ev.target.id); 
+        }
+        
+        function drop(ev) {
+            ev.preventDefault();
+            ev.currentTarget.classList.remove('hovered');
+            
+            if (ev.target.classList.contains('drag-item')) {
+                return;
+            }
+            
+            var data = ev.dataTransfer.getData("text");
+            var draggedElement = document.getElementById(data);
+            
+            ev.currentTarget.innerHTML = "";
+            ev.currentTarget.appendChild(draggedElement);
+        }
+
+        // EVALUACIÓN DESAFÍO 1
+        function validarDic1() {
+            const s1 = document.getElementById('dic1-s1').firstElementChild?.id;
+            const s2 = document.getElementById('dic1-s2').firstElementChild?.id;
+            const s3 = document.getElementById('dic1-s3').firstElementChild?.id;
+            const f = document.getElementById('f-dic1');
+            f.style.display = "block";
+
+            if (s1 === "dic1-char" && s2 === "dic1-varchar" && s3 === "dic1-decimal") {
+                f.className = "feedback-box feedback-success";
+                f.innerHTML = "<strong>¡Felicidades! Documentación perfecta y optimizada.</strong> Elegiste <code>CHAR(13)</code> para el RFC porque al ser estático no requiere recalcular espacio. Usaste <code>VARCHAR</code> para el nombre permitiendo un almacenamiento dinámico eficiente, y protegiste las finanzas con <code>DECIMAL</code>, evitando los peligros de redondeo de los tipos aproximados como <code>FLOAT</code>.";
+            } else {
+                f.className = "feedback-box feedback-error";
+                f.innerHTML = "<strong>Error en la Arquitectura de Metadatos:</strong> Revisa la asignación. Si utilizas <code>FLOAT</code> para dinero, perderás centavos en multiplicaciones masivas debido al redondeo de coma flotante. Si pones <code>CHAR</code> en el nombre, desperdiciarás gigabytes llenando los espacios vacíos con caracteres en blanco.";
+            }
+        }
+
+        // EVALUACIÓN DESAFÍO 2
+        function validarDic2() {
+            const s1 = document.getElementById('dic2-s1').firstElementChild?.id;
+            const s2 = document.getElementById('dic2-s2').firstElementChild?.id;
+            const s3 = document.getElementById('dic2-s3').firstElementChild?.id;
+            const f = document.getElementById('f-dic2');
+            f.style.display = "block";
+
+            if (s1 === "dic2-uq" && s2 === "dic2-nn" && s3 === "dic2-df") {
+                f.className = "feedback-box feedback-success";
+                f.innerHTML = "<strong>¡Espectacular! El diccionario cumple al 100% las reglas de negocio.</strong> <code>UNIQUE</code> blinda el correo para que no existan colisiones de usuarios, <code>NOT NULL</code> fuerza al sistema a capturar el puesto del empleado previniendo datos incompletos, y <code>DEFAULT CURRENT_DATE</code> alivia la carga de la aplicación delegando el registro del tiempo directamente al motor SQL.";
+            } else {
+                f.className = "feedback-box feedback-error";
+                f.innerHTML = "<strong>Restricciones Mal Ubicadas:</strong> Analiza el objetivo organizacional de cada fila. Si pones <code>NOT NULL</code> en el correo, aseguras que se capture, pero permitirías que dos empleados tengan asignado exactamente el mismo e-mail corporativo, violando la regla de unicidad.";
+            }
+        }
+    </script>
+</body>
+</html>

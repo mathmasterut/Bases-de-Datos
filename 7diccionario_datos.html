@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tema: Diccionario de Datos</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f7f6;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        h1 { margin: 0; font-size: 28px; }
+        h2 { color: #2c3e50; border-bottom: 3px solid #1abc9c; padding-bottom: 5px; margin-top: 40px; }
+        h3 { color: #16a085; margin-top: 25px; margin-bottom: 10px; }
+        .intro { background-color: #e6f2f0; padding: 20px; border-left: 5px solid #1abc9c; border-radius: 4px; margin-bottom: 30px; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .example-box { background-color: #f9f9f9; border-left: 3px solid #2ecc71; padding: 15px; margin-top: 10px; font-style: italic; }
+        .badge { background-color: #16a085; color: white; padding: 3px 8px; border-radius: 3px; font-size: 12px; font-weight: bold; }
+        
+        /* Estilos para el ejemplo de Diccionario */
+        .dd-table { width: 100%; border-collapse: collapse; margin: 20px 0; background: white; font-size: 14px; }
+        .dd-table th, .dd-table td { border: 1px solid #bdc3c7; padding: 10px; text-align: left; }
+        .dd-table th { background-color: #16a085; color: white; }
+        .dd-table tr:nth-child(even) { background-color: #f8f9fa; }
+        .meta-title { font-weight: bold; color: #2c3e50; margin-bottom: 5px; }
+
+        footer { text-align: center; margin-top: 50px; color: #7f8c8d; font-size: 14px; border-top: 1px solid #ccc; padding-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Tema 5: El Diccionario de Datos</h1>
+        <p>Concepto, características y documentación de metadatos</p>
+    </header>
+
+    <div class="intro">
+        <p><strong>¿Qué es un Diccionario de Datos?</strong> En términos sencillos, es un listado organizado y detallado que contiene la descripción técnica de todos los elementos que componen una base de datos. No almacena los datos reales de los clientes o alumnos, sino que almacena <strong>"datos sobre los datos" (Metadatos)</strong>, sirviendo como la guía de referencia oficial para los desarrolladores y administradores del sistema (DBA).</p>
+    </div>
+
+    <h2>1. Características de un Diccionario de Datos</h2>
+    <p>Un buen diccionario de datos debe cumplir con características esenciales para garantizar su utilidad en un proyecto de software:</p>
+    
+    <div class="card">
+        <ul>
+            <li><strong>Precisión y Consistencia:</strong> Define un único nombre y tipo de dato para cada elemento en todo el sistema, evitando que dos desarrolladores llamen al mismo dato de formas diferentes (ej. evitar usar <code>tel_cli</code> en una pantalla y <code>celular</code> en otra).</li>
+            <li><strong>Centralización:</strong> Funciona como el punto único de verdad. Cualquier duda sobre la longitud, restricciones o propósito de un campo se resuelve consultando este documento.</li>
+            <li><strong>Soporte para el Mantenimiento:</strong> Si en el futuro se necesita cambiar la longitud de un campo (por ejemplo, expandir el código postal para soporte internacional), el diccionario permite evaluar rápidamente a qué tablas afectará el cambio.</li>
+            <li><strong>Integración con el SGBD:</strong> La mayoría de los Sistemas Gestores de Bases de Datos modernos generan y mantienen un diccionario de datos interno de forma automática (a menudo llamado <em>catálogo del sistema</em>), el cual consultan antes de ejecutar cualquier consulta SQL para validar si las tablas y columnas existen.</li>
+        </ul>
+    </div>
+
+    <h2>2. Elementos Principales que se Documentan</h2>
+    <p>Para cada campo o columna de una tabla, el diccionario de datos suele registrar la siguiente información obligatoria:</p>
+
+    <div class="card">
+        <ul>
+            <li><strong>Nombre del Campo:</strong> El identificador técnico exacto que se usa en el código SQL (ej. <code>id_alumno</code>).</li>
+            <li><strong>Alias (opcional):</strong> Nombre alternativo o comercial con el que los usuarios finales conocen el dato (ej. "Número de Matrícula").</li>
+            <li><strong>Tipo de Dato y Longitud:</strong> Especifica si es texto, entero, decimal, fecha, etc., junto con su tamaño máximo (ej. <code>VARCHAR(50)</code>).</li>
+            <li><strong>Tipo de Llave:</strong> Indica si el campo es una Llave Primaria (PK), Llave Foránea (FK) o un campo común.</li>
+            <li><strong>Restricciones (Constraints):</strong> Reglas que el campo debe cumplir obligatoriamente (ej. si acepta valores nulos <code>NULL / NOT NULL</code>, si es un valor único <code>UNIQUE</code>, o rangos permitidos).</li>
+            <li><strong>Descripción:</strong> Una breve explicación textual sobre el propósito de ese campo dentro del negocio.</li>
+        </ul>
+    </div>
+
+    <h2>3. Ejemplo Gráfico: Estructura de un Diccionario de Datos</h2>
+    <p>A continuación se muestra cómo se documenta formalmente una tabla dentro del diccionario de datos. Este es el formato estándar que los alumnos deben replicar en sus proyectos escolares:</p>
+
+    <div class="card">
+        <div class="meta-title">Nombre de la Tabla: <span style="color:#16a085;">ALUMNOS</span></div>
+        <div class="meta-title">Descripción: <span style="font-weight:normal; color:#555;">Almacena la información de los estudiantes inscritos en la institución.</span></div>
+        
+        <table class="dd-table">
+            <thead>
+                <tr>
+                    <th>Nombre del Campo</th>
+                    <th>Tipo de Dato</th>
+                    <th>Llave</th>
+                    <th>Acepta Nulos</th>
+                    <th>Valor por Defecto</th>
+                    <th>Descripción / Reglas de Negocio</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>id_alumno</strong></td>
+                    <td>INT</td>
+                    <td><span class="badge">PK</span></td>
+                    <td>NO (NOT NULL)</td>
+                    <td>Autoincrementable</td>
+                    <td>Identificador único asignado a cada estudiante al ingresar.</td>
+                </tr>
+                <tr>
+                    <td><strong>nombre</strong></td>
+                    <td>VARCHAR(60)</td>
+                    <td>--</td>
+                    <td>NO (NOT NULL)</td>
+                    <td>Ninguno</td>
+                    <td>Nombre(s) y apellidos completos del alumno.</td>
+                </tr>
+                <tr>
+                    <td><strong>correo_inst</strong></td>
+                    <td>VARCHAR(50)</td>
+                    <td>--</td>
+                    <td>SÍ</td>
+                    <td>Ninguno</td>
+                    <td>Correo electrónico institucional. Debe ser único (UNIQUE).</td>
+                </tr>
+                <tr>
+                    <td><strong>fecha_ingreso</strong></td>
+                    <td>DATE</td>
+                    <td>--</td>
+                    <td>NO (NOT NULL)</td>
+                    <td>CURRENT_DATE</td>
+                    <td>Fecha exacta en la que el alumno se dio de alta en el sistema.</td>
+                </tr>
+                <tr>
+                    <td><strong>id_carrera</strong></td>
+                    <td>INT</td>
+                    <td><span class="badge" style="background:#e67e22;">FK</span></td>
+                    <td>NO (NOT NULL)</td>
+                    <td>Ninguno</td>
+                    <td>Se conecta con la tabla de CARRERAS para validar la especialidad.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>4. Resumen Analógico para el Alumno</h2>
+    <div class="card">
+        <p><strong>Piénsalo de esta manera:</strong> Si una Base de Datos fuera una casa inteligente recién construida, los datos reales serían los muebles y las personas que viven dentro. El <strong>Diccionario de Datos</strong> sería el plano arquitectónico y el manual técnico de la instalación eléctrica: te dice exactamente de qué tamaño es cada tubería, dónde se conecta cada cable y qué voltaje soporta, asegurando que si algo se descompone o cambia, sepas exactamente dónde intervenir sin tirar una pared.</p>
+    </div>
+
+    <footer>
+        <p>© 2026 - Material educativo digital de Bases de Datos. Prohibida su reproducción con fines comerciales.</p>
+    </footer>
+
+</body>
+</html>

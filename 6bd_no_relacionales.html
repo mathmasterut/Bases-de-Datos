@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tema: Bases de Datos No Relacionales (NoSQL)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f7f6;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        h1 { margin: 0; font-size: 28px; }
+        h2 { color: #2c3e50; border-bottom: 3px solid #9b59b6; padding-bottom: 5px; margin-top: 40px; }
+        h3 { color: #8e44ad; margin-top: 25px; margin-bottom: 10px; }
+        .intro { background-color: #f5eef8; padding: 20px; border-left: 5px solid #9b59b6; border-radius: 4px; margin-bottom: 30px; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .example-box { background-color: #f9f9f9; border-left: 3px solid #2ecc71; padding: 15px; margin-top: 10px; font-style: italic; }
+        .badge { background-color: #8e44ad; color: white; padding: 3px 8px; border-radius: 3px; font-size: 12px; font-weight: bold; }
+        
+        /* Contenedores Gráficos para Alumnos Visuales (Tipos de NoSQL) */
+        .graphic-container { background: #fdfefe; border: 1px dashed #bdc3c7; border-radius: 6px; padding: 20px; margin-top: 15px; display: flex; justify-content: space-around; align-items: center; gap: 15px; flex-wrap: wrap; }
+        
+        /* Estilos CSS para simular Documento JSON */
+        .json-box { font-family: 'Courier New', Courier, monospace; background: #2d3436; color: #fab1a0; padding: 15px; border-radius: 6px; font-size: 14px; min-width: 250px; text-align: left; }
+        .json-key { color: #00cec9; }
+        .json-value { color: #ffeaa7; }
+
+        /* Estilos CSS para simular Clave-Valor */
+        .kv-container { display: flex; flex-direction: column; gap: 8px; min-width: 220px; }
+        .kv-pair { display: flex; border: 1px solid #b2bec3; border-radius: 4px; overflow: hidden; font-size: 14px; }
+        .kv-key { background: #ffeaa7; padding: 6px; font-weight: bold; width: 40%; text-align: center; border-right: 1px solid #b2bec3; }
+        .kv-value { background: #fff; padding: 6px; width: 60%; padding-left: 10px; }
+
+        /* Estilos CSS para simular Grafos */
+        .graph-container { display: flex; align-items: center; gap: 10px; }
+        .graph-node { width: 65px; height: 65px; border-radius: 50%; background: #e84393; color: white; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 12px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .graph-edge { height: 2px; background: #636e72; width: 40px; position: relative; display: flex; justify-content: center; }
+        .graph-edge::after { content: '➔'; position: absolute; top: -11px; color: #636e72; }
+        .edge-label { font-size: 10px; color: #2d3436; position: absolute; top: -18px; font-weight: bold; }
+
+        footer { text-align: center; margin-top: 50px; color: #7f8c8d; font-size: 14px; border-top: 1px solid #ccc; padding-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Tema 4: El Modelo de Base de Datos No Relacional</h1>
+        <p>Introducción al ecosistema NoSQL y almacenamiento flexible de datos</p>
+    </header>
+
+    <div class="intro">
+        <p><strong>¿Qué es el Modelo No Relacional (NoSQL)?</strong> A diferencia del modelo relacional tradicional, NoSQL (<em>Not Only SQL</em>) es un enfoque de diseño de bases de datos que no utiliza estructuras de tablas rígidas ni requiere esquemas fijos. Nació para resolver los retos modernos de velocidad, alta disponibilidad y almacenamiento de volúmenes masivos de datos no estructurados (como videos, publicaciones de redes sociales o registros de sensores).</p>
+    </div>
+
+    <h2>1. Características Clave del Modelo No Relacional</h2>
+    <p>Las bases de datos NoSQL se definen por un conjunto de propiedades que las hacen ideales para entornos de rápido crecimiento:</p>
+    
+    <div class="card">
+        <ul>
+            <li><strong>Esquema Flexible (Dinámico):</strong> No es necesario definir columnas ni tipos de datos por adelantado. Cada registro puede tener una estructura totalmente diferente a los demás.</li>
+            <li><strong>Escalabilidad Horizontal:</strong> Mientras que el modelo relacional crece mejorando el servidor actual (más RAM o CPU), NoSQL crece "en concierto", es decir, distribuyendo los datos de forma nativa a través de decenas o cientos de servidores económicos interconectados.</li>
+            <li><strong>Ausencia de Joins (Uniones complejas):</strong> Para ganar velocidad extrema, las bases de datos NoSQL evitan relacionar datos mediante operaciones complejas en tiempo de ejecución. En su lugar, los datos relacionados se guardan juntos dentro del mismo registro (desnormalización).</li>
+            <li><strong>Variedad de Modelos:</strong> No existe una única forma "NoSQL". Dependiendo del problema, se eligen estructuras de documentos, grafos, columnas o simples listas de claves.</li>
+        </ul>
+    </div>
+
+    <h2>2. Elementos y Clasificación del Modelo No Relacional</h2>
+    <p>En lugar de tablas y filas, el ecosistema NoSQL organiza los elementos de información en cuatro grandes familias. Cada una cuenta con su propia estructura lógica interna:</p>
+
+    <h3>A. Modelo Orientado a Documentos</h3>
+    <p>El elemento básico aquí es el <strong>Documento</strong> (generalmente escrito en formato JSON o BSON), el cual se agrupa dentro de <strong>Colecciones</strong> (el equivalente NoSQL a las tablas).</p>
+    
+    <div class="graphic-container">
+        <div style="text-align:left; width: 100%;">
+            <span class="badge">Simulación de un Documento de Alumno (JSON)</span>
+        </div>
+        <div class="json-box">
+            {<br>
+            &nbsp;&nbsp;"<span class="json-key">_id</span>": <span class="json-value">102030</span>,<br>
+            &nbsp;&nbsp;"<span class="json-key">nombre</span>": <span class="json-value">"Carlos Mendoza"</span>,<br>
+            &nbsp;&nbsp;"<span class="json-key">hobbies</span>": [<span class="json-value">"Música", "Ajedrez"</span>],<br>
+            &nbsp;&nbsp;"<span class="json-key">contacto</span>": {<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;"<span class="json-key">celular</span>": <span class="json-value">"555-1234"</span><br>
+            &nbsp;&nbsp;}<br>
+            }
+        </div>
+        <div style="max-width: 500px;">
+            <p><strong>Elementos:</strong> Claves y valores anidados. Nota cómo el atributo "hobbies" guarda una lista y "contacto" guarda otro objeto completo adentro sin requerir tablas intermedias.</p>
+            <p><strong>Herramientas populares:</strong> MongoDB, CouchDB.</p>
+        </div>
+    </div>
+
+    <h3>B. Modelo Clave-Valor (Key-Value)</h3>
+    <p>Es el modelo más simple y veloz. Consiste en almacenar los datos emparejando una <strong>Clave única</strong> con un **Valor** asociado (que puede ser cualquier cadena de texto, número o archivo binario).</p>
+
+    <div class="graphic-container">
+        <div class="kv-container">
+            <span class="badge">Estructura Clave-Valor</span>
+            <div class="kv-pair"><div class="kv-key">usr_402</div><div class="kv-value">token_sesion_abc123</div></div>
+            <div class="kv-pair"><div class="kv-key">config_tema</div><div class="kv-value">"oscuro"</div></div>
+            <div class="kv-pair"><div class="kv-key">carrito_id</div><div class="kv-value">["prod_01", "prod_99"]</div></div>
+        </div>
+        <div style="max-width: 500px;">
+            <p><strong>Elementos:</strong> Funciona exactamente como un diccionario de palabras. Buscas la clave (Key) de forma directa y el sistema te devuelve instantáneamente su contenido (Value).</p>
+            <p><strong>Herramientas populares:</strong> Redis, DynamoDB.</p>
+        </div>
+    </div>
+
+    <h3>C. Modelo Orientado a Grafos</h3>
+    <p>Se utiliza cuando el valor real de los datos no reside en los elementos mismos, sino en **cómo están conectados**. Sus elementos principales son los <strong>Nodos</strong> (las entidades) y las <strong>Aristas / Relaciones</strong> (las líneas de conexión).</p>
+
+    <div class="graphic-container">
+        <div class="graph-container">
+            <div class="graph-node" style="background:#0984e3;">Usuario<br>(Ana)</div>
+            <div class="graph-edge"><span class="edge-label">Sigue a</span></div>
+            <div class="graph-node" style="background:#e84393;">Usuario<br>(Luis)</div>
+            <div class="graph-edge"><span class="edge-label">Compró</span></div>
+            <div class="graph-node" style="background:#2ecc71;">Libro<br>(BaseDatos)</div>
+        </div>
+        <div style="max-width: 450px;">
+            <p><strong>Elementos:</strong> Tanto los nodos como las aristas pueden almacenar propiedades propias. Es ideal para modelar redes sociales, mapas de transporte o sistemas de recomendación.</p>
+            <p><strong>Herramientas populares:</strong> Neo4j, Amazon Neptune.</p>
+        </div>
+    </div>
+
+    <h3>D. Modelo Orientado a Columnas (Familia de Columnas)</h3>
+    <p>A diferencia de las tablas relacionales que leen datos fila por fila en el disco duro, este modelo organiza y almacena los datos en **columnas de manera física**. Permite agrupar dinámicamente familias de columnas relacionadas.</p>
+    <div class="card">
+        <p><strong>Elementos:</strong> Llaves de fila que apuntan a múltiples "familias de columnas", donde cada fila puede tener un número variable de columnas en cualquier momento. Es óptimo para analítica masiva y data warehousing.</p>
+        <p class="example-box"><strong>Herramientas populares:</strong> Apache Cassandra, HBase.</p>
+    </div>
+
+    <h2>3. Resumen Comparativo para el Alumno</h2>
+    <div class="card">
+        <p>Para ayudarte a decidir cuándo usar cada modelo en tus proyectos, recuerda esta regla general:</p>
+        <ul>
+            <li>Usa el **Modelo Relacional** cuando los datos sean altamente estructurados, requieras transacciones bancarias perfectas y las reglas de negocio no cambien seguido.</li>
+            <li>Usa el **Modelo No Relacional** cuando necesites procesar millones de peticiones por segundo, la estructura de los datos cambie constantemente (esquema dinámico) o trabajes con información masiva desestructurada.</li>
+        </ul>
+    </div>
+
+    <footer>
+        <p>© 2026 - Material educativo digital de Bases de Datos. Prohibida su reproducción con fines comerciales.</p>
+    </footer>
+
+</body>
+</html>

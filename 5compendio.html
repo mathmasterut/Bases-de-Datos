@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Digital de Bases de Datos: Del Modelo Conceptual al Lógico</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f7f6;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        h1 { margin: 0; font-size: 28px; }
+        h2 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 5px; margin-top: 40px; }
+        h3 { color: #2980b9; margin-top: 20px; margin-bottom: 10px; }
+        .intro { background-color: #e8f4f8; padding: 20px; border-left: 5px solid #3498db; border-radius: 4px; margin-bottom: 30px; }
+        .grid-container { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .card-header { display: flex; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px; }
+        .symbol-name { font-size: 18px; font-weight: bold; color: #2980b9; }
+        .section-title { font-weight: bold; color: #555; margin-top: 10px; }
+        .example-box { background-color: #f9f9f9; border-left: 3px solid #2ecc71; padding: 15px; margin-top: 10px; font-style: italic; }
+        .important-note { background-color: #fff9db; border-left: 5px solid #f59f00; padding: 15px; border-radius: 4px; margin: 20px 0; }
+        .concept-block { margin-bottom: 15px; padding-left: 15px; border-left: 3px solid #bdc3c7; }
+        .badge { background-color: #34495e; color: white; padding: 3px 8px; border-radius: 3px; font-size: 12px; font-weight: bold; }
+        .formula { font-family: 'Courier New', Courier, monospace; background-color: #eaeded; padding: 6px 10px; border-radius: 4px; font-weight: bold; display: inline-block; margin-top: 5px; }
+        
+        /* Estilos de Tablas */
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; background: white; }
+        table, th, td { border: 1px solid #ccc; }
+        th, td { padding: 12px; text-align: left; }
+        th { background-color: #34495e; color: white; }
+        
+        /* Contenedores para Ejemplos Gráficos Escolares (CSS Art) */
+        .graphic-container { background: #f8f9fa; border: 1px dashed #b2bec3; border-radius: 6px; padding: 15px; margin-top: 15px; display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .g-entidad { border: 2px solid #2c3e50; padding: 10px 20px; background: #fff; font-weight: bold; min-width: 100px; text-align: center; }
+        .g-entidad-debil { border: 4px double #2c3e50; padding: 8px 18px; background: #fff; font-weight: bold; min-width: 100px; text-align: center; }
+        .g-relacion { width: 80px; height: 80px; background: #fff; border: 2px solid #2c3e50; transform: rotate(45deg); display: flex; justify-content: center; align-items: center; }
+        .g-relacion span { transform: rotate(-45deg); font-weight: bold; font-size: 13px; text-align: center; }
+        .g-atributo { border: 2px solid #2c3e50; border-radius: 50%; padding: 8px 15px; background: #fff; text-align: center; font-size: 13px; }
+        .g-atributo-llave { border: 2px solid #2c3e50; border-radius: 50%; padding: 8px 15px; background: #fff; text-align: center; font-size: 13px; text-decoration: underline; font-weight: bold; }
+        .g-atributo-multivalor { border: 4px double #2c3e50; border-radius: 50%; padding: 6px 12px; background: #fff; text-align: center; font-size: 13px; }
+        .g-atributo-calculado { border: 2px dashed #2c3e50; border-radius: 50%; padding: 8px 15px; background: #fff; text-align: center; font-size: 13px; }
+        .g-linea { height: 2px; background: #2c3e50; width: 40px; position: relative; }
+        .g-flecha-der::after { content: '►'; position: absolute; right: -4px; top: -7px; font-size: 10px; color: #2c3e50; }
+        .g-flecha-izq::before { content: '◄'; position: absolute; left: -4px; top: -7px; font-size: 10px; color: #2c3e50; }
+        
+        .step-block { background-color: #fff; border-left: 4px solid #3498db; padding: 15px; margin-bottom: 20px; border-radius: 0 8px 8px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .step-title { font-weight: bold; color: #2980b9; font-size: 16px; margin-bottom: 5px; }
+        
+        footer { text-align: center; margin-top: 50px; color: #7f8c8d; font-size: 14px; border-top: 1px solid #ccc; padding-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Compendio Digital de Bases de Datos</h1>
+        <p>Guía Completa: Simbología, MER, Modelo Relacional y Proceso de Transformación</p>
+    </header>
+
+    <h2>Tema 1: Manual de Simbología (Diagramas E-R)</h2>
+    <div class="intro">
+        <p><strong>¿Qué es un Diagrama E-R?</strong> Es una herramienta gráfica que se utiliza para modelar el diseño lógico de una base de datos. Permite visualizar de forma clara cómo se estructuran los datos y cómo interactúan entre sí. A continuación, se detalla la simbología estándar (modelo de Peter Chen) que debes dominar.</p>
+    </div>
+
+    <h3>1. Componentes Principales (Entidades y Relaciones)</h3>
+    <div class="grid-container">
+        <div class="card">
+            <div class="card-header"><span class="symbol-name">■ Entidad (Rectángulo)</span></div>
+            <p><div class="section-title">Función:</div> Representa un objeto, persona, lugar o concepto del mundo real sobre el cual se desea almacenar información en la base de datos. Existe de forma independiente.</p>
+            <div class="graphic-container">
+                <div class="g-entidad">Alumno</div>
+            </div>
+            <div class="example-box"><strong>Ejemplo práctico:</strong> En el sistema de una universidad, <code>Alumno</code>, <code>Profesor</code> y <code>Curso</code> son Entidades.</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><span class="symbol-name">⧈ Entidad Débil (Doble Rectángulo)</span></div>
+            <p><div class="section-title">Función:</div> Es una entidad cuya existencia depende por completo de la presencia de otra entidad (llamada entidad fuerte o principal). No tiene una clave primaria propia que la identifique de forma única.</p>
+            <div class="graphic-container">
+                <div class="g-entidad-debil">Dependiente</div>
+            </div>
+            <div class="example-box"><strong>Ejemplo práctico:</strong> La entidad <code>Dependiente</code> (hijo de un empleado). Si el <code>Empleado</code> es borrado de la base de datos, sus dependientes ya no tienen razón de existir en el sistema.</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><span class="symbol-name">◆ Relación (Rombo)</span></div>
+            <p><div class="section-title">Función:</div> Representa la asociación, vínculo o interacción que existe entre dos o más entidades.</p>
+            <div class="graphic-container">
+                <div class="g-entidad">Alumno</div> <div class="g-linea"></div> <div class="g-relacion"><span>Inscribe</span></div> <div class="g-linea"></div> <div class="g-entidad">Curso</div>
+            </div>
+            <div class="example-box"><strong>Ejemplo práctico:</strong> La entidad <code>Alumno</code> se <strong>Inscribe</strong> en la entidad <code>Curso</code>. "Inscribe" es la relación.</div>
+        </div>
+    </div>
+
+    <h3>2. Tipos de Atributos (Óvalos / Elipses)</h3>
+    <div class="grid-container">
+        <div class="card">
+            <div class="card-header"><span class="symbol-name">● Atributo (Óvalo)</span></div>
+            <p><div class="section-title">Función:</div> Define las propiedades, características o cualidades que describen a una entidad.</p>
+            <div class="graphic-container">
+                <div class="g-entidad">Alumno</div><div class="g-linea"></div><div class="g-atributo">Nombre</div>
+            </div>
+            <div class="example-box"><strong>Ejemplo práctico:</strong> Para la entidad <code>Alumno</code>, sus atributos serían: <code>Nombre</code>, <code>Edad</code> y <code>Correo electrónico</code>.</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><span class="symbol-name">⊚ Atributo Llave o Clave (Óvalo con texto subrayado)</span></div>
+            <p><div class="section-title">Función:</div> Es el atributo principal que identifica de manera única e irrepetible a cada registro (instancia) dentro de una entidad.</p>
+            <div class="graphic-container">
+                <div class="g-entidad">Alumno</div><div class="g-linea"></div><div class="g-atributo-llave">Matrícula</div>
+            </div>
+            <div class="example-box"><strong>Ejemplo práctico:</strong> En la entidad <code>Alumno</code>, el atributo llave sería la <code>Matrícula</code> o <code>ID_Alumno</code>, ya que dos alumnos no pueden tener el mismo número.</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><span class="symbol-name">◎ Atributo Multivaluado (Doble Óvalo)</span></div>
+            <p><div class="section-title">Función:</div> Se utiliza para características que pueden tener más de un valor al mismo tiempo para un solo registro.</p>
+            <div class="graphic-container">
+                <div class="g-entidad">Empleado</div><div class="g-linea"></div><div class="g-atributo-multivalor">Teléfono</div>
+            </div>
+            <div class="example-box"><strong>Ejemplo práctico:</strong> El atributo <code>Teléfono</code> de un empleado, dado que una persona puede registrar un teléfono de casa, uno celular y uno de oficina.</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><span class="symbol-name">🌿 Atributo Compuesto (Óvalo subdividido)</span></div>
+            <p><div class="section-title">Función:</div> Es un atributo que se puede desglosar o dividir en varios sub-atributos más pequeños y específicos, los cuales tienen significado por sí mismos.</p>
+            <div class="graphic-container">
+                <div class="g-atributo" style="font-weight: bold;">Dirección</div>
+                <div style="display:flex; flex-direction:column; gap:5px;">
+                    <div class="g-atributo">Calle</div>
+                    <div class="g-atributo">Número</div>
+                </div>
+            </div>
+            <div class="example-box"><strong>Ejemplo práctico:</strong> El atributo <code>Dirección</code> se compone de: <code>Calle</code>, <code>Número</code>, <code>Colonia</code> y <code>Código Postal</code>.</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><span class="symbol-name">◌ Atributo Calculado / Derivado (Óvalo con línea punteada)</span></div>
+            <p><div class="section-title">Función:</div> Representa un valor que no se almacena físicamente en la base de datos de forma estática, sino que se calcula dinámicamente a partir de otros datos existentes.</p>
+            <div class="graphic-container">
+                <div class="g-entidad">Alumno</div><div class="g-linea"></div><div class="g-atributo-calculado">Edad</div>
+            </div>
+            <div class="example-box"><strong>Ejemplo práctico:</strong> El atributo <code>Edad</code> se calcula automáticamente restando la <code>Fecha de Nacimiento</code> de la fecha actual del sistema.</div>
+        </div>
+    </div>
+
+    <h3>3. Cardinalidad y Tipos de Relaciones</h3>
+    <p>La cardinalidad indica cuántos registros de una entidad se pueden asociar con cuántos registros de otra entidad a través de las líneas de conexión.</p>
+    <div class="grid-container">
+        <div class="card">
+            <div class="card-header"><span class="symbol-name">Relación Muchos a Muchos (n : m)</span></div>
+            <p><strong>Representación:</strong> Líneas rectas sin flechas que conectan las entidades al rombo.</p>
+            <p><div class="section-title">Función:</div> Un registro de la Entidad A se relaciona con muchos de la Entidad B, y viceversa.</p>
+            <div class="graphic-container">
+                <div class="g-entidad">Alumno</div> <span style="font-weight:bold;">N</span> <div class="g-linea"></div> <div class="g-relacion"><span>Curza</span></div> <div class="g-linea"></div> <span style="font-weight:bold;">M</span> <div class="g-entidad">Materia</div>
+            </div>
+            <div class="example-box"><strong>Ejemplo práctico:</strong> Muchos <code>Alumnos</code> pueden cursar muchas <code>Materias</code> diferentes, y una <code>Materia</code> es cursada por muchos <code>Alumnos</code>.</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><span class="symbol-name">Relación Muchos a Uno / Uno a Muchos (n : 1 / 1 : n)</span></div>
+            <p><strong>Representación:</strong> Una línea recta del lado del "Muchos" (n) y una línea con punta de flecha apuntando hacia el lado del "Uno" (1).</p>
+            <p><div class="section-title">Función:</div> Múltiples registros de una entidad se asocian con un único registro de otra entidad.</p>
+            <div class="graphic-container">
+                <div class="g-entidad">Empleado</div> <span style="font-weight:bold;">N</span> <div class="g-linea"></div> <div class="g-relacion"><span>Pertenece</span></div> <div class="g-linea g-flecha-der"></div> <span style="font-weight:bold;">1</span> <div class="g-entidad">Depto</div>
+            </div>
+            <div class="example-box"><strong>Ejemplo práctico:</strong> Muchos <code>Empleados</code> (lado n) trabajan para un solo <code>Departamento</code> (lado 1, indicado con la flecha).</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><span class="symbol-name">Relación Uno a Uno (1 : 1)</span></div>
+            <p><strong>Representación:</strong> Ambas líneas que salen del rombo de relación tienen puntas de flecha apuntando a las respectivas entidades.</p>
+            <p><div class="section-title">Función:</div> Un registro de la Entidad A se puede vincular únicamente con un solo registro de la Entidad B, y viceversa.</p>
+            <div class="graphic-container">
+                <div class="g-entidad">País</div> <span style="font-weight:bold;">1</span> <div class="g-linea g-flecha-izq"></div> <div class="g-relacion"><span>Tiene</span></div> <div class="g-linea g-flecha-der"></div> <span style="font-weight:bold;">1</span> <div class="g-entidad">Capital</div>
+            </div>
+            <div class="example-box"><strong>Ejemplo práctico:</strong> Un <code>País</code> (lado 1) tiene una sola <code>Capital</code> (lado 1), y esa <code>Capital</code> pertenece a un solo <code>País</code>.</div>
+        </div>
+    </div>
+
+
+    <h2>Tema 2: El Modelo de Base de Datos Relacional</h2>
+    <div class="intro">
+        <p><strong>¿Qué es el Modelo Relacional?</strong> Propuesto originalmente por Edgar F. Codd en 1970, es el modelo más utilizado hoy en día para administrar bases de datos. Su principio fundamental es organizar la información en <strong>tablas (o relaciones)</strong> compuestas por filas y columnas, permitiendo un acceso y manipulación de datos de manera intuitiva y matemática.</p>
+    </div>
+
+    <h3>1. Características Clave del Modelo Relacional</h3>
+    <div class="card">
+        <ul>
+            <li><strong>Independencia Física y Lógica:</strong> La forma en que se almacenan los datos en el disco duro (física) no afecta a los programas ni a las consultas que los usuarios hacen (lógica).</li>
+            <li><strong>Flexibilidad:</strong> Es muy fácil añadir nuevas columnas o tablas sin necesidad de reestructurar toda la base de datos desde cero.</li>
+            <li><strong>Integridad de Datos:</strong> Reglas estrictas que garantizan que la información almacenada sea válida, coherente y que no existan datos "huérfanos".</li>
+            <li><strong>Uso de Lenguaje Estándar:</strong> Utiliza principalmente <strong>SQL</strong> (Structured Query Language) para consultar, insertar, actualizar y borrar información.</li>
+        </ul>
+    </div>
+
+    <h3>2. Elementos Fundamentales de una Base de Datos Relacional</h3>
+    <div class="card">
+        <h3>A. Relación (Tabla)</h3>
+        <p>Es el elemento central. Una tabla representa una "entidad" del mundo real y contiene una colección de datos sobre un tema específico.</p>
+        <h3>B. Tupla (Fila o Registro)</h3>
+        <p>Corresponde a una fila horizontal en la tabla. Cada tupla representa un objeto o caso individual único dentro de esa tabla.</p>
+        <h3>C. Atributo (Columna o Campo)</h3>
+        <p>Es cada columna vertical de la tabla. Define una propiedad o característica específica que queremos guardar de cada registro.</p>
+        <h3>D. Dominio</h3>
+        <p>Es el conjunto de valores permitidos para un atributo determinado. Define el <em>tipo de dato</em> (ej. Entero, Texto, Fecha) y las restricciones (ej. que la edad sea un número entre 1 y 120).</p>
+    </div>
+
+    <h3>3. Ejemplo Visual de una Tabla Relacional</h3>
+    <p>A continuación se muestra cómo se traducen estos términos en una tabla real llamada <code>ALUMNOS</code>:</p>
+    <table>
+        <thead>
+            <tr>
+                <th>ID_Alumno <br><span class="badge" style="background:#e67e22;">Atributo / Llave</span></th>
+                <th>Nombre <br><span class="badge">Atributo</span></th>
+                <th>Semestre <br><span class="badge">Atributo</span></th>
+                <th>Carrera <br><span class="badge">Atributo</span></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="background-color: #ebf5fb;">
+                <td>102030</td>
+                <td>Carlos Mendoza</td>
+                <td>4°</td>
+                <td>Sistemas</td>
+                <td style="border:none; background:#f4f7f6; font-weight:bold; color:#2980b9;">← Esto es una Tupla (Fila)</td>
+            </tr>
+            <tr>
+                <td>102031</td>
+                <td>Ana Paula Gómez</td>
+                <td>2°</td>
+                <td>Industrial</td>
+            </tr>
+            <tr>
+                <td>102032</td>
+                <td>Luis Fernando Soto</td>
+                <td>6°</td>
+                <td>Sistemas</td>
+            </tr>
+        </tbody>
+    </table>
+    <p><em>* Nota para el alumno: Toda esta tabla es la <strong>Relación</strong>. Cada fila horizontal es una <strong>Tupla</strong>.</em></p>
+
+    <h3>4. Elementos de Vinculación y Control: Las Llaves (Keys)</h3>
+    <div class="card">
+        <h3>1. Llave Primaria (Primary Key - PK)</h3>
+        <p>Es un atributo (o combinación de ellos) que identifica de forma <strong>única e inequívoca</strong> a cada tupla en una tabla. No puede haber dos filas con la misma Llave Primaria, y este campo nunca puede quedar vacío (<code>NOT NULL</code>).</p>
+        <div class="example-box"><strong>Ejemplo:</strong> En la tabla anterior, <code>ID_Alumno</code> es la Llave Primaria.</div>
+
+        <h3>2. Llave Foránea o Ajena (Foreign Key - FK)</h3>
+        <p>Es un atributo en una tabla cuyo valor debe coincidir exactamente con la Llave Primaria de otra tabla distinta. Es el mecanismo físico que <strong>crea la relación</strong> entre dos tablas.</p>
+        <div class="example-box"><strong>Ejemplo:</strong> Si en la tabla de <code>ALUMNOS</code> añadimos una columna llamada <code>ID_Carrera</code> para conectarla con una tabla independiente de <code>CARRERAS</code>, esa columna actúa como Llave Foránea.</div>
+    </div>
+    <div class="important-note">
+        <strong>Regla de Oro (Integridad Referencial):</strong> Una Llave Foránea no puede contener un valor que no exista previamente como Llave Primaria en la tabla de origen. Esto evita que, por ejemplo, inscribamos a un alumno en una carrera que no existe en la institución.
+    </div>
+
+
+    <h2>Tema 3: El Modelo Entidad-Relación (MER) como Metodología</h2>
+    <div class="intro">
+        <p><strong>¿Qué es el Modelo Entidad-Relación?</strong> Es un modelo de datos de alto nivel que se emplea para diseñar la estructura conceptual de una base de datos. Sirve como un "puente" o plano arquitectónico que permite traducir los requerimientos del mundo real de una empresa hacia una estructura lógica que una computadora pueda entender (las tablas).</p>
+    </div>
+
+    <h3>1. Características Principales del MER</h3>
+    <div class="card">
+        <ul>
+            <li><strong>Abstracción de Alto Nivel:</strong> No se preocupa por cómo se guardarán los archivos en el disco, ni por qué gestor de base de datos (MySQL, PostgreSQL, Oracle) se usará. Se enfoca puramente en la semántica de los datos.</li>
+            <li><strong>Comprensión Universal:</strong> Al ser un modelo visual y semántico, funciona como una excelente herramienta de comunicación entre los ingenieros de sistemas y los clientes o usuarios finales.</li>
+            <li><strong>Base para el Modelo Relacional:</strong> Existe una transición casi directa y matemática para convertir un Modelo Entidad-Relación en tablas relacionales.</li>
+        </ul>
+    </div>
+
+    <h3>2. Elementos Esenciales del Modelo</h3>
+    <div class="card">
+        <h3>1. Entidades y Conjuntos de Entidades</h3>
+        <div class="concept-block">
+            <strong>A. Entidades Fuertes (o Regulares):</strong> Tienen existencia propia y poseen suficientes atributos para identificar de forma única cada uno de sus registros mediante una clave primaria.
+            <div class="example-box">Ejemplo: Un <code>CLIENTE</code> o un <code>PRODUCTO</code>.</div>
+        </div>
+        <div class="concept-block">
+            <strong>B. Entidades Débiles:</strong> No pueden identificarse por sí mismas; dependen de una entidad fuerte para existir y su clave se compone de la combinación de la clave de la entidad fuerte más un discriminador propio.
+            <div class="example-box">Ejemplo: Las <code>PARCIALIDADES</code> de un pago. No existen pagos parciales si no se genera primero una <code>FACTURA</code> principal.</div>
+        </div>
+
+        <h3>2. Atributos y sus Clasificaciones</h3>
+        <div class="concept-block"><strong>A. Atributo Simple (Atómico):</strong> No se puede dividir en partes más pequeñas con significado propio.<div class="example-box">Ejemplo: La <code>Edad</code> o el <code>Precio</code> de un artículo.</div></div>
+        <div class="concept-block"><strong>B. Atributo Compuesto:</strong> Se puede desglosar en componentes más pequeños que sí tienen significado independiente.<div class="example-box">Ejemplo: El atributo <code>NombreCompleto</code> (dividido en Nombre, Apellido Paterno, Apellido Materno).</div></div>
+        <div class="concept-block"><strong>C. Atributo Monovalor:</strong> Tiene un único valor para una entidad en particular.<div class="example-box">Ejemplo: El número de <code>CURP</code> de una persona (solo se tiene uno).</div></div>
+        <div class="concept-block"><strong>D. Atributo Multivalorado:</strong> Puede almacenar una colección o lista de valores para una misma celda o registro.<div class="example-box">Ejemplo: Los <code>CorreosElectrónicos</code> de un cliente (puede tener dos o tres).</div></div>
+        <div class="concept-block"><strong>E. Atributo Derivado (o Calculado):</strong> Su valor se extrae o deduce a partir de otros atributos existentes mediante una operación.<div class="example-box">Ejemplo: La <code>Antigüedad</code> de un empleado calculada con base en su Fecha de Contratación.</div></div>
+
+        <h3>3. Relaciones y Grados de Relación</h3>
+        <div class="concept-block"><strong>Relación Unaria (Recursiva):</strong> Una entidad se relaciona consigo misma.<div class="example-box">Ejemplo: Un <code>EMPLEADO</code> supervisa a otros <code>EMPLEADOS</code>.</div></div>
+        <div class="concept-block"><strong>Relación Binaria (Grado 2):</strong> Participan exactamente dos entidades. Es el tipo más común en el diseño de bases de datos.<div class="example-box">Ejemplo: Un <code>CLIENTE</code> realiza una <code>COMPRA</code>.</div></div>
+        <div class="concept-block"><strong>Relación Ternaria (Grado 3):</strong> Involucra de forma simultánea a tres entidades distintas en un solo evento.<div class="example-box">Ejemplo: Un <code>PROVEEDOR</code> suministra un <code>COMPONENTE</code> a un <code>PROYECTO</code> específico.</div></div>
+    </div>
+
+    <h3>3. Restricciones del Modelo: Mapeo y Participación</h3>
+    <div class="card">
+        <h3>A. Razón de Mapeo (Cardinalidad)</h3>
+        <ul>
+            <li>Uno a Uno <span class="badge">1:1</span></li>
+            <li>Uno a Muchos <span class="badge">1:N</span></li>
+            <li>Muchos a Muchos <span class="badge">N:M</span></li>
+        </ul>
+        <h3>B. Restricciones de Participación</h3>
+        <ul>
+            <li><strong>Participación Total (Dependencia de existencia):</strong> Cada entidad en el conjunto <em>debe</em> participar obligatoriamente en al menos una relación del conjunto.</li>
+            <li><strong>Participación Parcial:</strong> Algunas entidades del conjunto pueden o no participar en la relación.</li>
+        </ul>
+    </div>
+
+
+    <h2>Tema 4: Modelo Relacional y Proceso de Transformación (Mapeo)</h2>
+    <div class="intro">
+        <p><strong>¿Qué aprenderemos aquí?</strong> Diseñar un Diagrama Entidad-Relación (conceptual) es solo la mitad del trabajo. Para construir la base de datos real, debemos aplicar un conjunto de reglas matemáticas y lógicas para transformar esos diagramas en un <strong>Modelo Relacional (lógico)</strong> estándar, garantizando que no se pierda información ni consistencia en el proceso.</p>
+    </div>
+
+    <h3>1. Características y Restricciones del Modelo Relacional</h3>
+    <div class="card">
+        <ul>
+            <li><strong>Atomicidad:</strong> Cada celda debe contener un <strong>único valor simple</strong>. No se permiten listas ni conjuntos de datos dentro de una celda.</li>
+            <li><strong>Unicidad de Columnas:</strong> Cada columna en una tabla debe tener un nombre único.</li>
+            <li><strong>Unicidad de Tuplas:</strong> No pueden existir dos filas exactamente idénticas en una misma tabla; de ahí la obligación de definir una Llave Primaria (PK).</li>
+            <li><strong>El orden es irrelevante:</strong> El orden físico de las filas o de las columnas no altera el significado ni el comportamiento de los datos.</li>
+        </ul>
+    </div>
+
+    <h3>2. Procedimiento de Transformación (Mapeo de MER a Tablas)</h3>
+    
+    <div class="step-block">
+        <div class="step-title">Paso 1: Transformación de Entidades Fuertes</div>
+        <p>Cada entidad fuerte del diagrama se convierte directamente en una <strong>tabla independiente</strong>. Los atributos simples de la entidad se convierten en las columnas de la tabla, y el atributo llave se define como la <strong>Llave Primaria (PK)</strong>.</p>
+        <div class="graphic-container">
+            <div style="text-align:center;">
+                <span class="badge">Modelo Conceptual</span><br><br>
+                <div class="g-atributo-llave">Matricula</div>───<div class="g-entidad">ALUMNO</div>───<div class="g-atributo">Nombre</div>
+            </div>
+            <div style="font-weight:bold; font-size:20px;">➔</div>
+            <div>
+                <span class="badge" style="background:#e67e22;">Modelo Lógico Resultante</span><br>
+                <span class="formula">ALUMNO (<span style="text-decoration: underline;">Matricula</span>, Nombre)</span>
+            </div>
+        </div>
+        <div class="example-box"><strong>Ejemplo:</strong> La entidad <code>ALUMNO</code> con llave <code>Matricula</code> y atributo <code>Nombre</code>.</div>
+    </div>
+
+    <div class="step-block">
+        <div class="step-title">Paso 2: Transformación de Entidades Débiles</div>
+        <p>Cada entidad débil se convierte en una <strong>tabla</strong>. Sus columnas serán sus propios atributos más la **Llave Primaria de la entidad fuerte** de la que depende. Esta clave copiada actuará como Llave Foránea (FK), y la unión de ambas claves formará la Llave Primaria compuesta de la nueva tabla.</p>
+        <div class="graphic-container">
+            <div style="text-align:center;">
+                <span class="badge">Modelo Conceptual</span><br><br>
+                <div class="g-entidad">EMPLEADO</div> === <div class="g-entidad-debil">DEPENDIENTE</div>
+            </div>
+            <div style="font-weight:bold; font-size:20px;">➔</div>
+            <div>
+                <span class="badge" style="background:#e67e22;">Modelo Lógico Resultante</span><br>
+                <span class="formula">DEPENDIENTE (<span style="text-decoration: underline;">ID_Empleado (FK), NombreHijo</span>, Parentesco)</span>
+            </div>
+        </div>
+        <div class="example-box"><strong>Ejemplo:</strong> La entidad débil <code>DEPENDIENTE</code> (hijo de un empleado) depende de <code>EMPLEADO</code>.</div>
+    </div>
+
+    <div class="step-block">
+        <div class="step-title">Paso 3: Transformación de Relaciones 1:N (Uno a Muchos)</div>
+        <p>En este tipo de relación <strong>no se crea una tabla nueva</strong>. En su lugar, la Llave Primaria de la entidad del lado "Uno" se copia y se pega dentro de la tabla del lado "Muchos" (N) en forma de <strong>Llave Foránea (FK)</strong>. Si la relación tenía atributos propios, estos también se mudan al lado "Muchos".</p>
+        <div class="graphic-container">
+            <div style="text-align:center;">
+                <span class="badge">Modelo Conceptual (1 a N)</span><br><br>
+                <div class="g-entidad">DEPARTAMENTO</div> ── 1 ── ‹R› ── N ── <div class="g-entidad">EMPLEADO</div>
+            </div>
+            <div style="font-weight:bold; font-size:20px;">➔</div>
+            <div>
+                <span class="badge" style="background:#e67e22;">Modelo Lógico Resultante</span><br>
+                <span class="formula">EMPLEADO (<span style="text-decoration: underline;">ID_Empleado</span>, Nombre, ID_Depto (FK))</span>
+            </div>
+        </div>
+        <div class="example-box"><strong>Ejemplo:</strong> Un <code>DEPARTAMENTO</code> (1) tiene muchos <code>EMPLEADOS</code> (N). La clave <code>ID_Depto</code> viaja a la tabla de empleados.</div>
+    </div>
+
+    <div class="step-block">
+        <div class="step-title">Paso 4: Transformación de Relaciones N:M (Muchos a Muchos)</div>
+        <p>Toda relación Muchos a Muchos <strong>se transforma obligatoriamente en una nueva tabla independiente</strong> (a menudo llamada tabla intermedia o asociativa). Su Llave Primaria será compuesta, formada por la combinación de las Llaves Primarias de las dos entidades participantes. Si la relación tenía atributos propios, se añaden a esta nueva tabla.</p>
+        <div class="graphic-container">
+            <div style="text-align:center;">
+                <span class="badge">Modelo Conceptual (N a M)</span><br><br>
+                <div class="g-entidad">ALUMNO</div> ── N ── ‹Inscribe› ── M ── <div class="g-entidad">MATERIA</div>
+            </div>
+            <div style="font-weight:bold; font-size:20px;">➔</div>
+            <div>
+                <span class="badge" style="background:#e67e22;">Modelo Lógico (¡Nace tabla intermedia!)</span><br>
+                <span class="formula">INSCRIPCION (<span style="text-decoration: underline;">Matricula (FK), ID_Materia (FK)</span>, CalificacionFinal)</span>
+            </div>
+        </div>
+        <div class="example-box"><strong>Ejemplo:</strong> Muchos <code>ALUMNOS</code> (N) cursan muchas <code>MATERIAS</code> (M). Se genera la tabla intermedia <code>INSCRIPCION</code>.</div>
+    </div>
+
+    <div class="step-block">
+        <div class="step-title">Paso 5: Tratamiento de Atributos Multivalorados</div>
+        <p>Como el modelo relacional prohíbe guardar listas de datos en una sola celda (regla de atomicidad), cada atributo multivalorado <strong>se convierte en una tabla independiente</strong>. Esta tabla contendrá el atributo en sí y la Llave Primaria de la entidad original para poder saber a quién le pertenece ese dato.</p>
+        <div class="graphic-container">
+            <div style="text-align:center;">
+                <span class="badge">Modelo Conceptual</span><br><br>
+                <div class="g-entidad">EMPLEADO</div> ─── <div class="g-atributo-multivalor">Telefono</div>
+            </div>
+            <div style="font-weight:bold; font-size:20px;">➔</div>
+            <div>
+                <span class="badge" style="background:#e67e22;">Modelo Lógico Resultante</span><br>
+                <span class="formula">TELEFONOS_EMPLEADO (<span style="text-decoration: underline;">ID_Empleado (FK), NumeroTelefono</span>)</span>
+            </div>
+        </div>
+        <div class="example-box"><strong>Ejemplo:</strong> Si la entidad <code>EMPLEADO</code> tiene el atributo multivalorado <code>Telefono</code>.</div>
+    </div>
+
+    <h3>3. Resumen de Reglas de Relación (Mapeo Rápido)</h3>
+    <div class="card">
+        <p>Para que los alumnos lo recuerden de forma mnemotécnica antes de un examen o proyecto:</p>
+        <ul>
+            <li><strong>Relación 1 : 1</strong> → La clave de una entidad pasa a la otra como FK (preferentemente a la que tenga participación total).</li>
+            <li><strong>Relación 1 : N</strong> → La clave del "1" viaja al "N" como FK. (<em>"El fuerte adopta al débil"</em>).</li>
+            <li><strong>Relación N : M</strong> → <strong>¡Alerta!</strong> El rombo se destruye y nace una nueva tabla intermedia con claves combinadas.</li>
+        </ul>
+    </div>
+
+    <footer>
+        <p>© 2026 - Material educativo digital de Bases de Datos. Prohibida su reproducción con fines comerciales.</p>
+    </footer>
+
+</body>
+</html>

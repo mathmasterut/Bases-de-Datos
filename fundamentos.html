@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fundamentos de Bases de Datos</title>
+    <style>
+        /* ESTILO VISUAL UNIFICADO CON IDENTIDAD PROPIA (AZUL EMPRESARIAL) */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f7f6;
+        }
+        header {
+            background-color: #2e4053;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        h2 { color: #2e4053; border-bottom: 3px solid #34495e; padding-bottom: 5px; margin-top: 40px; }
+        .intro { background-color: #eaecee; padding: 20px; border-left: 5px solid #2e4053; border-radius: 4px; margin-bottom: 30px; }
+        
+        .activity-card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); margin-bottom: 30px; border-top: 4px solid #2e4053; }
+        .problem-statement { background-color: #f8f9fa; border: 1px solid #e2e8f0; padding: 15px; border-radius: 6px; font-style: italic; margin-bottom: 20px; }
+        
+        /* ESTILOS DRAG & DROP Y PALETA */
+        .palette { display: flex; gap: 10px; background: #ebf5fb; padding: 15px; border-radius: 6px; margin-bottom: 20px; justify-content: center; flex-wrap: wrap; border: 1px solid #aed6f1; }
+        .drag-item { padding: 8px 12px; background: white; border: 2px solid #2e4053; font-weight: bold; cursor: grab; font-size: 13px; user-select: none; color: #2e4053; border-radius: 4px; }
+        
+        /* CONTENEDORES GRÁFICOS */
+        .contenedor-conceptos { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin: 20px 0; }
+        .caja-concepto { background: #fdfefe; border: 2px solid #34495e; border-radius: 6px; width: 280px; min-height: 150px; display: flex; flex-direction: column; overflow: hidden; }
+        .caja-header { background: #34495e; color: white; padding: 8px; text-align: center; font-weight: bold; font-size: 14px; }
+        .caja-body { padding: 15px; display: flex; flex-direction: column; gap: 10px; flex-grow: 1; justify-content: center; align-items: center; background: #fafafa; }
+
+        .drop-slot { min-width: 140px; min-height: 45px; border: 2px dashed #7f8c8d; display: flex; justify-content: center; align-items: center; background: #fff; font-size: 11px; color: #7f8c8d; text-align: center; padding: 2px; width: 100%; box-sizing: border-box; }
+        .drop-slot.hovered { background: #e8f8f5; border-color: #2ecc71; }
+
+        /* BOTONES Y FEEDBACK */
+        .btn-evaluar { background-color: #34495e; color: white; border: none; padding: 12px 20px; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; width: 100%; transition: 0.2s; margin-top: 15px; }
+        .btn-evaluar:hover { background-color: #2e4053; }
+        .feedback-box { margin-top: 20px; padding: 15px; border-radius: 6px; display: none; }
+        .feedback-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .feedback-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        
+        footer { text-align: center; margin-top: 50px; color: #7f8c8d; font-size: 14px; border-top: 1px solid #bdc3c7; padding-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Fundamentos de Bases de Datos</h1>
+        <p>Comprende las características fundamentales y las funciones del motor de datos organizacional</p>
+    </header>
+
+    <div class="intro">
+        <p><strong>¿Qué estamos evaluando?:</strong> Antes de programar o estructurar tablas, debes entender el "por qué". En este módulo evaluarás los pilares que diferencian a una Base de Datos profesional de un simple archivo de texto o una hoja de cálculo tradicional, identificando sus características de protección y sus funciones operativas.</p>
+    </div>
+
+    <h2>Desafío 1: Características Esenciales (¿Excel o Base de Datos?)</h2>
+    <div class="activity-card">
+        <div class="problem-statement">
+            <strong>Caso de Negocio:</strong> "Una startup guardaba sus ventas en un archivo Excel compartido en la red. Con el tiempo sufrieron tres problemas: 1) Si dos empleados guardaban un cambio al mismo tiempo, uno borraba al otro. 2) Al cambiar la estructura del archivo, los reportes automatizados se rompían. 3) Había registros de clientes duplicados por todas partes. Arrastra la característica de una Base de Datos real que soluciona cada síntoma organizacional."
+        </div>
+        
+        <div class="palette">
+            <div class="drag-item" draggable="true" id="fun1-concurrencia" ondragstart="drag(event)">Acceso Concurrente</div>
+            <div class="drag-item" draggable="true" id="fun1-independencia" ondragstart="drag(event)">Independencia Lógica/Física</div>
+            <div class="drag-item" draggable="true" id="fun1-redundancia" ondragstart="drag(event)">Redundancia Mínima</div>
+        </div>
+
+        <div class="contenedor-conceptos">
+            <div class="caja-concepto">
+                <div class="caja-header">Fallo: Choque de Usuarios</div>
+                <div class="caja-body">
+                    <p style="font-size: 12px; margin: 0 0 10px 0; text-align: center; color: #555;">Dos cajeros intentan cobrar un producto en el mismo milisegundo.</p>
+                    <div class="drop-slot" id="fun1-s1" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Solución Técnica ]</div>
+                </div>
+            </div>
+
+            <div class="caja-concepto">
+                <div class="caja-header">Fallo: Sistema Frágil</div>
+                <div class="caja-body">
+                    <p style="font-size: 12px; margin: 0 0 10px 0; text-align: center; color: #555;">Al agregar una nueva columna de teléfono, las aplicaciones dejan de funcionar.</p>
+                    <div class="drop-slot" id="fun1-s2" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Solución Técnica ]</div>
+                </div>
+            </div>
+
+            <div class="caja-concepto">
+                <div class="caja-header">Fallo: Datos Duplicados</div>
+                <div class="caja-body">
+                    <p style="font-size: 12px; margin: 0 0 10px 0; text-align: center; color: #555;">El mismo cliente aparece registrado 5 veces con variaciones en su dirección.</p>
+                    <div class="drop-slot" id="fun1-s3" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Solución Técnica ]</div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-evaluar" onclick="validarFun1()">Verificar Diagnóstico de Infraestructura</button>
+        <div class="feedback-box" id="f-fun1"></div>
+    </div>
+
+    <h2>Desafío 2: Enlistar las Funciones Operativas del SGBD</h2>
+    <div class="activity-card">
+        <div class="problem-statement">
+            <strong>Caso de Negocio:</strong> "El Sistema de Gestión de Bases de Datos (SGBD) ejecuta funciones específicas para mantener viva la información corporativa. Mapea la acción del negocio con la función técnica que la ejecuta de manera interna en el motor."
+        </div>
+        
+        <div class="palette">
+            <div class="drag-item" draggable="true" id="fun2-def" ondragstart="drag(event)">Definición de Datos</div>
+            <div class="drag-item" draggable="true" id="fun2-manip" ondragstart="drag(event)">Manipulación (CRUD)</div>
+            <div class="drag-item" draggable="true" id="fun2-integ" ondragstart="drag(event)">Control de Integridad</div>
+        </div>
+
+        <div class="contenedor-conceptos">
+            <div class="caja-concepto" style="border-color: #27ae60;">
+                <div class="caja-header" style="background: #27ae60;">Acción: Operaciones del Cajero</div>
+                <div class="caja-body">
+                    <p style="font-size: 12px; margin: 0 0 10px 0; text-align: center; color: #555;">El empleado busca un cliente por INE, modifica su teléfono y registra un pago.</p>
+                    <div class="drop-slot" id="fun2-s1" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Función del Motor ]</div>
+                </div>
+            </div>
+
+            <div class="caja-concepto" style="border-color: #27ae60;">
+                <div class="caja-header" style="background: #27ae60;">Acción: Reglas del Sistema</div>
+                <div class="caja-body">
+                    <p style="font-size: 12px; margin: 0 0 10px 0; text-align: center; color: #555;">El motor rechaza la captura de una venta porque el campo 'Monto' venía vacío.</p>
+                    <div class="drop-slot" id="fun2-s2" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Función del Motor ]</div>
+                </div>
+            </div>
+
+            <div class="caja-concepto" style="border-color: #27ae60;">
+                <div class="caja-header" style="background: #27ae60;">Acción: Diseño de Catálogos</div>
+                <div class="caja-body">
+                    <p style="font-size: 12px; margin: 0 0 10px 0; text-align: center; color: #555;">El Arquitecto de TI declara que la tabla 'PRODUCTOS' tendrá un ID entero y descripción de texto.</p>
+                    <div class="drop-slot" id="fun2-s3" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Función del Motor ]</div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-evaluar" onclick="validarFun2()">Validar Mapeo de Funciones</button>
+        <div class="feedback-box" id="f-fun2"></div>
+    </div>
+
+    <footer>
+        <p>© 2026 - Módulo de Evaluación Continua Interactiva | Material educativo digital de Bases de Datos. Prohibida su reproducción con fines comerciales.</p>
+    </footer>
+
+    <script>
+        // CONTROL SEGURO DE DRAG & DROP
+        function allowDrop(ev) { 
+            ev.preventDefault(); 
+            if (ev.currentTarget.classList.contains('drop-slot')) {
+                ev.currentTarget.classList.add('hovered'); 
+            }
+        }
+        
+        function dragLeave(ev) { 
+            ev.currentTarget.classList.remove('hovered'); 
+        }
+        
+        function drag(ev) { 
+            ev.dataTransfer.setData("text", ev.target.id); 
+        }
+        
+        function drop(ev) {
+            ev.preventDefault();
+            ev.currentTarget.classList.remove('hovered');
+            
+            if (ev.target.classList.contains('drag-item')) {
+                return;
+            }
+            
+            var data = ev.dataTransfer.getData("text");
+            var draggedElement = document.getElementById(data);
+            
+            ev.currentTarget.innerHTML = "";
+            ev.currentTarget.appendChild(draggedElement);
+        }
+
+        // EVALUACIÓN DESAFÍO 1
+        function validarFun1() {
+            const s1 = document.getElementById('fun1-s1').firstElementChild?.id;
+            const s2 = document.getElementById('fun1-s2').firstElementChild?.id;
+            const s3 = document.getElementById('fun1-s3').firstElementChild?.id;
+            const f = document.getElementById('f-fun1');
+            f.style.display = "block";
+
+            if (s1 === "fun1-concurrencia" && s2 === "fun1-independencia" && s3 === "fun1-redundancia") {
+                f.className = "feedback-box feedback-success";
+                f.innerHTML = "<strong>¡Excelente análisis teórico!</strong> Has identificado perfectamente por qué las organizaciones migran a bases de datos. El <strong>Acceso Concurrente</strong> gestiona bloqueos para que múltiples usuarios interactúen simultáneamente sin sobreescribirse. La <strong>Independencia</strong> separa los datos del software para que los cambios estructurales no rompan las aplicaciones, y la eliminación de <strong>Redundancia</strong> asegura un único origen de la verdad.";
+            } else {
+                f.className = "feedback-box feedback-error";
+                f.innerHTML = "<strong>Diagnóstico Incorrecto:</strong> Analiza detalladamente cada síntoma. Si colocas 'Redundancia' en el choque de usuarios, recuerda que la redundancia habla de datos duplicados y desperdicio de almacenamiento, no de usuarios concurrentes intentando modificar información al mismo tiempo.";
+            }
+        }
+
+        // EVALUACIÓN DESAFÍO 2
+        function validarFun2() {
+            const s1 = document.getElementById('fun2-s1').firstElementChild?.id;
+            const s2 = document.getElementById('fun2-s2').firstElementChild?.id;
+            const s3 = document.getElementById('fun2-s3').firstElementChild?.id;
+            const f = document.getElementById('f-fun2');
+            f.style.display = "block";
+
+            if (s1 === "fun2-manip" && s2 === "fun2-integ" && s3 === "fun2-def") {
+                f.className = "feedback-box feedback-success";
+                f.innerHTML = "<strong>¡Felicidades! Comprensión de las funciones del SGBD completada.</strong> Operar con registros existentes (Consultar, Modificar, Insertar) es la esencia de la <strong>Manipulación de datos</strong> (CRUD). Impedir datos corruptos o campos obligatorios vacíos mediante restricciones automáticas es la función de <strong>Control de Integridad</strong>, y dictar la estructura inicial de metadatos en las tablas corresponde a la <strong>Definición de datos</strong>.";
+            } else {
+                f.className = "feedback-box feedback-error";
+                f.innerHTML = "<strong>Mapeo Erróneo:</strong> Recuerda el propósito de cada función. El diseño estructural (tipos de datos) pertenece a la 'Definición'; mientras que el uso cotidiano de inserciones y modificaciones pertenece estrictamente a la 'Manipulación'.";
+            }
+        }
+    </script>
+</body>
+</html>

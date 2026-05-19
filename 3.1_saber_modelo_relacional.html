@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saber Hacer: Transformación al Modelo Relacional</title>
+    <style>
+        /* ESTILO VISUAL UNIFICADO */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f7f6;
+        }
+        header {
+            background-color: #1a5276;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        h2 { color: #1a5276; border-bottom: 3px solid #f39c12; padding-bottom: 5px; margin-top: 40px; }
+        .intro { background-color: #fef9e7; padding: 20px; border-left: 5px solid #f39c12; border-radius: 4px; margin-bottom: 30px; }
+        
+        .activity-card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); margin-bottom: 30px; border-top: 4px solid #f39c12; }
+        .problem-statement { background-color: #f8f9fa; border: 1px solid #e2e8f0; padding: 15px; border-radius: 6px; font-style: italic; margin-bottom: 20px; }
+        
+        /* ESTILOS DRAG & DROP */
+        .palette { display: flex; gap: 10px; background: #ebf5fb; padding: 15px; border-radius: 6px; margin-bottom: 20px; justify-content: center; flex-wrap: wrap; border: 1px solid #aed6f1; }
+        .drag-item { padding: 8px 12px; background: white; border: 2px solid #2980b9; font-weight: bold; cursor: grab; font-size: 13px; user-select: none; color: #1a5276; }
+        .drag-item.pk { border-color: #27ae60; background: #e8f8f5; }
+        .drag-item.fk { border-color: #e74c3c; background: #fdedec; }
+        
+        .drop-zone-container { display: flex; justify-content: center; gap: 15px; align-items: center; background: #f8f9fa; padding: 25px; border: 2px dashed #bdc3c7; border-radius: 8px; min-height: 100px; flex-wrap: wrap; }
+        .drop-slot { min-width: 130px; min-height: 50px; border: 2px dashed #95a5a6; display: flex; justify-content: center; align-items: center; background: #fff; font-size: 11px; color: #7f8c8d; text-align: center; padding: 2px; }
+        .drop-slot.hovered { background: #d5f5e3; border-color: #27ae60; }
+
+        /* ESQUEMAS DE TABLAS RELACIONALES */
+        .t-tabla { border: 2px solid #2c3e50; border-radius: 4px; overflow: hidden; background: #fff; display: inline-block; vertical-align: top; margin: 10px; min-width: 220px; }
+        .t-header { background: #2c3e50; color: white; font-weight: bold; padding: 6px 12px; text-align: center; font-size: 14px; }
+        .t-body { padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+
+        /* BOTONES Y FEEDBACK */
+        .btn-evaluar { background-color: #27ae60; color: white; border: none; padding: 12px 20px; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; width: 100%; transition: 0.2s; margin-top: 15px; }
+        .btn-evaluar:hover { background-color: #219653; }
+        .feedback-box { margin-top: 20px; padding: 15px; border-radius: 6px; display: none; }
+        .feedback-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .feedback-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        
+        footer { text-align: center; margin-top: 50px; color: #7f8c8d; font-size: 14px; border-top: 1px solid #bdc3c7; padding-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Saber Hacer: Mapeo y Diagramación en el Modelo Relacional</h1>
+        <p>Aprende a transformar conceptos de negocio en tablas reales con integridad referencial</p>
+    </header>
+
+    <div class="intro">
+        <p><strong>¿Qué estamos evaluando?:</strong> Ya dejamos atrás la abstracción de los diagramas Entidad-Relación. En este nivel debes razonar de forma física: definir qué campos se convierten en llaves, cómo viajan las llaves foráneas (FK) para entrelazar datos y cómo estructurar tablas intermedias sin generar redundancias.</p>
+    </div>
+
+    <h2>Desafío 1: Migración de Llaves en Relación 1:N</h2>
+    <div class="activity-card">
+        <div class="problem-statement">
+            <strong>Caso de Negocio:</strong> "Un <code>DEPARTAMENTO</code> de la empresa tiene muchos <code>EMPLEADOS</code>. En el modelo relacional, ¿cómo se conectan estas dos tablas de manera correcta?"
+        </div>
+        
+        <div class="palette" id="p1">
+            <div class="drag-item pk" draggable="true" id="rel1-id-dep" ondragstart="drag(event)">id_dep [PK]</div>
+            <div class="drag-item fk" draggable="true" id="rel1-fk-dep" ondragstart="drag(event)">id_dep [FK]</div>
+            <div class="drag-item pk" draggable="true" id="rel1-id-emp" ondragstart="drag(event)">id_emp [PK]</div>
+        </div>
+
+        <div style="display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap;">
+            <div class="t-tabla">
+                <div class="t-header">TABLA: DEPARTAMENTO</div>
+                <div class="t-body">
+                    <div class="drop-slot" id="rel1-s1" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Llave Primaria ]</div>
+                    <div style="padding: 5px;">nombre_dep</div>
+                </div>
+            </div>
+
+            <div style="font-weight: bold; font-size: 24px; color: #7f8c8d;">➔</div>
+
+            <div class="t-tabla">
+                <div class="t-header">TABLA: EMPLEADO</div>
+                <div class="t-body">
+                    <div class="drop-slot" id="rel1-s2" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Llave Primaria ]</div>
+                    <div style="padding: 5px;">nombre_empleado</div>
+                    <div class="drop-slot" id="rel1-s3" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Relación / Vínculo ]</div>
+                </div>
+            </div>
+        </div>
+        <button class="btn-evaluar" onclick="validarRel1()">Verificar Estructura Relacional</button>
+        <div class="feedback-box" id="f-rel1"></div>
+    </div>
+
+    <h2>Desafío 2: Romper la Relación Muchos a Muchos (N:M)</h2>
+    <div class="activity-card">
+        <div class="problem-statement">
+            <strong>Caso de Negocio:</strong> "Un <code>ESTUDIANTE</code> se inscribe en muchas <code>MATERIAS</code>, y una materia recibe a muchos estudiantes. El diseño requiere una tabla intermedia llamada <code>INSCRIPCION</code>. Configura sus llaves estructurales."
+        </div>
+        
+        <div class="palette" id="p2">
+            <div class="drag-item pk" draggable="true" id="rel2-pk1" ondragstart="drag(event)">id_estudiante [PK/FK]</div>
+            <div class="drag-item pk" draggable="true" id="rel2-pk2" ondragstart="drag(event)">id_materia [PK/FK]</div>
+            <div class="drag-item" draggable="true" id="rel2-x" ondragstart="drag(event)">fecha_inscripcion</div>
+        </div>
+
+        <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+            <div class="t-tabla">
+                <div class="t-header">TABLA: ESTUDIANTE</div>
+                <div class="t-body"><div style="padding: 5px;"><u>id_estudiante (PK)</u></div><div style="padding: 5px;">nombre</div></div>
+            </div>
+            <div class="t-tabla" style="border-color: #e67e22;">
+                <div class="t-header" style="background:#e67e22;">TABLA INTERMEDIA: INSCRIPCION</div>
+                <div class="t-body">
+                    <div class="drop-slot" id="rel2-s1" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Componente Llave 1 ]</div>
+                    <div class="drop-slot" id="rel2-s2" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Componente Llave 2 ]</div>
+                    <div class="drop-slot" id="rel2-s3" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Atributo Propio ]</div>
+                </div>
+            </div>
+            <div class="t-tabla">
+                <div class="t-header">TABLA: MATERIA</div>
+                <div class="t-body"><div style="padding: 5px;"><u>id_materia (PK)</u></div><div style="padding: 5px;">nombre_mat</div></div>
+            </div>
+        </div>
+        <button class="btn-evaluar" onclick="validarRel2()">Validar Rompimiento N:M</button>
+        <div class="feedback-box" id="f-rel2"></div>
+    </div>
+
+    <h2>Desafío 3: El Misterio de la Relación 1:1 Exclusiva</h2>
+    <div class="activity-card">
+        <div class="problem-statement">
+            <strong>Caso de Negocio:</strong> "Cada <code>CIUDADANO</code> posee una única <code>CARTILLA_MILITAR</code>, y una cartilla pertenece estrictamente a un solo ciudadano. ¿Cómo garantizas la integridad relacional de la cartilla?"
+        </div>
+        
+        <div class="palette" id="p3">
+            <div class="drag-item pk" draggable="true" id="rel3-pk" ondragstart="drag(event)">num_cartilla [PK]</div>
+            <div class="drag-item fk" draggable="true" id="rel3-fk" ondragstart="drag(event)">id_ciudadano [FK/UNIQUE]</div>
+            <div class="drag-item" draggable="true" id="rel3-normal" ondragstart="drag(event)">id_ciudadano [Solo FK]</div>
+        </div>
+
+        <div style="display: flex; justify-content: center; gap: 30px; align-items: center; flex-wrap: wrap;">
+            <div class="t-tabla">
+                <div class="t-header">TABLA: CIUDADANO</div>
+                <div class="t-body"><div style="padding: 5px;"><u>id_ciudadano (PK)</u></div><div style="padding: 5px;">nombre</div></div>
+            </div>
+            <div style="font-size: 24px;">↔</div>
+            <div class="t-tabla">
+                <div class="t-header">TABLA: CARTILLA_MILITAR</div>
+                <div class="t-body">
+                    <div class="drop-slot" id="rel3-s1" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Llave Primaria ]</div>
+                    <div style="padding: 5px;">fecha_emision</div>
+                    <div class="drop-slot" id="rel3-s2" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Mecanismo de Enlace ]</div>
+                </div>
+            </div>
+        </div>
+        <button class="btn-evaluar" onclick="validarRel3()">Validar Restricción 1:1</button>
+        <div class="feedback-box" id="f-rel3"></div>
+    </div>
+
+    <h2>Desafío 4: Identificando Llaves Compuestas Naturales</h2>
+    <div class="activity-card">
+        <div class="problem-statement">
+            <strong>Caso de Negocio:</strong> "En un hotel, los números de habitación se repiten por piso (Ej: Habitación 101 en Piso 1, Habitación 101 en Piso 2). Para crear la tabla <code>HABITACION</code> sin usar llaves artificiales, ¿qué campos deben unirse para formar la Llave Primaria?"
+        </div>
+        
+        <div class="palette" id="p4">
+            <div class="drag-item pk" draggable="true" id="rel4-p1" ondragstart="drag(event)">num_habitacion</div>
+            <div class="drag-item pk" draggable="true" id="rel4-p2" ondragstart="drag(event)">num_piso</div>
+            <div class="drag-item" draggable="true" id="rel4-p3" ondragstart="drag(event)">precio_noche</div>
+            <div class="drag-item" draggable="true" id="rel4-p4" ondragstart="drag(event)">estado_limpieza</div>
+        </div>
+
+        <div style="display: flex; justify-content: center;">
+            <div class="t-tabla" style="width: 350px;">
+                <div class="t-header">TABLA: HABITACION (Llave Compuesta)</div>
+                <div class="t-body">
+                    <div style="text-align: center; font-size: 11px; color: #27ae60; font-weight: bold;">[ ZONA DE LLAVE PRIMARIA COMPUESTA ]</div>
+                    <div class="drop-slot" id="rel4-s1" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Llave Parte A ]</div>
+                    <div class="drop-slot" id="rel4-s2" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Llave Parte B ]</div>
+                    <hr style="width: 100%; border: 0; border-top: 1px solid #ddd; margin: 5px 0;">
+                    <div class="drop-slot" id="rel4-s3" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Atributo Descriptivo ]</div>
+                </div>
+            </div>
+        </div>
+        <button class="btn-evaluar" onclick="validarRel4()">Evaluar Llave Compuesta</button>
+        <div class="feedback-box" id="f-rel4"></div>
+    </div>
+
+    <h2>Desafío 5: Integridad Referencial y Reglas No Nulas</h2>
+    <div class="activity-card">
+        <div class="problem-statement">
+            <strong>Caso de Negocio:</strong> "Un <code>PRODUCTO</code> obligatoriamente debe estar clasificado dentro de una <code>CATEGORIA</code>. Si la categoría se elimina, el producto no puede quedar huérfano. Diseña los requerimientos del campo de enlace."
+        </div>
+        
+        <div class="palette" id="p5">
+            <div class="drag-item fk" draggable="true" id="rel5-c1" ondragstart="drag(event)">id_categoria [FK]</div>
+            <div class="drag-item" draggable="true" id="rel5-c2" ondragstart="drag(event)">Restricción: NOT NULL</div>
+            <div class="drag-item" draggable="true" id="rel5-c3" ondragstart="drag(event)">Permitir valores NULL</div>
+        </div>
+
+        <div style="display: flex; justify-content: center; gap: 20px; align-items: center; flex-wrap: wrap;">
+            <div class="t-tabla">
+                <div class="t-header">TABLA: CATEGORIA</div>
+                <div class="t-body"><div style="padding: 5px;"><u>id_categoria (PK)</u></div><div style="padding: 5px;">nombre_cat</div></div>
+            </div>
+            <div style="font-size: 24px;">➔</div>
+            <div class="t-tabla" style="width: 280px;">
+                <div class="t-header">TABLA: PRODUCTO</div>
+                <div class="t-body">
+                    <div style="padding: 5px;"><u>id_producto (PK)</u></div>
+                    <div style="padding: 5px;">nombre_prod</div>
+                    <div style="padding: 5px;">precio</div>
+                    <hr style="border: 0; border-top: 1px solid #ddd; margin: 5px 0;">
+                    <div class="drop-slot" id="rel5-s1" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Selector de Enlace ]</div>
+                    <div class="drop-slot" id="rel5-s2" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Regla de Integridad ]</div>
+                </div>
+            </div>
+        </div>
+        <button class="btn-evaluar" onclick="validarRel5()">Validar Reglas de Integridad</button>
+        <div class="feedback-box" id="f-rel5"></div>
+    </div>
+
+    <footer>
+        <p>© 2026 - Módulo de Evaluación Continua Interactiva | Material educativo digital de Bases de Datos. Prohibida su reproducción con fines comerciales.</p>
+    </footer>
+
+    <script>
+        // CONTROL SEGURO DE DRAG & DROP
+        function allowDrop(ev) { 
+            ev.preventDefault(); 
+            if (ev.currentTarget.classList.contains('drop-slot')) {
+                ev.currentTarget.classList.add('hovered'); 
+            }
+        }
+        
+        function dragLeave(ev) { 
+            ev.currentTarget.classList.remove('hovered'); 
+        }
+        
+        function drag(ev) { 
+            ev.dataTransfer.setData("text", ev.target.id); 
+        }
+        
+        function drop(ev) {
+            ev.preventDefault();
+            ev.currentTarget.classList.remove('hovered');
+            
+            // Seguridad: Evitar meter un elemento dentro de otro elemento arrastrado
+            if (ev.target.classList.contains('drag-item')) {
+                return;
+            }
+            
+            var data = ev.dataTransfer.getData("text");
+            var draggedElement = document.getElementById(data);
+            
+            ev.currentTarget.innerHTML = "";
+            ev.currentTarget.appendChild(draggedElement);
+        }
+
+        // EVALUACIÓN DESAFÍO 1
+        function validarRel1() {
+            const s1 = document.getElementById('rel1-s1').firstElementChild?.id;
+            const s2 = document.getElementById('rel1-s2').firstElementChild?.id;
+            const s3 = document.getElementById('rel1-s3').firstElementChild?.id;
+            const f = document.getElementById('f-rel1');
+            f.style.display = "block";
+
+            if (s1 === "rel1-id-dep" && s2 === "rel1-id-emp" && s3 === "rel1-fk-dep") {
+                f.className = "feedback-box feedback-success";
+                f.innerHTML = "<strong>¡Correcto! Excelente análisis.</strong> En una relación 1:N, la regla de oro del Modelo Relacional dicta que la Llave Primaria del lado '1' (DEPARTAMENTO) viaja a la tabla del lado 'N' (EMPLEADO) como Llave Foránea (FK). Así, cada empleado apunta de forma limpia al departamento donde trabaja.";
+            } else {
+                f.className = "feedback-box feedback-error";
+                f.innerHTML = "<strong>Incorrecto. ¿Por qué?:</strong> Si intentaras poner la PK del empleado en el departamento, estarías limitando tu base de datos a que un departamento solo pueda tener un único empleado, rompiendo la regla de negocio.";
+            }
+        }
+
+        // EVALUACIÓN DESAFÍO 2
+        function validarRel2() {
+            const s1 = document.getElementById('rel2-s1').firstElementChild?.id;
+            const s2 = document.getElementById('rel2-s2').firstElementChild?.id;
+            const s3 = document.getElementById('rel2-s3').firstElementChild?.id;
+            const f = document.getElementById('f-rel2');
+            f.style.display = "block";
+
+            if ((s1 === "rel2-pk1" && s2 === "rel2-pk2" && s3 === "rel2-x") || (s1 === "rel2-pk2" && s2 === "rel2-pk1" && s3 === "rel2-x")) {
+                f.className = "feedback-box feedback-success";
+                f.innerHTML = "<strong>¡Extraordinario! Has roto la relación N:M.</strong> En el modelo relacional, las relaciones Muchos a Muchos no existen físicamente. Se crea una tabla intermedia que adopta las Llaves Primarias de ambas entidades y las une para formar una **Llave Primaria Compuesta**, permitiendo que la fecha guarde correspondencia exacta con esa combinación única.";
+            } else {
+                f.className = "feedback-box feedback-error";
+                f.innerHTML = "<strong>Estructura Equivocada:</strong> La tabla intermedia requiere obligatoriamente **ambas llaves** como componentes PK para evitar registros duplicados de un alumno en la misma materia. El atributo fecha solo describe el evento, no identifica el registro.";
+            }
+        }
+
+        // EVALUACIÓN DESAFÍO 3
+        function validarRel3() {
+            const s1 = document.getElementById('rel3-s1').firstElementChild?.id;
+            const s2 = document.getElementById('rel3-s2').firstElementChild?.id;
+            const f = document.getElementById('f-rel3');
+            f.style.display = "block";
+
+            if (s1 === "rel3-pk" && s2 === "rel3-fk") {
+                f.className = "feedback-box feedback-success";
+                f.innerHTML = "<strong>¡Exacto! Control de exclusividad impecable.</strong> Para implementar una relación 1:1 en el modelo relacional, migramos la llave como si fuera un 1:N, pero le añadimos una restricción de unicidad (**UNIQUE**). De esta manera, el sistema impedirá físicamente que dos cartillas diferentes apunten al mismo ciudadano.";
+            } else {
+                f.className = "feedback-box feedback-error";
+                f.innerHTML = "<strong>Fallo en la restricción:</strong> Si utilizas una FK simple (sin restricción UNIQUE), el sistema permitiría que un ciudadano registre múltiples cartillas militares, convirtiendo la relación en un 1:N por error.";
+            }
+        }
+
+        // EVALUACIÓN DESAFÍO 4
+        function validarRel4() {
+            const s1 = document.getElementById('rel4-s1').firstElementChild?.id;
+            const s2 = document.getElementById('rel4-s2').firstElementChild?.id;
+            const f = document.getElementById('f-rel4');
+            f.style.display = "block";
+
+            const pksCorrectas = (s1 === "rel4-p1" && s2 === "rel4-p2") || (s1 === "rel4-p2" && s2 === "rel4-p1");
+
+            if (pksCorrectas) {
+                f.className = "feedback-box feedback-success";
+                f.innerHTML = "<strong>¡Correcto! Has diseñado una Llave Compuesta Natural.</strong> Como el número de habitación por sí solo se repite en otros pisos, la combinación única de [num_habitacion + num_piso] asegura que no existan tuplas duplicadas en el hotel sin recurrir a IDs artificiales.";
+            } else {
+                f.className = "feedback-box feedback-error";
+                f.innerHTML = "<strong>Error de Identificación:</strong> Elementos como 'precio_noche' o 'estado_limpieza' son datos variables y descriptivos; no poseen propiedades de identificación únicas para el registro.";
+            }
+        }
+
+        // EVALUACIÓN DESAFÍO 5
+        function validarRel5() {
+            const s1 = document.getElementById('rel5-s1').firstElementChild?.id;
+            const s2 = document.getElementById('rel5-s2').firstElementChild?.id;
+            const f = document.getElementById('f-rel5');
+            f.style.display = "block";
+
+            if (s1 === "rel5-c1" && s2 === "rel5-c2") {
+                f.className = "feedback-box feedback-success";
+                f.innerHTML = "<strong>¡Perfecto! Integridad referencial sólida.</strong> Al definir la FK `id_categoria` acompañada de la regla `NOT NULL`, la base de datos rechazará cualquier intento de registrar un producto sin una categoría válida asignada, previniendo fallos en las futuras consultas.";
+            } else {
+                f.className = "feedback-box feedback-error";
+                f.innerHTML = "<strong>Vulnerabilidad de Datos:</strong> Si permites valores `NULL` en el enlace, un usuario podría crear productos huérfanos, lo cual contradice el requerimiento obligatorio estipulado en el planteamiento.";
+            }
+        }
+    </script>
+</body>
+</html>

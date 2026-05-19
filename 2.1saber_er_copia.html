@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saber Hacer: Laboratorio Práctico de Diseño y Diagramación E-R</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f7f6;
+        }
+        header {
+            background-color: #d35400;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        h1 { margin: 0; font-size: 26px; }
+        h2 { color: #2c3e50; border-bottom: 3px solid #d35400; padding-bottom: 5px; margin-top: 40px; }
+        h3 { color: #e67e22; margin-top: 20px; }
+        .intro { background-color: #fdf2e9; padding: 20px; border-left: 5px solid #e67e22; border-radius: 4px; margin-bottom: 30px; }
+        
+        /* Contenedores de Actividades */
+        .activity-card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); margin-bottom: 30px; border-top: 4px solid #2c3e50; }
+        .problem-statement { background-color: #f8f9fa; border: 1px solid #e2e8f0; padding: 15px; border-radius: 6px; font-style: italic; margin-bottom: 20px; }
+        
+        .workspace { margin: 20px 0; }
+        .question-group { margin-bottom: 15px; background: #fafafa; padding: 15px; border-radius: 6px; border-left: 3px solid #7f8c8d; }
+        .question-group label { font-weight: bold; display: block; margin-bottom: 8px; color: #2c3e50; }
+        select { width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc; font-size: 14px; background-color: #fff; }
+        
+        /* Botones y Retroalimentación */
+        .btn-evaluar { background-color: #27ae60; color: white; border: none; padding: 12px 20px; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; width: 100%; transition: background 0.2s; margin-bottom: 15px; }
+        .btn-evaluar:hover { background-color: #219653; }
+        
+        .feedback-box { margin-top: 20px; padding: 15px; border-radius: 6px; display: none; }
+        .feedback-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .feedback-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .feedback-box ul { margin: 5px 0 0 20px; padding: 0; }
+        .feedback-box li { margin-bottom: 8px; }
+
+        /* Contenedor del Diagrama Revelado */
+        .diagrama-revelado { display: none; margin-top: 20px; padding: 15px; background: #f9f9f9; border: 2px dashed #3498db; border-radius: 6px; text-align: center; }
+
+        /* Estilos de Diagramación Visual (CSS Art) */
+        .graphic-container { display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap; margin-top: 15px; padding: 10px; background: #fff; border-radius: 4px; }
+        .g-entidad { border: 2px solid #2c3e50; padding: 10px 20px; background: #fff; font-weight: bold; min-width: 100px; text-align: center; }
+        .g-relacion { width: 80px; height: 80px; background: #fff; border: 2px solid #2c3e50; transform: rotate(45deg); display: flex; justify-content: center; align-items: center; }
+        .g-relacion span { transform: rotate(-45deg); font-weight: bold; font-size: 13px; text-align: center; }
+        .g-atributo-llave { border: 2px solid #2c3e50; border-radius: 50%; padding: 8px 15px; background: #fff; text-align: center; font-size: 13px; text-decoration: underline; font-weight: bold; }
+        .g-atributo { border: 2px solid #2c3e50; border-radius: 50%; padding: 8px 15px; background: #fff; text-align: center; font-size: 13px; }
+        .g-linea { height: 2px; background: #2c3e50; width: 40px; position: relative; }
+        .g-flecha-der::after { content: '►'; position: absolute; right: -4px; top: -7px; font-size: 10px; color: #2c3e50; }
+
+        /* --- ESTILOS PARA DRAG AND DROP (SABER HACER INTERACTIVO) --- */
+        .drag-instructions { font-weight: bold; color: #2c3e50; margin-bottom: 10px; }
+        .palette { display: flex; gap: 15px; background: #ebf5fb; padding: 15px; border-radius: 6px; margin-bottom: 20px; justify-content: center; border: 1px solid #aed6f1; }
+        .drag-item { padding: 10px 15px; background: white; border: 2px solid #3498db; font-weight: bold; cursor: grab; text-align: center; user-select: none; }
+        .drag-item.rect { border-radius: 0px; }
+        .drag-item.rombo { border-radius: 4px; background: #fcf3cf; border-color: #f1c40f; }
+        .drag-item.oval { border-radius: 50%; padding: 8px 12px; font-size: 13px; background: #eaeded; border-color: #7f8c8d; }
+        
+        .drop-zone-container { display: flex; justify-content: center; gap: 20px; align-items: center; background: #f8f9fa; padding: 25px; border: 2px dashed #bdc3c7; border-radius: 8px; min-height: 120px; }
+        .drop-slot { min-width: 130px; min-height: 60px; border: 2px dashed #95a5a6; display: flex; justify-content: center; align-items: center; background: #fff; font-size: 12px; color: #7f8c8d; font-weight: bold; text-align: center; padding: 5px; }
+        .drop-slot.hovered { background: #d5f5e3; border-color: #2ecc71; }
+
+        footer { text-align: center; margin-top: 50px; color: #7f8c8d; font-size: 14px; border-top: 1px solid #ccc; padding-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Módulo Saber Hacer: Laboratorio Avanzado de Diseño y Diagramación E-R</h1>
+        <p>Práctica interactiva: Cuestionarios de Abstracción y Desafíos de Arrastrar y Soltar</p>
+    </header>
+
+    <div class="intro">
+        <p><strong>¡Bienvenidos a la sección práctica!</strong> Aquí aplicarás la simbología y las reglas de negocio. En las primeras prácticas resolverás la lógica y revelarás el diagrama correcto. En las últimas, <strong>arrastrarás los componentes</strong> al bloque correspondiente para armar el diagrama tú mismo. ¡Aprende experimentando!</p>
+    </div>
+
+    <h2>Práctica 1: Sistema de Control Escolar</h2>
+    <div class="activity-card" id="actividad1">
+        <div class="problem-statement">
+            <strong>Caso de Negocio:</strong> "Una universidad necesita un sistema para gestionar sus asignaturas. Se sabe que un Alumno posee un número de control único, nombre y carrera. Por otra parte, la Materia cuenta con una clave de materia única y un nombre. Muchos alumnos pueden cursar simultáneamente muchas materias, y cada materia recibe a muchos alumnos."
+        </div>
+        <div class="workspace">
+            <div class="question-group">
+                <label>1. ¿Cuáles son las Entidades Fuertes principales involucradas?</label>
+                <select id="a1-q1">
+                    <option value="">-- Selecciona una opción --</option>
+                    <option value="incorrecto1">Carrera y Nombre</option>
+                    <option value="correcto">Alumno y Materia</option>
+                    <option value="incorrecto2">Número de Control y Clave de Materia</option>
+                </select>
+            </div>
+            <div class="question-group">
+                <label>2. ¿Cuál es el Atributo Llave correcto para la entidad Alumno?</label>
+                <select id="a1-q2">
+                    <option value="">-- Selecciona una opción --</option>
+                    <option value="incorrecto1">Nombre (Óvalo simple)</option>
+                    <option value="correcto">Número de Control (Óvalo con texto subrayado)</option>
+                    <option value="incorrecto2">Carrera (Atributo multivalorado)</option>
+                </select>
+            </div>
+            <div class="question-group">
+                <label>3. ¿Qué cardinalidad (razón de mapeo) debe conectar a ambas entidades en el rombo de relación?</label>
+                <select id="a1-q3">
+                    <option value="">-- Selecciona una opción --</option>
+                    <option value="incorrecto1">Relación Uno a Uno (1:1)</option>
+                    <option value="incorrecto2">Relación Uno a Muchos (1:N)</option>
+                    <option value="correcto">Relación Muchos a Muchos (N:M)</option>
+                </select>
+            </div>
+        </div>
+        <button class="btn-evaluar" onclick="evaluarActividad1()">Evaluar Diseño de Diagrama</button>
+        <div class="feedback-box" id="feedback1"></div>
+    </div>
+
+    <h2>Práctica 2: Sistema de Asignación de Herramientas de Planta</h2>
+    <div class="activity-card" id="actividad2">
+        <div class="problem-statement">
+            <strong>Caso de Negocio:</strong> "En una fábrica automotriz, cada Empleado tiene un ID de empleado único y un nombre. A cada empleado se le asigna una única Computadora portátil de la empresa para trabajar, y cada computadora (identificada por su número de serie único) pertenece exclusivamente a un solo empleado."
+        </div>
+        <div class="workspace">
+            <div class="question-group">
+                <label>1. ¿Cómo se deben diagramar estructuralmente los elementos 'Empleado' y 'Computadora'?</label>
+                <select id="a2-q1">
+                    <option value="">-- Selecciona una opción --</option>
+                    <option value="correcto">Como dos Rectángulos (Entidades Fuertes independientes)</option>
+                    <option value="incorrecto1">Como un Rectángulo y un Doble Rectángulo (Entidad Fuerte y Débil)</option>
+                    <option value="incorrecto2">Como dos Óvalos (Atributos de una sola entidad)</option>
+                </select>
+            </div>
+            <div class="question-group">
+                <label>2. Al transformar este diagrama al Modelo Relacional (Tablas), ¿cuál es el procedimiento correcto?</label>
+                <select id="a2-q2">
+                    <option value="">-- Selecciona una opción --</option>
+                    <option value="incorrecto1">Se debe crear una tercera tabla intermedia para unir las claves.</option>
+                    <option value="correcto">Se mapean dos tablas, y la PK de una viaja a la otra como Llave Foránea (FK).</option>
+                    <option value="incorrecto2">Ambas entidades se fusionan obligatoriamente en una sola tabla combinada.</option>
+                </select>
+            </div>
+            <div class="question-group">
+                <label>3. ¿Qué cardinalidad define la interacción del negocio en el diagrama conceptual?</label>
+                <select id="a2-q3">
+                    <option value="">-- Selecciona una opción --</option>
+                    <option value="correcto">Relación Uno a Uno (1:1)</option>
+                    <option value="incorrecto1">Relación Muchos a Uno (N:1)</option>
+                    <option value="incorrecto2">Relación Muchos a Muchos (N:M)</option>
+                </select>
+            </div>
+        </div>
+        <button class="btn-evaluar" onclick="evaluarActividad2()">Evaluar Diseño de Diagrama</button>
+        <div class="feedback-box" id="feedback2"></div>
+    </div>
+
+
+    <h2>Práctica 3: Sistema de Ventas de Tienda (Con Diagrama Visual)</h2>
+    <div class="activity-card" id="actividad3">
+        <div class="problem-statement">
+            <strong>Caso de Negocio:</strong> "Una tienda requiere controlar sus ventas. Se identificó la entidad <code>CLIENTE</code> (con atributo clave <code>RFC</code>) y la entidad <code>PEDIDO</code> (con clave <code>NumPedido</code>). Un cliente puede realizar muchos pedidos a lo largo del mes, pero cada pedido individual pertenece obligatoriamente a un único cliente específico."
+        </div>
+        <div class="workspace">
+            <div class="question-group">
+                <label>1. ¿Qué cardinalidad mapea correctamente este negocio?</label>
+                <select id="a3-q1">
+                    <option value="">-- Selecciona una opción --</option>
+                    <option value="correcto">Uno a Muchos (1:N) de Cliente hacia Pedido</option>
+                    <option value="incorrecto1">Muchos a Muchos (N:M)</option>
+                    <option value="incorrecto2">Uno a Uno (1:1)</option>
+                </select>
+            </div>
+        </div>
+        <button class="btn-evaluar" onclick="evaluarActividad3()">Evaluar y Revelar Diagrama Solución</button>
+        <div class="feedback-box" id="feedback3"></div>
+        
+        <div class="diagrama-revelado" id="diag3">
+            <span class="badge" style="background:#3498db;">Diagrama Conceptual Correcto (Modelo de Chen)</span>
+            <div class="graphic-container">
+                <div class="g-atributo-llave">RFC</div>──
+                <div class="g-entidad">CLIENTE</div> <span style="font-weight:bold;margin-left:5px;">1</span>
+                <div class="g-linea"></div>
+                <div class="g-relacion"><span>Genera</span></div>
+                <div class="g-linea g-flecha-der"></div> <span style="font-weight:bold;margin-right:5px;">N</span>
+                <div class="g-entidad">PEDIDO</div>──
+                <div class="g-atributo-llave">NumPedido</div>
+            </div>
+        </div>
+    </div>
+
+
+    <h2>Práctica 4: Control de Cines y Películas (Con Diagrama Visual)</h2>
+    <div class="activity-card" id="actividad4">
+        <div class="problem-statement">
+            <strong>Caso de Negocio:</strong> "Una cadena cinematográfica desea mapear su cartelera. Se tiene la entidad <code>CINE</code> (Clave: <code>ID_Cine</code>) y la entidad <code>PELÍCULA</code> (Clave: <code>CodPelícula</code>). Un cine proyecta múltiples películas en sus diferentes salas, y una misma película es distribuida y proyectada en muchos cines de la cadena."
+        </div>
+        <div class="workspace">
+            <div class="question-group">
+                <label>1. ¿Cuál es el comportamiento de las llaves al pasar al modelo lógico de tablas?</label>
+                <select id="a4-q1">
+                    <option value="">-- Selecciona una opción --</option>
+                    <option value="incorrecto1">La clave de CINE se copia directamente en la tabla de PELÍCULA.</option>
+                    <option value="correcto">Se destruye el rombo conceptual y se crea una nueva tabla intermedia con clave compuesta.</option>
+                    <option value="incorrecto2">No se alteran las entidades ni se comparten llaves.</option>
+                </select>
+            </div>
+        </div>
+        <button class="btn-evaluar" onclick="evaluarActividad4()">Evaluar y Revelar Diagrama Solución</button>
+        <div class="feedback-box" id="feedback4"></div>
+        
+        <div class="diagrama-revelado" id="diag4">
+            <span class="badge" style="background:#3498db;">Diagrama Conceptual Correcto (Modelo de Chen)</span>
+            <div class="graphic-container">
+                <div class="g-atributo-llave">ID_Cine</div>──
+                <div class="g-entidad">CINE</div> <span style="font-weight:bold;margin-left:5px;">N</span>
+                <div class="g-linea"></div>
+                <div class="g-relacion"><span>Proyecta</span></div>
+                <div class="g-linea"></div> <span style="font-weight:bold;margin-right:5px;">M</span>
+                <div class="g-entidad">PELÍCULA</div>──
+                <div class="g-atributo-llave">CodPelícula</div>
+            </div>
+        </div>
+    </div>
+
+
+    <h2>Práctica 5: Desafío Drag & Drop - El Rompecabezas del Diagrama</h2>
+    <div class="activity-card">
+        <div class="problem-statement">
+            <strong>Instrucciones de Arrastre:</strong> Abajo tienes 3 figuras del modelo conceptual. Arrástralas y colócalas en los espacios punteados correctos para representar la siguiente regla de negocio: <em>"Un <code>PRODUCTO</code> es suministrado por un <code>PROVEEDOR</code>."</em>
+        </div>
+        
+        <div class="drag-instructions">Paleta de Componentes (¡Arrastra de aquí!):</div>
+        <div class="palette">
+            <div class="drag-item rect" draggable="true" id="drag-ent1" ondragstart="drag(event)">PRODUCTO</div>
+            <div class="drag-item rombo" draggable="true" id="drag-rel" ondragstart="drag(event)">Suministra</div>
+            <div class="drag-item rect" draggable="true" id="drag-ent2" ondragstart="drag(event)">PROVEEDOR</div>
+        </div>
+
+        <div class="drag-instructions">Área de Armado de Diagrama:</div>
+        <div class="drop-zone-container">
+            <div class="drop-slot" id="slot-izq" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Entidad 1 (Fuerte) ]</div>
+            <div style="font-weight:bold;">──</div>
+            <div class="drop-slot" id="slot-cen" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Relación ]</div>
+            <div style="font-weight:bold;">──</div>
+            <div class="drop-slot" id="slot-der" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Entidad 2 (Fuerte) ]</div>
+        </div>
+        <br>
+        <button class="btn-evaluar" style="background:#8e44ad;" onclick="validarDrag1()">Validar Posiciones de Simbología</button>
+        <div class="feedback-box" id="feedbackDrag1"></div>
+    </div>
+
+
+    <h2>Práctica 6: Desafío Drag & Drop - Atributos de una Entidad</h2>
+    <div class="activity-card">
+        <div class="problem-statement">
+            <strong>Instrucciones de Arrastre:</strong> Completa el diseño de la entidad <code>CLIENTE</code>. Arrastra el tipo de atributo correcto a su espacio correspondiente basándote en su simbología.
+        </div>
+        
+        <div class="palette">
+            <div class="drag-item oval" draggable="true" id="drag-pk" ondragstart="drag(event)">RFC (Llave)</div>
+            <div class="drag-item oval" style="border-style:double;" draggable="true" id="drag-mv" ondragstart="drag(event)">Teléfonos (Multivalor)</div>
+        </div>
+
+        <div class="drop-zone-container">
+            <div class="drop-slot" id="slot-attr1" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Atributo Único / Llave ]</div>
+            <div style="font-weight:bold;">───</div>
+            <div class="g-entidad" style="background:#e8f4f8;">CLIENTE</div>
+            <div style="font-weight:bold;">───</div>
+            <div class="drop-slot" id="slot-attr2" ondragover="allowDrop(event)" ondrop="drop(event)" ondragleave="dragLeave(event)">[ Atributo Lista / Varios Valores ]</div>
+        </div>
+        <br>
+        <button class="btn-evaluar" style="background:#8e44ad;" onclick="validarDrag2()">Validar Atributos</button>
+        <div class="feedback-box" id="feedbackDrag2"></div>
+    </div>
+
+    <footer>
+        <p>© 2026 - Módulo de Evaluación Continua Interactiva | Material educativo digital de Bases de Datos. Prohibida su reproducción con fines comerciales."</p>
+    </footer>
+
+    <script>
+        // Funciones previas (Actividades 1 y 2)
+        function evaluarActividad1() {
+            const q1 = document.getElementById('a1-q1').value;
+            const q2 = document.getElementById('a1-q2').value;
+            const q3 = document.getElementById('a1-q3').value;
+            const feedback = document.getElementById('feedback1');
+            feedback.style.display = "block";
+            if(q1 === "correcto" && q2 === "correcto" && q3 === "correcto") {
+                feedback.className = "feedback-box feedback-success";
+                feedback.innerHTML = "<strong>¡Excelente! Diseño Correcto:</strong><br>Abstrajiste el problema perfectamente. Identificaste que Alumno y Materia existen por sí mismos (rectángulos), que el número de control los identifica de forma única (óvalo subrayado) y que la relación es N:M. Al transformar a tablas lógicas, esto generará tres tablas independientes.";
+            } else {
+                feedback.className = "feedback-box feedback-error";
+                let errores = "<strong>Tu diseño tiene fallas de lógica. Analiza por qué:</strong><ul>";
+                if(q1 !== "correcto") errores += "<li><strong>Pregunta 1 Incorrecta:</strong> Las entidades corresponden a los objetos principales (Alumno y Materia). Número de control o carrera son atributos.</li>";
+                if(q2 !== "correcto") errores += "<li><strong>Pregunta 2 Incorrecta:</strong> El nombre puede repetirse. El único atributo con propiedad de Llave es el Número de Control (Texto subrayado).</li>";
+                if(q3 !== "correcto") errores += "<li><strong>Pregunta 3 Incorrecta:</strong> El texto dice 'muchos alumnos' toman 'muchas materias'. Debe ser N:M para no limitar el sistema.</li>";
+                errores += "</ul>"; feedback.innerHTML = errores;
+            }
+        }
+
+        function evaluarActividad2() {
+            const q1 = document.getElementById('a2-q1').value;
+            const q2 = document.getElementById('a2-q2').value;
+            const q3 = document.getElementById('a2-q3').value;
+            const feedback = document.getElementById('feedback2');
+            feedback.style.display = "block";
+            if(q1 === "correcto" && q2 === "correcto" && q3 === "correcto") {
+                feedback.className = "feedback-box feedback-success";
+                feedback.innerHTML = "<strong>¡Felicidades! Respuestas Correctas:</strong><br>El escenario plantea una correspondencia de 1 a 1. Ambos objetos tienen claves independientes (ID y número de serie), por lo que son entidades fuertes. La conexión lógica se efectúa compartiendo una clave hacia la otra tabla como Llave Foránea (FK) sin crear tablas intermedias.";
+            } else {
+                feedback.className = "feedback-box feedback-error";
+                let errores = "<strong>Revisa tus conceptos de transformación:</strong><ul>";
+                if(q1 !== "correcto") errores += "<li><strong>Pregunta 1 Incorrecta:</strong> La computadora posee su propio 'número de serie único', por ende es una entidad fuerte independiente.</li>";
+                if(q2 !== "correcto") errores += "<li><strong>Pregunta 2 Incorrecta:</strong> Las tablas intermedias solo se crean en cardinalidades Muchos a Muchos (N:M).</li>";
+                if(q3 !== "correcto") errores += "<li><strong>Pregunta 3 Incorrecta:</strong> Si eliges N:1, significaría que muchos empleados comparten la misma laptop, rompiendo la regla de negocio.</li>";
+                errores += "</ul>"; feedback.innerHTML = errores;
+            }
+        }
+
+        // NUEVAS EVALUACIONES CON DESPLEGABLE GRÁFICO (Prácticas 3 y 4)
+       function evaluarActividad3() {
+    const q1 = document.getElementById('a3-q1').value;
+    const feedback = document.getElementById('feedback3');
+    const diag = document.getElementById('diag3');
+    feedback.style.display = "block";
+    
+    if(q1 === "correcto") {
+        feedback.className = "feedback-box feedback-success";
+        feedback.innerHTML = "<strong>¡Correcto!</strong> Un cliente realiza múltiples (N) pedidos, pero cada pedido individual pertenece a un (1) único cliente. Abajo puedes ver cómo se conecta gráficamente el rombo con punta de flecha hacia el lado 'Uno'.";
+        diag.style.display = "block";
+    } else {
+        feedback.className = "feedback-box feedback-error";
+        diag.style.display = "none";
+        
+        // CORRECCIÓN: Evaluación precisa según la respuesta del alumno
+        if(q1 === "incorrecto2") { // Si el alumno eligió Uno a Uno (1:1)
+            feedback.innerHTML = "<strong>Incorrecto (Elegiste 1:1). ¿Por qué?:</strong> Si la relación fuera 1:1, estarías limitando el sistema a que un cliente solo pueda hacer **un único pedido en toda su vida** dentro de la tienda. El problema dice que un cliente puede realizar 'muchos pedidos a lo largo del mes'.";
+        } else if(q1 === "incorrecto1") { // Si el alumno eligió Muchos a Muchos (N:M)
+            feedback.innerHTML = "<strong>Incorrecto (Elegiste N:M). ¿Por qué?:</strong> Si la relación fuera Muchos a Muchos, estarías diciendo que un pedido físico específico con un ID único puede pertenecer a varios clientes distintos al mismo tiempo, lo cual alteraría la auditoría de ventas.";
+        }
+    }
+}
+
+        function evaluarActividad4() {
+            const q1 = document.getElementById('a4-q1').value;
+            const feedback = document.getElementById('feedback4');
+            const diag = document.getElementById('diag4');
+            feedback.style.display = "block";
+            
+            if(q1 === "correcto") {
+                feedback.className = "feedback-box feedback-success";
+                feedback.innerHTML = "<strong>¡Excelente comprensión!</strong> Al ser una relación Muchos a Muchos (N:M), las reglas de mapeo lógico prohíben meter las claves en las tablas originales para evitar celdas repetidas o nulas. Se genera por ley una tabla intermedia. Observa el diagrama conceptual abajo.";
+                diag.style.display = "block";
+            } else {
+                feedback.className = "feedback-box feedback-error";
+                feedback.innerHTML = "<strong>Lógica Incorrecta.</strong> ¿Por qué? Si copias la clave de CINE en PELÍCULA de forma directa, limitarías a que una película solo se pueda proyectar en un único cine de todo el país. El negocio exige que sea multidireccional.";
+                diag.style.display = "none";
+            }
+        }
+
+        // --- LÓGICA MECÁNICA DRAG AND DROP ---
+        function allowDrop(ev) { ev.preventDefault(); ev.currentTarget.classList.add('hovered'); }
+        function dragLeave(ev) { ev.currentTarget.classList.remove('hovered'); }
+        function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
+        function drop(ev) {
+            ev.preventDefault();
+            ev.currentTarget.classList.remove('hovered');
+            var data = ev.dataTransfer.getData("text");
+            var draggedElement = document.getElementById(data);
+            if (ev.currentTarget.innerHTML.includes('[') || ev.currentTarget.children.length === 0) {
+                ev.currentTarget.innerHTML = "";
+                ev.currentTarget.appendChild(draggedElement);
+            }
+        }
+
+        // Validaciones de Arrastre
+        function validarDrag1() {
+            const izq = document.getElementById('slot-izq').firstElementChild;
+            const cen = document.getElementById('slot-cen').firstElementChild;
+            const der = document.getElementById('slot-der').firstElementChild;
+            const f = document.getElementById('feedbackDrag1');
+            f.style.display = "block";
+
+            if(!izq || !cen || !der) {
+                f.className = "feedback-box feedback-error";
+                f.innerHTML = "<strong>¡Incompleto!</strong> Debes colocar un componente en cada espacio en blanco para poder analizar la sintaxis.";
+                return;
+            }
+
+            if(cen.id === "drag-rel" && ((izq.id === "drag-ent1" && der.id === "drag-ent2") || (izq.id === "drag-ent2" && der.id === "drag-ent1"))) {
+                f.className = "feedback-box feedback-success";
+                f.innerHTML = "<strong>¡Perfecto! Sintaxis del Diagrama Correcta:</strong> Colocaste el Rombo ('Suministra') en el centro para conectar las dos Entidades Fuertes (Rectángulos). En la metodología de Chen, la relación siempre sirve de puente de comunicación entre objetos.";
+            } else {
+                f.className = "feedback-box feedback-error";
+                f.innerHTML = "<strong>Sintaxis Incorrecta. ¿Por qué?:</strong> Pusiste un Rectángulo en el espacio del Rombo (o viceversa). Recuerda que las relaciones no se pueden conectar de forma directa extremo a extremo sin pasar por un rombo de acción. Las entidades nunca se tocan directamente.";
+            }
+        }
+
+        function validarDrag2() {
+            const attr1 = document.getElementById('slot-attr1').firstElementChild;
+            const attr2 = document.getElementById('slot-attr2').firstElementChild;
+            const f = document.getElementById('feedbackDrag2');
+            f.style.display = "block";
+
+            if(!attr1 || !attr2) {
+                f.className = "feedback-box feedback-error";
+                f.innerHTML = "<strong>¡Faltan componentes!</strong> Llena ambos slots de atributos para evaluar.";
+                return;
+            }
+
+            if(attr1.id === "drag-pk" && attr2.id === "drag-mv") {
+                f.className = "feedback-box feedback-success";
+                f.innerHTML = "<strong>¡Extraordinario! Identificación de Símbolos Exitosa:</strong> El atributo LLAVE (RFC) va en el espacio izquierdo conectado directamente, e identificaste que el doble óvalo de la derecha corresponde semánticamente a un atributo MULTIVALORADO (Teléfonos) que almacena listas de datos.";
+            } else {
+                f.className = "feedback-box feedback-error";
+                f.innerHTML = "<strong>Asignación Errónea. ¿Por qué?:</strong> Confundiste las propiedades de los óvalos. Recuerda: El óvalo simple/subrayado define unicidad (Llave Primaria). Si colocas un dato multivalorado en una celda primaria, violas la ley de atomicidad del modelo.";
+            }
+        }
+    </script>
+</body>
+</html>

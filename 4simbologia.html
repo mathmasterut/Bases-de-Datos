@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Simbología: Diagramas Entidad-Relación (E-R)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f7f6;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        h1 { margin: 0; font-size: 24px; }
+        h2 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 5px; }
+        .intro { background-color: #e8f4f8; padding: 15px; border-left: 5px solid #3498db; border-radius: 4px; margin-bottom: 30px; }
+        .grid-container { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .card-header { display: flex; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px; }
+        .symbol-name { font-size: 18px; font-weight: bold; color: #2980b9; }
+        .section-title { font-weight: bold; color: #555; margin-top: 10px; }
+        .example-box { background-color: #f9f9f9; border-left: 3px solid #2ecc71; padding: 10px; margin-top: 10px; font-style: italic; }
+        footer { text-align: center; margin-top: 40px; color: #7f8c8d; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Manual de Simbología: Diagramas Entidad-Relación</h1>
+        <p>Material de consulta para estudiantes de Bases de Datos</p>
+    </header>
+
+    <div class="intro">
+        <p><strong>¿Qué es un Diagrama E-R?</strong> Es una herramienta gráfica que se utiliza para modelar el diseño lógico de una base de datos. Permite visualizar de forma clara cómo se estructuran los datos y cómo interactúan entre sí. A continuación, se detalla la simbología estándar (modelo de Peter Chen) que debes dominar.</p>
+    </div>
+
+    <h2>1. Componentes Principales (Entidades y Relaciones)</h2>
+    <div class="grid-container">
+        
+        <div class="card">
+            <div class="card-header">
+                <span class="symbol-name">■ Entidad (Rectángulo)</span>
+            </div>
+            <p><div class="section-title">Función:</div> Representa un objeto, persona, lugar o concepto del mundo real sobre el cual se desea almacenar información en la base de datos. Existe de forma independiente.</p>
+            <div class="example-box">
+                <strong>Ejemplo práctico:</strong> En el sistema de una universidad, <code>Alumno</code>, <code>Profesor</code> y <code>Curso</code> son Entidades.
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="symbol-name">⧈ Entidad Débil (Doble Rectángulo)</span>
+            </div>
+            <p><div class="section-title">Función:</div> Es una entidad cuya existencia depende por completo de la presencia de otra entidad (llamada entidad fuerte o principal). No tiene una clave primaria propia que la identifique de forma única.</p>
+            <div class="example-box">
+                <strong>Ejemplo práctico:</strong> La entidad <code>Dependiente</code> (hijo de un empleado). Si el <code>Empleado</code> es borrado de la base de datos, sus dependientes ya no tienen razón de existir en el sistema.
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="symbol-name">◆ Relación (Rombo)</span>
+            </div>
+            <p><div class="section-title">Función:</div> Representa la asociación, vínculo o interacción que existe entre dos o más entidades.</p>
+            <div class="example-box">
+                <strong>Ejemplo práctico:</strong> La entidad <code>Alumno</code> se <strong>Inscribe</strong> en la entidad <code>Curso</code>. "Inscribe" es la relación.
+            </div>
+        </div>
+    </div>
+
+    <h2>2. Tipos de Atributos (Óvalos / Elipses)</h2>
+    <div class="grid-container">
+
+        <div class="card">
+            <div class="card-header">
+                <span class="symbol-name">● Atributo (Óvalo)</span>
+            </div>
+            <p><div class="section-title">Función:</div> Define las propiedades, características o cualidades que describen a una entidad.</p>
+            <div class="example-box">
+                <strong>Ejemplo práctico:</strong> Para la entidad <code>Alumno</code>, sus atributos serían: <code>Nombre</code>, <code>Edad</code> y <code>Correo electrónico</code>.
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="symbol-name">⊚ Atributo Llave o Clave (Óvalo con texto subrayado)</span>
+            </div>
+            <p><div class="section-title">Función:</div> Es el atributo principal que identifica de manera única e irrepetible a cada registro (instancia) dentro de una entidad.</p>
+            <div class="example-box">
+                <strong>Ejemplo práctico:</strong> En la entidad <code>Alumno</code>, el atributo llave sería la <code>Matrícula</code> o <code>ID_Alumno</code>, ya que dos alumnos no pueden tener el mismo número.
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="symbol-name">◎ Atributo Multivaluado (Doble Óvalo)</span>
+            </div>
+            <p><div class="section-title">Función:</div> Se utiliza para características que pueden tener más de un valor al mismo tiempo para un solo registro.</p>
+            <div class="example-box">
+                <strong>Ejemplo práctico:</strong> El atributo <code>Teléfono</code> de un empleado, dado que una persona puede registrar un teléfono de casa, uno celular y uno de oficina.
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="symbol-name">🌿 Atributo Compuesto (Óvalo subdividido)</span>
+            </div>
+            <p><div class="section-title">Función:</div> Es un atributo que se puede desglosar o dividir en varios sub-atributos más pequeños y específicos, los cuales tienen significado por sí mismos.</p>
+            <div class="example-box">
+                <strong>Ejemplo práctico:</strong> El atributo <code>Dirección</code> se compone de: <code>Calle</code>, <code>Número</code>, <code>Colonia</code> y <code>Código Postal</code>.
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="symbol-name">◌ Atributo Calculado / Derivado (Óvalo con línea punteada)</span>
+            </div>
+            <p><div class="section-title">Función:</div> Representa un valor que no se almacena físicamente en la base de datos de forma estática, sino que se calcula dinámicamente a partir de otros datos existentes.</p>
+            <div class="example-box">
+                <strong>Ejemplo práctico:</strong> El atributo <code>Edad</code> se calcula automáticamente restando la <code>Fecha de Nacimiento</code> de la fecha actual del sistema.
+            </div>
+        </div>
+    </div>
+
+    <h2>3. Cardinalidad y Tipos de Relaciones</h2>
+    <p>La cardinalidad indica cuántos registros de una entidad se pueden asociar con cuántos registros de otra entidad a través de las líneas de conexión.</p>
+    
+    <div class="grid-container">
+
+        <div class="card">
+            <div class="card-header">
+                <span class="symbol-name">Relación Muchos a Muchos (n : m)</span>
+            </div>
+            <p><strong>Representación:</strong> Líneas rectas sin flechas que conectan las entidades al rombo.</p>
+            <p><div class="section-title">Función:</div> Un registro de la Entidad A se relaciona con muchos de la Entidad B, y viceversa.</p>
+            <div class="example-box">
+                <strong>Ejemplo práctico:</strong> Muchos <code>Alumnos</code> pueden cursar muchas <code>Materias</code> diferentes, y una <code>Materia</code> es cursada por muchos <code>Alumnos</code>.
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="symbol-name">Relación Muchos a Uno / Uno a Muchos (n : 1 / 1 : n)</span>
+            </div>
+            <p><strong>Representación:</strong> Una línea recta del lado del "Muchos" (n) y una línea con punta de flecha apuntando hacia el lado del "Uno" (1).</p>
+            <p><div class="section-title">Función:</div> Múltiples registros de una entidad se asocian con un único registro de otra entidad.</p>
+            <div class="example-box">
+                <strong>Ejemplo práctico:</strong> Muchos <code>Empleados</code> (lado n) trabajan para un solo <code>Departamento</code> (lado 1, indicado con la flecha).
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="symbol-name">Relación Uno a Uno (1 : 1)</span>
+            </div>
+            <p><strong>Representación:</strong> Ambas líneas que salen del rombo de relación tienen puntas de flecha apuntando a las respectivas entidades.</p>
+            <p><div class="section-title">Función:</div> Un registro de la Entidad A se puede vincular únicamente con un solo registro de la Entidad B, y viceversa.</p>
+            <div class="example-box">
+                <strong>Ejemplo práctico:</strong> Un <code>País</code> (lado 1) tiene una sola <code>Capital</code> (lado 1), y esa <code>Capital</code> pertenece a un solo <code>País</code>.
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 - Material educativo digital de Bases de Datos. Prohibida su reproducción con fines comerciales.</p>
+    </footer>
+
+</body>
+</html>

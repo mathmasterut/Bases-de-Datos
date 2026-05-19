@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saber Hacer: Laboratorio Practico de Diseño E-R</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f7f6;
+        }
+        header {
+            background-color: #d35400;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        h1 { margin: 0; font-size: 26px; }
+        h2 { color: #2c3e50; border-bottom: 3px solid #d35400; padding-bottom: 5px; margin-top: 40px; }
+        h3 { color: #e67e22; margin-top: 20px; }
+        .intro { background-color: #fdf2e9; padding: 20px; border-left: 5px solid #e67e22; border-radius: 4px; margin-bottom: 30px; }
+        
+        /* Contenedores de Actividades */
+        .activity-card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); margin-bottom: 30px; border-top: 4px solid #2c3e50; }
+        .problem-statement { background-color: #f8f9fa; border: 1px solid #e2e8f0; padding: 15px; border-radius: 6px; font-style: italic; margin-bottom: 20px; }
+        
+        .workspace { margin: 20px 0; }
+        .question-group { margin-bottom: 15px; background: #fafafa; padding: 15px; border-radius: 6px; border-left: 3px solid #7f8c8d; }
+        .question-group label { font-weight: bold; display: block; margin-bottom: 8px; color: #2c3e50; }
+        select { width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc; font-size: 14px; background-color: #fff; }
+        
+        /* Botones y Retroalimentación */
+        .btn-evaluar { background-color: #27ae60; color: white; border: none; padding: 10px 20px; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; width: 100%; transition: background 0.2s; }
+        .btn-evaluar:hover { background-color: #219653; }
+        
+        .feedback-box { margin-top: 20px; padding: 15px; border-radius: 6px; display: none; }
+        .feedback-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .feedback-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        
+        .feedback-box ul { margin: 5px 0 0 20px; padding: 0; }
+        .feedback-box li { margin-bottom: 8px; }
+
+        footer { text-align: center; margin-top: 50px; color: #7f8c8d; font-size: 14px; border-top: 1px solid #ccc; padding-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Módulo Saber Hacer: Laboratorio de Diseño y Diagramación E-R</h1>
+        <p>Práctica interactiva para el modelado conceptual y lógico de Bases de Datos</p>
+    </header>
+
+    <div class="intro">
+        <p><strong>Instrucciones de la Actividad:</strong> Lee detenidamente cada escenario del mundo real planteado. Tu objetivo es abstraer el problema e identificar correctamente las <strong>Entidades</strong>, sus <strong>Atributos Llave</strong> y la <strong>Cardinalidad</strong> idónea para construir el diagrama Entidad-Relación perfecto. Selecciona tus respuestas y evalúa tu lógica de diseño.</p>
+    </div>
+
+    <h2>Práctica 1: Sistema de Control Escolar</h2>
+    <div class="activity-card" id="actividad1">
+        <div class="problem-statement">
+            <strong>Caso Clínico de Negocio:</strong> "Una universidad necesita un sistema para gestionar sus asignaturas. Se sabe que un Alumno posee un número de control único, nombre y carrera. Por otra parte, la Materia cuenta con una clave de materia única y un nombre. Muchos alumnos pueden cursar simultáneamente muchas materias, y cada materia recibe a muchos alumnos."
+        </div>
+
+        <div class="workspace">
+            <div class="question-group">
+                <label>1. ¿Cuáles son las Entidades Fuertes principales involucradas?</label>
+                <select id="a1-q1">
+                    <option value="">-- Selecciona una opción --</option>
+                    <option value="incorrecto1">Carrera y Nombre</option>
+                    <option value="correcto">Alumno y Materia</option>
+                    <option value="incorrecto2">Número de Control y Clave de Materia</option>
+                </select>
+            </div>
+
+            <div class="question-group">
+                <label>2. ¿Cuál es el Atributo Llave correcto para la entidad Alumno?</label>
+                <select id="a1-q2">
+                    <option value="">-- Selecciona una opción --</option>
+                    <option value="incorrecto1">Nombre (Óvalo simple)</option>
+                    <option value="correcto">Número de Control (Óvalo con texto subrayado)</option>
+                    <option value="incorrecto2">Carrera (Atributo multivalorado)</option>
+                </select>
+            </div>
+
+            <div class="question-group">
+                <label>3. ¿Qué cardinalidad (razón de mapeo) debe conectar a ambas entidades en el rombo de relación?</label>
+                <select id="a1-q3">
+                    <option value="">-- Selecciona una opción --</option>
+                    <option value="incorrecto1">Relación Uno a Uno (1:1)</option>
+                    <option value="incorrecto2">Relación Uno a Muchos (1:N)</option>
+                    <option value="correcto">Relación Muchos a Muchos (N:M)</option>
+                </select>
+            </div>
+        </div>
+
+        <button class="btn-evaluar" onclick="evaluarActividad1()">Evaluar Diseño de Diagrama</button>
+
+        <div class="feedback-box" id="feedback1"></div>
+    </div>
+
+    <h2>Práctica 2: Sistema de Asignación de Herramientas de Planta</h2>
+    <div class="activity-card" id="actividad2">
+        <div class="problem-statement">
+            <strong>Caso Clínico de Negocio:</strong> "En una fábrica automotriz, cada Empleado tiene un ID de empleado único y un nombre. A cada empleado se le asigna una única Computadora portátil de la empresa para trabajar, y cada computadora (identificada por su número de serie único) pertenece exclusivamente a un solo empleado."
+        </div>
+
+        <div class="workspace">
+            <div class="question-group">
+                <label>1. ¿Cómo se deben diagramar estructuralmente los elementos 'Empleado' y 'Computadora'?</label>
+                <select id="a2-q1">
+                    <option value="">-- Selecciona una opción --</option>
+                    <option value="correcto">Como dos Rectángulos (Entidades Fuertes independientes)</option>
+                    <option value="incorrecto1">Como un Rectángulo y un Doble Rectángulo (Entidad Fuerte y Débil)</option>
+                    <option value="incorrecto2">Como dos Óvalos (Atributos de una sola entidad)</option>
+                </select>
+            </div>
+
+            <div class="question-group">
+                <label>2. Al transformar este diagrama al Modelo Relacional (Tablas), ¿cuál es el procedimiento correcto?</label>
+                <select id="a2-q2">
+                    <option value="">-- Selecciona una opción --</option>
+                    <option value="incorrecto1">Se debe crear una tercera tabla intermedia para unir las claves.</option>
+                    <option value="correcto">Se mapean dos tablas, y la PK de una viaja a la otra como Llave Foránea (FK).</option>
+                    <option value="incorrecto2">Ambas entidades se fusionan obligatoriamente en una sola tabla combinada.</option>
+                </select>
+            </div>
+
+            <div class="question-group">
+                <label>3. ¿Qué cardinalidad define la interacción del negocio en el diagrama conceptual?</label>
+                <select id="a2-q3">
+                    <option value="">-- Selecciona una opción --</option>
+                    <option value="correcto">Relación Uno a Uno (1:1)</option>
+                    <option value="incorrecto1">Relación Muchos a Uno (N:1)</option>
+                    <option value="incorrecto2">Relación Muchos a Muchos (N:M)</option>
+                </select>
+            </div>
+        </div>
+
+        <button class="btn-evaluar" onclick="evaluarActividad2()">Evaluar Diseño de Diagrama</button>
+
+        <div class="feedback-box" id="feedback2"></div>
+    </div>
+
+    <footer>
+        <p>© 2026 - Módulo de Evaluación Continua | Dashboard "Saber Hacer"</p>
+    </footer>
+
+    <script>
+        function evaluarActividad1() {
+            const q1 = document.getElementById('a1-q1').value;
+            const q2 = document.getElementById('a1-q2').value;
+            const q3 = document.getElementById('a1-q3').value;
+            const feedback = document.getElementById('feedback1');
+            
+            if(!q1 || !q2 || !q3) {
+                alert("Por favor responde todas las preguntas antes de evaluar.");
+                return;
+            }
+
+            feedback.style.display = "block";
+            
+            if(q1 === "correcto" && q2 === "correcto" && q3 === "correcto") {
+                feedback.className = "feedback-box feedback-success";
+                feedback.innerHTML = "<strong>¡Excelente! Diseño Correcto:</strong><br>Abstrajiste el problema perfectamente. Identificaste que Alumno y Materia existen por sí mismos (rectángulos), que el número de control los identifica de forma única (óvalo subrayado) y que la relación es N:M. Al transformar a tablas lógicas, esto generará tres tablas independientes.";
+            } else {
+                feedback.className = "feedback-box feedback-error";
+                let errores = "<strong>Tu diseño tiene fallas de lógica. Analiza por qué:</strong><ul>";
+                if(q1 !== "correcto") errores += "<li><strong>Pregunta 1 Incorrecta:</strong> Recuerda que las entidades corresponden a los objetos físicos o conceptuales del problema (el Alumno y la Materia). El número de control o la carrera son propiedades de estos, es decir, atributos.</li>";
+                if(q2 !== "correcto") errores += "<li><strong>Pregunta 2 Incorrecta:</strong> El nombre de un alumno puede repetirse (no es único). El único atributo con la propiedad de Llave Primaria en el diagrama es el Número de Control, representado siempre con texto subrayado.</li>";
+                if(q3 !== "correcto") errores += "<li><strong>Pregunta 3 Incorrecta:</strong> El texto dice claramente que 'muchos alumnos' toman 'muchas materias'. Si seleccionaste 1:N o 1:1, limitarías el sistema impidiendo que un alumno tome más de una clase o que un profesor registre a más de un estudiante en su lista.</li>";
+                errores += "</ul>";
+                feedback.innerHTML = errores;
+            }
+        }
+
+        function evaluarActividad2() {
+            const q1 = document.getElementById('a2-q1').value;
+            const q2 = document.getElementById('a2-q2').value;
+            const q3 = document.getElementById('a2-q3').value;
+            const feedback = document.getElementById('feedback2');
+            
+            if(!q1 || !q2 || !q3) {
+                alert("Por favor responde todas las preguntas antes de evaluar.");
+                return;
+            }
+
+            feedback.style.display = "block";
+            
+            if(q1 === "correcto" && q2 === "correcto" && q3 === "correcto") {
+                feedback.className = "feedback-box feedback-success";
+                feedback.innerHTML = "<strong>¡Felicidades! Respuestas Correctas:</strong><br>El escenario plantea una correspondencia estricta de 1 a 1. Ambos objetos tienen claves independientes (ID y número de serie), por lo que son entidades fuertes. Siguiendo las reglas de mapeo lógico, la conexión se efectúa compartiendo una clave primaria hacia la otra tabla como Llave Foránea (FK) sin crear tablas huérfanas o intermedias.";
+            } else {
+                feedback.className = "feedback-box feedback-error";
+                let errores = "<strong>Revisa tus conceptos de transformación y diagramación:</strong><ul>";
+                if(q1 !== "correcto") errores += "<li><strong>Pregunta 1 Incorrecta:</strong> La computadora no es una entidad débil porque posee su propio 'número de serie único'. Si la empresa despide al empleado, la computadora sigue existiendo físicamente y puede asignarse a alguien más. Ambas son fuertes.</li>";
+                if(q2 !== "correcto") errores += "<li><strong>Pregunta 2 Incorrecta:</strong> Las tablas intermedias solo se crean obligatoriamente cuando la cardinalidad es Muchos a Muchos (N:M). Para una relación 1:1 basta con colocar una Llave Foránea en la tabla más dependiente.</li>";
+                if(q3 !== "correcto") errores += "<li><strong>Pregunta 3 Incorrecta:</strong> Si eliges N:1, significaría que muchos empleados comparten la misma laptop, lo cual rompe la regla de negocio que dictamina: 'pertenece exclusivamente a un solo empleado'.</li>";
+                errores += "</ul>";
+                feedback.innerHTML = errores;
+            }
+        }
+    </script>
+</body>
+</html>

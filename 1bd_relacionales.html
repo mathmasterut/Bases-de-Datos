@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tema: Bases de Datos Relacionales</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f7f6;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        h1 { margin: 0; font-size: 24px; }
+        h2 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #2980b9; }
+        .intro { background-color: #e8f4f8; padding: 15px; border-left: 5px solid #3498db; border-radius: 4px; margin-bottom: 30px; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .important-note { background-color: #fff9db; border-left: 5px solid #f59f00; padding: 15px; border-radius: 4px; margin: 20px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; background: white; }
+        table, th, td { border: 1px solid #ccc; }
+        th, td { padding: 10px; text-align: left; }
+        th { background-color: #34495e; color: white; }
+        .highlight { font-weight: bold; color: #c0392b; }
+        footer { text-align: center; margin-top: 40px; color: #7f8c8d; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Tema 1: El Modelo de Base de Datos Relacional</h1>
+        <p>Introducción a las estructuras de datos basadas en tablas</p>
+    </header>
+
+    <div class="intro">
+        <p><strong>¿Qué es el Modelo Relacional?</strong> Propuesto originalmente por Edgar F. Codd en 1970, es el modelo más utilizado hoy en día para administrar bases de datos. Su principio fundamental es organizar la información en <strong>tablas (o relaciones)</strong> compuestas por filas y columnas, permitiendo un acceso y manipulación de datos de manera intuitiva y matemática.</p>
+    </div>
+
+    <h2>1. Características Clave del Modelo Relacional</h2>
+    <p>Para que una base de datos se considere relacional, debe cumplir con ciertas propiedades esenciales:</p>
+    
+    <div class="card">
+        <ul>
+            <li><strong>Independencia Física y Lógica:</strong> La forma en que se almacenan los datos en el disco duro (física) no afecta a los programas ni a las consultas que los usuarios hacen (lógica).</li>
+            <li><strong>Flexibilidad:</strong> Es muy fácil añadir nuevas columnas o tablas sin necesidad de reestructurar toda la base de datos desde cero.</li>
+            <li><strong>Integridad de Datos:</strong> Reglas estrictas que garantizan que la información almacenada sea válida, coherente y que no existan datos "huérfanos".</li>
+            <li><strong>Uso de Lenguaje Estándar:</strong> Utiliza principalmente <strong>SQL</strong> (Structured Query Language) para consultar, insertar, actualizar y borrar información.</li>
+        </ul>
+    </div>
+
+    <h2>2. Elementos Fundamentales de una Base de Datos Relacional</h2>
+    <p>A nivel conceptual y lógico, toda base de datos relacional se compone de los siguientes elementos estructurales:</p>
+
+    <div class="card">
+        <h3>A. Relación (Tabla)</h3>
+        <p>Es el elemento central. Una tabla representa una "entidad" del mundo real y contiene una colección de datos sobre un tema específico.</p>
+        
+        <h3>B. Tupla (Fila o Registro)</h3>
+        <p>Corresponde a una fila horizontal en la tabla. Cada tupla representa un objeto o caso individual único dentro de esa tabla.</p>
+
+        <h3>C. Atributo (Columna o Campo)</h3>
+        <p>Es cada columna vertical de la tabla. Define una propiedad o característica específica que queremos guardar de cada registro.</p>
+
+        <h3>D. Dominio</h3>
+        <p>Es el conjunto de valores permitidos para un atributo determinado. Define el <em>tipo de dato</em> (ej. Entero, Texto, Fecha) y las restricciones (ej. que la edad sea un número entre 1 y 120).</p>
+    </div>
+
+    <h2>3. Ejemplo Visual de una Tabla Relacional</h2>
+    <p>A continuación se muestra cómo se traducen estos términos en una tabla real llamada <code>ALUMNOS</code>:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID_Alumno (Atributo / Llave)</th>
+                <th>Nombre (Atributo)</th>
+                <th>Semestre (Atributo)</th>
+                <th>Carrera (Atributo)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>102030</td>
+                <td>Carlos Mendoza</td>
+                <td>4°</td>
+                <td>Sistemas</td>
+            </tr>
+            <tr>
+                <td>102031</td>
+                <td>Ana Paula Gómez</td>
+                <td>2°</td>
+                <td>Industrial</td>
+            </tr>
+            <tr>
+                <td>102032</td>
+                <td>Luis Fernando Soto</td>
+                <td>6°</td>
+                <td>Sistemas</td>
+            </tr>
+        </tbody>
+    </table>
+    <p><em>* Nota para el alumno: Toda esta tabla es la <strong>Relación</strong>. Cada fila horizontal es una <strong>Tupla</strong>.</em></p>
+
+    <h2>4. Elementos de Vinculación y Control: Las Llaves (Keys)</h2>
+    <p>Las tablas no trabajan solas; se conectan entre sí para formar el sistema completo utilizando dos elementos críticos:</p>
+
+    <div class="card">
+        <h3>1. Llave Primaria (Primary Key - PK)</h3>
+        <p>Es un atributo (o combinación de ellos) que identifica de forma <strong>única e inequívoca</strong> a cada tupla en una tabla. No puede haber dos filas con la misma Llave Primaria, y este campo nunca puede quedar vacío (<code>NOT NULL</code>).</p>
+        <p class="example-box"><strong>Ejemplo:</strong> En la tabla anterior, <code>ID_Alumno</code> es la Llave Primaria.</p>
+
+        <h3>2. Llave Foránea o Ajena (Foreign Key - FK)</h3>
+        <p>Es un atributo en una tabla cuyo valor debe coincidir exactamente con la Llave Primaria de otra tabla distinta. Es el mecanismo físico que <strong>crea la relación</strong> entre dos tablas.</p>
+        <p class="example-box"><strong>Ejemplo:</strong> Si en la tabla de <code>ALUMNOS</code> añadimos una columna llamada <code>ID_Carrera</code> para conectarla con una tabla independiente de <code>CARRERAS</code>, esa columna actúa como Llave Foránea.</p>
+    </div>
+
+    <div class="important-note">
+        <strong>Regla de Oro (Integridad Referencial):</strong> Una Llave Foránea no puede contener un valor que no exista previamente como Llave Primaria en la tabla de origen. Esto evita que, por ejemplo, inscribamos a un alumno en una carrera que no existe en la institución.
+    </div>
+
+    <footer>
+        <p>© 2026 - Material educativo digital de Bases de Datos. Prohibida su reproducción con fines comerciales.</p>
+    </footer>
+
+</body>
+</html>
