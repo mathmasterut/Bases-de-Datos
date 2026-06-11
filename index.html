@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ecosistema de Aprendizaje: Bases de Datos</title>
+    <title>Dashboard de Aprendizaje: Bases de Datos</title>
     <style>
-        /* CONFIGURACIÓN Y COLORES CORE */
+        /* CONFIGURACIÓN Y COLORES CORE - INSPIRADO EN APRENDE.ORG */
         :root {
             --primary: #2c3e50;
             --secondary: #16a085;
@@ -13,7 +13,11 @@
             --bg: #f4f7f6;
             --text: #34495e;
             --card-bg: #ffffff;
+            --u1-color: #1abc9c;
+            --u2-color: #9b59b6;
             --u3-color: #2980b9;
+            --u4-color: #8e44ad;
+            --success: #27ae60;
         }
 
         body {
@@ -25,70 +29,127 @@
             padding: 0;
         }
 
-        /* JUMBOTRON / ENCABEZADO */
+        /* ENCABEZADO TIPO DASHBOARD */
         header {
             background: linear-gradient(135deg, #2c3e50 0%, #117a65 100%);
             color: white;
-            padding: 40px 20px;
+            padding: 30px 20px;
             text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1s);
         }
 
         header h1 {
             margin: 0;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             letter-spacing: -0.5px;
         }
 
         header p {
-            margin: 10px 0 0 0;
+            margin: 8px 0 0 0;
             font-size: 1.1rem;
             opacity: 0.9;
+        }
+
+        /* BARRA DE PROGRESO GLOBAL GIGANTE */
+        .progress-container-global {
+            max-width: 1100px;
+            margin: 20px auto -10px auto;
+            padding: 0 20px;
+        }
+
+        .progress-box {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .progress-info {
+            font-weight: bold;
+            color: var(--primary);
+            min-width: 140px;
+        }
+
+        .progress-bar-bg {
+            background: #e2e8f0;
+            border-radius: 10px;
+            height: 18px;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            background: linear-gradient(90deg, var(--secondary), var(--u3-color));
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease-in-out;
         }
 
         .main-container {
             max-width: 1100px;
             margin: 30px auto;
             padding: 0 20px;
+            min-height: 500px;
         }
 
-        /* TITULARES DE LAS UNIDADES */
-        .unidad-titulo {
-            font-size: 1.8rem;
-            color: var(--primary);
-            border-bottom: 4px solid var(--secondary);
-            padding-bottom: 8px;
-            margin-top: 40px;
-            margin-bottom: 20px;
+        /* MENÚ DE PESTAÑAS (TABS NAVIGATION) */
+        .dashboard-tabs {
             display: flex;
-            align-items: center;
+            flex-wrap: wrap;
             gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #cbd5e1;
+            padding-bottom: 10px;
         }
 
-        .unidad-badge {
-            background-color: var(--primary);
-            color: white;
-            padding: 4px 12px;
+        .tab-btn {
+            padding: 12px 24px;
             font-size: 1rem;
-            border-radius: 20px;
             font-weight: bold;
+            background: #e2e8f0;
+            color: var(--primary);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .unidad-titulo.u2 .unidad-badge {
-            background-color: var(--accent);
-        }
-        .unidad-titulo.u2 {
-            border-bottom-color: var(--accent);
+        .tab-btn:hover {
+            background: #cbd5e1;
         }
 
-        .unidad-titulo.u3 .unidad-badge {
-            background-color: var(--u3-color);
-        }
-        .unidad-titulo.u3 {
-            border-bottom-color: var(--u3-color);
+        .tab-btn.active {
+            color: white;
         }
 
-        /* DISEÑO DE REJILLA (GRID SYSTEM) */
+        /* Colores dinámicos por pestaña activa */
+        .tab-btn[data-tab="inicio"].active { background-color: var(--primary); }
+        .tab-btn[data-tab="u1"].active { background-color: var(--u1-color); }
+        .tab-btn[data-tab="u2"].active { background-color: var(--u2-color); }
+        .tab-btn[data-tab="u3"].active { background-color: var(--u3-color); }
+        .tab-btn[data-tab="u4"].active { background-color: var(--u4-color); }
+
+        /* VISTAS DE CONTENIDO (PANELS) */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out forwards;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* REJILLAS Y TARJETAS */
         .temas-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -96,7 +157,6 @@
             margin-bottom: 20px;
         }
 
-        /* TARJETAS DE CONTENIDO (CARDS) */
         .tema-card {
             background: var(--card-bg);
             border-radius: 8px;
@@ -105,21 +165,52 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            border-left: 5px solid var(--secondary);
-            transition: transform 0.2s, box-shadow 0.2s;
+            border-left: 6px solid var(--secondary);
+            position: relative;
+            transition: all 0.2s ease;
         }
 
-        .u2-card {
-            border-left-color: var(--accent);
+        .u1-card { border-left-color: var(--u1-color); }
+        .u2-card { border-left-color: var(--u2-color); }
+        .u3-card { border-left-color: var(--u3-color); }
+        .u4-card { border-left-color: var(--u4-color); }
+
+        /* Estilo visual de Tarjeta Completada */
+        .tema-card.completed {
+            background-color: #fafdfb;
+            border-left-color: var(--success) !important;
+            box-shadow: 0 2px 5px rgba(39, 174, 96, 0.1);
         }
 
-        .u3-card {
-            border-left-color: var(--u3-color);
+        /* HEADER INTERNO DE LA TARJETA (Título + Check) */
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 10px;
         }
 
-        .tema-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        .tracker-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.8rem;
+            background: #edf2f7;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            transition: 0.2s;
+        }
+
+        .tracker-container:hover { background: #e2e8f0; }
+        .tracker-container input { cursor: pointer; margin: 0; }
+
+        .tema-card.completed .tracker-container {
+            background: #def7ec;
+            color: #03543f;
         }
 
         .tema-meta {
@@ -131,7 +222,7 @@
         }
 
         .tema-name {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             color: var(--primary);
             margin: 0 0 10px 0;
             font-weight: 700;
@@ -143,231 +234,56 @@
             margin: 0 0 20px 0;
         }
 
-        .tema-card .tema-desc {
-            margin: 0 0 15px 0;
-        }
-
-        /* ELEMENTOS INTERNOS DE TEXTO */
-        .data-item {
-            font-size: 0.9rem;
-            margin-bottom: 8px;
-            color: #4b5966;
-        }
-        
-        .data-item strong {
-            color: var(--primary);
-        }
-
-        .u2-card .data-item strong {
-            color: #2c3e50;
-        }
-
-        ul {
-            padding-left: 20px;
-            margin: 10px 0;
-            font-size: 0.9rem;
-            color: #5d6d7e;
-        }
-
-        li {
-            margin-bottom: 6px;
-        }
-
-        li strong {
-            color: var(--primary);
-        }
-
-        /* NOTAS DE EXPERTO */
-        .expert-note {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 12px;
-            margin-top: 15px;
-            font-size: 0.88rem;
-            font-style: italic;
-            font-weight: bold;
-            color: #856404;
-            border-radius: 0 4px 4px 0;
-        }
-
-        /* TABLAS ESTRUCTURADAS */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 15px 0;
-            font-size: 0.85rem;
-            background: white;
-        }
-
-        th, td {
-            padding: 10px;
-            border: 1px solid #e2e8f0;
-            text-align: left;
-        }
-
-        th {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f8fafc;
-        }
-
-        /* BOTONES E INTERACCIONES */
-        .links-container {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
+        /* BOTONES UNIFICADOS */
+        .links-container { margin-top: auto; }
 
         .btn-link {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 15px;
-            background-color: #ebf5fb;
-            color: #2980b9;
+            padding: 12px 15px;
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: 6px;
             font-weight: 600;
             font-size: 0.9rem;
             transition: 0.2s;
-            cursor: pointer;
-            border: none;
             width: 100%;
             box-sizing: border-box;
         }
 
-        .btn-link:hover {
-            background-color: #2980b9;
-            color: white;
-        }
+        /* Estilos cromáticos de botones según la sección */
+        .u1-card .btn-link { background: #e8f8f5; color: #117a65; }
+        .u1-card .btn-link:hover { background: #117a65; color: white; }
 
-        .btn-saber {
-            background-color: #e8f8f5;
-            color: #117a65;
-        }
+        .u2-card .btn-link { background: #f5eef8; color: #8e44ad; }
+        .u2-card .btn-link:hover { background: #8e44ad; color: white; }
+        
+        .u2-card .btn-saber { background: #fdf2e9; color: #d35400; border: 1px dashed #f5b041; margin-top: 8px;}
+        .u2-card .btn-saber:hover { background: #d35400; color: white; }
 
-        .btn-saber:hover {
-            background-color: #117a65;
-            color: white;
-        }
+        .u3-card .btn-link { background: #eaf2f8; color: #2471a3; border: 1px solid #d4e6f1; }
+        .u3-card .btn-link:hover { background: #2471a3; color: white; }
 
-        .u2-card .btn-saber {
-            background-color: #f5eef8;
-            color: #8e44ad;
-        }
+        .u4-card .btn-link { background: #f4ecf7; color: #7d3c98; border: 1px solid #e8daef; }
+        .u4-card .btn-link:hover { background: #7d3c98; color: white; }
 
-        .u2-card .btn-saber:hover {
-            background-color: #8e44ad;
-            color: white;
-        }
+        .badge-tipo { font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; background: rgba(0,0,0,0.05); }
 
-        .badge-tipo {
-            font-size: 0.75rem;
-            padding: 2px 6px;
-            border-radius: 4px;
-            background: rgba(0,0,0,0.05);
-        }
-
-        /* ZONA DE QUIZ INTERACTIVO */
-        .quiz-full-width {
-            grid-column: 1 / -1;
-            background: #fff;
-            border-left: 5px solid #e74c3c !important;
-        }
-
-        .quiz-header-desc {
-            background-color: #fdf2f2;
-            border: 1px solid #fde8e8;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            color: #c81e1e;
-            font-weight: 600;
-        }
-
-        .question {
-            margin-bottom: 25px;
-            background: #f8fafc;
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #edf2f7;
-        }
-
-        .question p {
-            margin-top: 0;
-            font-size: 1rem;
-            color: var(--primary);
-        }
-
-        .options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .opt-btn {
-            padding: 12px 20px;
-            border: 1px solid #cbd5e1;
+        /* BIENVENIDA EN INICIO */
+        .welcome-box {
             background: white;
-            cursor: pointer;
-            border-radius: 6px;
-            transition: 0.2s;
-            text-align: left;
-            font-size: 0.9rem;
-            color: var(--text);
-            font-weight: 500;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
         }
 
-        .opt-btn:hover {
-            background: #e2e8f0;
-            border-color: #94a3b8;
-        }
+        .welcome-box h2 { margin-top: 0; color: var(--primary); }
 
-        .feedback {
-            margin-top: 12px;
-            padding: 12px;
-            border-radius: 6px;
-            display: none;
-            font-size: 0.88rem;
-            font-weight: 600;
-        }
+        /* COMPLEMENTO DINÁMICO */
+        #seccion-complemento { display: none; animation: fadeIn 0.5s ease-in-out forwards; margin-top: 20px;}
 
-        .correct {
-            background: #def7ec;
-            color: #03543f;
-            border: 1px solid #bcf0da;
-        }
-
-        .incorrect {
-            background: #fde8e8;
-            color: #9b1c1c;
-            border: 1px solid #fcd2d2;
-        }
-
-        /* SECCIÓN DEL COMPLEMENTO DINÁMICO */
-        #seccion-complemento {
-            display: none;
-            animation: fadeIn 0.5s ease-in-out forwards;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 60px;
-            padding: 25px;
-            color: #7f8c8d;
-            font-size: 0.9rem;
-            background-color: #eaeded;
-            border-top: 1px solid #d5dbdb;
-        }
+        footer { text-align: center; margin-top: 60px; padding: 25px; color: #7f8c8d; font-size: 0.9rem; background-color: #eaeded; border-top: 1px solid #d5dbdb; }
     </style>
 </head>
 <body>
@@ -377,532 +293,274 @@
         <p>Estructura Curricular y Módulos de Evaluación Continua Interactiva</p>
     </header>
 
+    <div class="progress-container-global">
+        <div class="progress-box">
+            <div class="progress-info">Progreso del Curso: <span id="progress-percentage">0%</span></div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
     <div class="main-container">
 
-        <div class="unidad-titulo">
-            <span class="unidad-badge">UNIDAD I</span>
-            <span>Fundamentos de Bases de Datos</span>
+        <div class="dashboard-tabs">
+            <button class="tab-btn active" data-tab="inicio">🏠 Inicio</button>
+            <button class="tab-btn" data-tab="u1">Módulo I (Fundamentos)</button>
+            <button class="tab-btn" data-tab="u2">Módulo II (Modelado)</button>
+            <button class="tab-btn" data-tab="u3">Módulo III (Construcción)</button>
+            <button class="tab-btn" data-tab="u4">Módulo IV (Consultas SQL)</button>
         </div>
 
-        <div class="temas-grid">
-            <div class="tema-card">
-                <div>
-                    <div class="tema-meta">Conceptos Teóricos</div>
+        <div id="inicio" class="tab-content active">
+            <div class="welcome-box">
+                <h2>¡Bienvenido a tu Entorno de Aprendizaje!</h2>
+                <p>Este ecosistema interactivo está diseñado para guiarte paso a paso en el dominio de las <strong>Bases de Datos Relacionales y No Relacionales</strong>.</p>
+                <p><strong>Instrucciones de Navegación:</strong></p>
+                <ul>
+                    <li>Selecciona cualquiera de los módulos en el menú superior para desplegar sus temas correspondientes.</li>
+                    <li>Utiliza el botón de verificación <strong>"¿Completado?"</strong> en la esquina superior derecha de cada tarjeta para guardar tu avance personal. Tu progreso se guardará automáticamente en este navegador.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="u1" class="tab-content">
+            <div class="temas-grid">
+                <div class="tema-card u1-card" id="card-u1t1">
+                    <div class="card-top">
+                        <div class="tema-meta">Conceptos Teóricos</div>
+                        <label class="tracker-container">
+                            <input type="checkbox" onchange="toggleCardProgress('card-u1t1')"> <span>¿Listo?</span>
+                        </label>
+                    </div>
                     <h3 class="tema-name">1. Introducción y Características</h3>
                     <p class="tema-desc">Estudio integral del concepto de base de datos, redundancia, consistencia y ventajas sobre sistemas de archivos.</p>
+                    <div class="links-container">
+                        <a href="fundamentos.html" class="btn-link">
+                            <span>📖 Contenido y Diagnóstico</span>
+                            <span class="badge-tipo">HTML</span>
+                        </a>
+                    </div>
                 </div>
-                <div class="links-container">
-                    <a href="fundamentos.html" class="btn-link">
-                        <span>📖 Contenido y Diagnóstico</span>
-                        <span class="badge-tipo">HTML</span>
-                    </a>
-                </div>
-            </div>
-
-            <div class="tema-card">
-                <div>
-                    <div class="tema-meta">Arquitectura de Componentes</div>
+                <div class="tema-card u1-card" id="card-u1t2">
+                    <div class="card-top">
+                        <div class="tema-meta">Arquitectura de Componentes</div>
+                        <label class="tracker-container">
+                            <input type="checkbox" onchange="toggleCardProgress('card-u1t2')"> <span>¿Listo?</span>
+                        </label>
+                    </div>
                     <h3 class="tema-name">2. Componentes del Sistema</h3>
                     <p class="tema-desc">Análisis del Hardware, Software, Procedimientos y el espectro de Datos Dinámicos, Estáticos y Metadatos.</p>
-                </div>
-                <div class="links-container">
-                    <a href="componentes_bd.html" class="btn-link">
-                        <span>📖 Contenido y Flujos</span>
-                        <span class="badge-tipo">HTML</span>
-                    </a>
+                    <div class="links-container">
+                        <a href="componentes_bd.html" class="btn-link">
+                            <span>📖 Contenido y Flujos</span>
+                            <span class="badge-tipo">HTML</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
 
-
-        <div class="unidad-titulo u2">
-            <span class="unidad-badge">UNIDAD II</span>
-            <span>Modelado de Bases de Datos</span>
-        </div>
-
-        <div class="temas-grid">
-            <div class="tema-card u2-card">
-                <div>
-                    <div class="tema-meta">Paradigma Relacional</div>
+        <div id="u2" class="tab-content">
+            <div class="temas-grid">
+                <div class="tema-card u2-card" id="card-u2t1">
+                    <div class="card-top">
+                        <div class="tema-meta">Paradigma Relacional</div>
+                        <label class="tracker-container">
+                            <input type="checkbox" onchange="toggleCardProgress('card-u2t1')"> <span>¿Listo?</span>
+                        </label>
+                    </div>
                     <h3 class="tema-name">1. Bases de Datos Relacionales</h3>
                     <p class="tema-desc">Principios teóricos del modelo relacional, tablas, tuplas, atributos y propiedades fundamentales.</p>
+                    <div class="links-container">
+                        <a href="1bd_relacionales.html" class="btn-link">
+                            <span>📖 Estudio del Modelo</span>
+                            <span class="badge-tipo">HTML</span>
+                        </a>
+                    </div>
                 </div>
-                <div class="links-container">
-                    <a href="1bd_relacionales.html" class="btn-link">
-                        <span>📖 Estudio del Modelo</span>
-                        <span class="badge-tipo">HTML</span>
-                    </a>
-                </div>
-            </div>
-
-            <div class="tema-card u2-card">
-                <div>
-                    <div class="tema-meta">Diseño Conceptual</div>
+                <div class="tema-card u2-card" id="card-u2t2">
+                    <div class="card-top">
+                        <div class="tema-meta">Diseño Conceptual</div>
+                        <label class="tracker-container">
+                            <input type="checkbox" onchange="toggleCardProgress('card-u2t2')"> <span>¿Listo?</span>
+                        </label>
+                    </div>
                     <h3 class="tema-name">2. Modelo Entidad-Relación</h3>
                     <p class="tema-desc">Abstracción de diagramas comerciales y modelado gráfico de entidades, atributos y relaciones.</p>
+                    <div class="links-container">
+                        <a href="2modelo_er.html" class="btn-link">
+                            <span>📖 Teoría E-R</span>
+                            <span class="badge-tipo">HTML</span>
+                        </a>
+                        <a href="2.1saber_er.html" class="btn-link btn-saber">
+                            <span>⚡ Saber Hacer: Práctica Principal</span>
+                            <span class="badge-tipo">Interactiva</span>
+                        </a>
+                    </div>
                 </div>
-                <div class="links-container">
-                    <a href="2modelo_er.html" class="btn-link">
-                        <span>📖 Teoría E-R</span>
-                        <span class="badge-tipo">HTML</span>
-                    </a>
-                    <a href="2.1saber_er.html" class="btn-link btn-saber">
-                        <span>⚡ Saber Hacer: Práctica Principal</span>
-                        <span class="badge-tipo">Interactiva</span>
-                    </a>
-                    <a href="2.1saber_er_copia.html" class="btn-link btn-saber" style="opacity: 0.8;">
-                        <span>⚡ Práctica: Variante A (Copia)</span>
-                        <span class="badge-tipo">Interactiva</span>
-                    </a>
-                    <a href="2.1saber_er_copia_copia.html" class="btn-link btn-saber" style="opacity: 0.6;">
-                        <span>⚡ Práctica: Variante B (Refuerzo)</span>
-                        <span class="badge-tipo">Interactiva</span>
-                    </a>
-                </div>
-            </div>
-
-            <div class="tema-card u2-card">
-                <div>
-                    <div class="tema-meta">Mapeo Físico</div>
+                <div class="tema-card u2-card" id="card-u2t3">
+                    <div class="card-top">
+                        <div class="tema-meta">Mapeo Físico</div>
+                        <label class="tracker-container">
+                            <input type="checkbox" onchange="toggleCardProgress('card-u2t3')"> <span>¿Listo?</span>
+                        </label>
+                    </div>
                     <h3 class="tema-name">3. Transformación Relacional</h3>
                     <p class="tema-desc">Reglas para convertir diagramas conceptuales a tablas relacionales físicas y migración de llaves primarias y foráneas.</p>
+                    <div class="links-container">
+                        <a href="3modelo_relacional.html" class="btn-link">
+                            <span>📖 Teoría de Mapeo</span>
+                            <span class="badge-tipo">HTML</span>
+                        </a>
+                        <a href="3.1_saber_modelo_relacional.html" class="btn-link btn-saber">
+                            <span>⚡ Saber Hacer: Romper N:M y Llaves</span>
+                            <span class="badge-tipo">Interactiva</span>
+                        </a>
+                    </div>
                 </div>
-                <div class="links-container">
-                    <a href="3modelo_relacional.html" class="btn-link">
-                        <span>📖 Teoría de Mapeo</span>
-                        <span class="badge-tipo">HTML</span>
-                    </a>
-                    <a href="3.1_saber_modelo_relacional.html" class="btn-link btn-saber">
-                        <span>⚡ Saber Hacer: Romper N:M y Llaves</span>
-                        <span class="badge-tipo">Interactiva</span>
-                    </a>
-                </div>
-            </div>
-
-            <div class="tema-card u2-card">
-                <div>
-                    <div class="tema-meta">Diccionario Estándar</div>
+                <div class="tema-card u2-card" id="card-u2t4">
+                    <div class="card-top">
+                        <div class="tema-meta">Diccionario Estándar</div>
+                        <label class="tracker-container">
+                            <input type="checkbox" onchange="toggleCardProgress('card-u2t4')"> <span>¿Listo?</span>
+                        </label>
+                    </div>
                     <h3 class="tema-name">4. Simbología Técnica</h3>
                     <p class="tema-desc">Compendio completo de notaciones para modelado de datos conceptuales, lógicos y físicos.</p>
+                    <div class="links-container">
+                        <a href="4simbologia.html" class="btn-link">
+                            <span>📖 Consultar Catálogo gráfico</span>
+                            <span class="badge-tipo">HTML</span>
+                        </a>
+                    </div>
                 </div>
-                <div class="links-container">
-                    <a href="4simbologia.html" class="btn-link">
-                        <span>📖 Consultar Catálogo gráfico</span>
-                        <span class="badge-tipo">HTML</span>
-                    </a>
-                </div>
-            </div>
-
-            <div class="tema-card u2-card">
-                <div>
-                    <div class="tema-meta">Casos de Estudio</div>
+                <div class="tema-card u2-card" id="card-u2t5">
+                    <div class="card-top">
+                        <div class="tema-meta">Casos de Estudio</div>
+                        <label class="tracker-container">
+                            <input type="checkbox" onchange="toggleCardProgress('card-u2t5')"> <span>¿Listo?</span>
+                        </label>
+                    </div>
                     <h3 class="tema-name">5. Compendio General</h3>
                     <p class="tema-desc">Integración y lectura de problemáticas complejas de negocio resueltas de inicio a fin.</p>
+                    <div class="links-container">
+                        <a href="5compendio.html" class="btn-link">
+                            <span>📖 Consultar Repositorio</span>
+                            <span class="badge-tipo">HTML</span>
+                        </a>
+                    </div>
                 </div>
-                <div class="links-container">
-                    <a href="5compendio.html" class="btn-link">
-                        <span>📖 Consultar Repositorio</span>
-                        <span class="badge-tipo">HTML</span>
-                    </a>
-                </div>
-            </div>
-
-            <div class="tema-card u2-card">
-                <div>
-                    <div class="tema-meta">Nuevos Paradigmas</div>
+                <div class="tema-card u2-card" id="card-u2t6">
+                    <div class="card-top">
+                        <div class="tema-meta">Nuevos Paradigmas</div>
+                        <label class="tracker-container">
+                            <input type="checkbox" onchange="toggleCardProgress('card-u2t6')"> <span>¿Listo?</span>
+                        </label>
+                    </div>
                     <h3 class="tema-name">6. Bases de Datos No Relacionales</h3>
                     <p class="tema-desc">Introducción a ecosistemas NoSQL: Almacenamiento orientado a documentos, clave-valor y grafos.</p>
+                    <div class="links-container">
+                        <a href="6bd_no_relacionales.html" class="btn-link">
+                            <span>📖 Explorar Tecnologías NoSQL</span>
+                            <span class="badge-tipo">HTML</span>
+                        </a>
+                    </div>
                 </div>
-                <div class="links-container">
-                    <a href="6bd_no_relacionales.html" class="btn-link">
-                        <span>📖 Explorar Tecnologías NoSQL</span>
-                        <span class="badge-tipo">HTML</span>
-                    </a>
+                <div class="tema-card u2-card" id="card-u2t7">
+                    <div class="card-top">
+                        <div class="tema-meta">Metadatos Corporativos</div>
+                        <label class="tracker-container">
+                            <input type="checkbox" onchange="toggleCardProgress('card-u2t7')"> <span>¿Listo?</span>
+                        </label>
+                    </div>
+                    <h3 class="tema-name">7. Diccionarios de Datos</h3>
+                    <p class="tema-desc">Documentación precisa de campos, tipos de datos óptimos (CHAR vs VARCHAR), longitudes y restricciones lógicas.</p>
+                    <div class="links-container">
+                        <a href="7diccionario_datos.html" class="btn-link">
+                            <span>📖 Teoría de Metadatos</span>
+                            <span class="badge-tipo">HTML</span>
+                        </a>
+                        <a href="7.1_saber_diccionario_datos.html" class="btn-link btn-saber">
+                            <span>⚡ Saber Hacer: Documentar Tablas</span>
+                            <span class="badge-tipo">Interactiva</span>
+                        </a>
+                        <button onclick="toggleComplemento()" class="btn-link btn-saber" id="btn-toggle-comp">
+                            <span>⚡ Complemento a UNIDAD II</span>
+                            <span class="badge-tipo">Interactiva</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <div class="tema-card u2-card">
-                <div>
-                    <div class="tema-meta">Metadatos Corporativos</div>
-                    <h3 class="tema-name">7. Diccionarios de Datos</h3>
-                    <p class="tema-desc">Documentación precisa de campos, tipos de datos óptimos (CHAR vs VARCHAR), longitudes y restricciones lógicas.</p>
-                </div>
-                <div class="links-container">
-                    <a href="7diccionario_datos.html" class="btn-link">
-                        <span>📖 Teoría de Metadatos</span>
-                        <span class="badge-tipo">HTML</span>
-                    </a>
-                    <a href="7.1_saber_diccionario_datos.html" class="btn-link btn-saber">
-                        <span>⚡ Saber Hacer: Documentar Tablas</span>
-                        <span class="badge-tipo">Interactiva</span>
-                    </a>
-                    <button onclick="toggleComplemento()" class="btn-link btn-saber" id="btn-toggle-comp">
-                        <span>⚡ Complemento a UNIDAD II</span>
-                        <span class="badge-tipo">Interactiva</span>
-                    </button>
+            <div id="seccion-complemento">
+                <h3 style="color: var(--primary); border-bottom: 2px dashed var(--accent); padding-bottom: 5px;">Módulo Auxiliar: Configuración de Esquemas en SQLyog</h3>
+                <div class="temas-grid">
+                    <div class="tema-card u2-card">
+                        <div>
+                            <div class="tema-meta">Configuración General</div>
+                            <h4 class="tema-name">Configuración General de la Tabla</h4>
+                            <p class="tema-desc">Propiedades globales de la entidad física dentro del motor relacional:</p>
+                            <div style="font-size:0.9rem; margin-bottom:5px;"><strong>Table Name:</strong> Cliente.</div>
+                            <div style="font-size:0.9rem; margin-bottom:5px;"><strong>Database:</strong> mitiendota.</div>
+                            <div style="font-size:0.9rem;"><strong>Engine:</strong> InnoDB.</div>
+                        </div>
+                    </div>
+                    <div class="tema-card u2-card">
+                        <div>
+                            <div class="tema-meta">Restricciones Físicas</div>
+                            <h4 class="tema-name">Restricciones y Atributos</h4>
+                            <p class="tema-desc">Configuración lógica de integridad estructural:</p>
+                            <ul style="margin:5px 0; padding-left:20px; font-size:0.9rem;">
+                                <li><strong>PK? (Primary Key):</strong> Desmarcado.</li>
+                                <li><strong>Not Null?:</strong> Desmarcado.</li>
+                            </ul>
+                            <div style="background:#fff3cd; border-left:4px solid #ffc107; padding:8px; margin-top:10px; font-size:0.85rem; font-style:italic; color:#856404;">
+                                Observación de experto: Se debe marcar PK, Not Null y Auto Incr.
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div id="seccion-complemento">
-            <div class="unidad-titulo u3">
-                <span class="unidad-badge">UNIDAD II.3</span>
-                <span>Configuración de Esquemas e Interfaz SQLyog</span>
-            </div>
-
+        <div id="u3" class="tab-content">
             <div class="temas-grid">
-                <div class="tema-card">
-                    <div>
-                        <div class="tema-meta">Configuración General</div>
-                        <h3 class="tema-name">1. Configuración General de la Tabla</h3>
-                        <p class="tema-desc">Propiedades globales de la entidad física dentro del motor relacional:</p>
-                        <div class="data-item"><strong>Table Name:</strong> Es el nombre identificador de la entidad, en este caso Cliente.</div>
-                        <div class="data-item"><strong>Database:</strong> Indica el esquema al que pertenece, llamado mitiendota.</div>
-                        <div class="data-item"><strong>Engine:</strong> Configurado como InnoDB, ideal para llaves foráneas e integridad transaccional.</div>
-                        <div class="data-item"><strong>Character Set:</strong> Configurado en [default] para heredar el juego de caracteres base (UTF-8).</div>
-                        <div class="data-item"><strong>Collation:</strong> Configurado en [default], heredando reglas nativas de ordenamiento.</div>
+                <div class="tema-card u3-card" id="card-u3t1">
+                    <div class="card-top">
+                        <div class="tema-meta">Implementación DDL</div>
+                        <label class="tracker-container">
+                            <input type="checkbox" onchange="toggleCardProgress('card-u3t1')"> <span>¿Listo?</span>
+                        </label>
                     </div>
-                </div>
-
-                <div class="tema-card">
-                    <div>
-                        <div class="tema-meta">Diseño Atómico</div>
-                        <h3 class="tema-name">2. Estructura de id_cliente</h3>
-                        <p class="tema-desc">Análisis y definición de atributos primarios del primer campo de la tabla:</p>
-                        <div class="data-item"><strong>Column Name:</strong> El nombre técnico del campo es id_cliente.</div>
-                        <div class="data-item"><strong>Data Type:</strong> El tipo de dato asignado corresponde a int (entero).</div>
-                        <div class="data-item"><strong>Length:</strong> No definido explícitamente (asume 11 por defecto), regula el límite de visualización.</div>
-                        <div class="data-item"><strong>Default:</strong> Vacío; sin asignación de valor predeterminado manual.</div>
-                    </div>
-                </div>
-
-                <div class="tema-card">
-                    <div>
-                        <div class="tema-meta">Restricciones Físicas</div>
-                        <h3 class="tema-name">3. Restricciones y Atributos (Checkboxes)</h3>
-                        <p class="tema-desc">Configuración lógica de integridad estructural para la entidad cliente:</p>
-                        <ul>
-                            <li><strong>PK? (Primary Key):</strong> Desmarcado. Debería activarse para asegurar unicidad.</li>
-                            <li><strong>Not Null?:</strong> Desmarcado. Permitiría la inserción de nulos erróneos.</li>
-                            <li><strong>Unsigned?:</strong> Desmarcado. Evita enteros negativos optimizando el rango de IDs.</li>
-                            <li><strong>Auto Incr?:</strong> Desmarcado. Recomendado delegar el autoincremento al DBMS.</li>
-                            <li><strong>Zerofill?:</strong> Desmarcado. Completaría con ceros lógicos a la izquierda.</li>
-                            <li><strong>On Update:</strong> Sin acción temporal configurada de forma nativa.</li>
-                            <li><strong>Comment:</strong> Metadato documental descriptivo para ingenieros de desarrollo.</li>
-                        </ul>
-                        <div class="expert-note">
-                            Observación de experto: Para que esta tabla sea funcional, el alumno debe marcar las casillas de PK, Not Null y Auto Incr en la fila de id_cliente. Sin esto, la tabla no tendrá una forma de identificar de manera única a cada cliente.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tema-card">
-                    <div>
-                        <div class="tema-meta">Campos Calculados</div>
-                        <h3 class="tema-name">4. Virtualidad y Lógica Calculada</h3>
-                        <p class="tema-desc">Gestión y comportamiento dinámico de campos derivados en memoria:</p>
-                        <div class="data-item"><strong>Virtuality:</strong> Blanco. Permite discriminar si la columna es física, virtual o almacenada persistente.</div>
-                        <div class="data-item"><strong>Expression:</strong> Sentencia para fórmulas lógicas. Al ser id_cliente un dato atómico base, permanece vacío.</div>
+                    <h3 class="tema-name">1. Lenguaje de Definición de Datos</h3>
+                    <p class="tema-desc">Estructuración técnica de esquemas mediante sentencias físicas y comandos SQL nativos para la creación y manipulación de tablas.</p>
+                    <div class="links-container">
+                        <a href="unidad3.html" class="btn-link">
+                            <span>📖 Guía de Construcción y Laboratorio: Casos Prácticos</span>
+                            <span class="badge-tipo">Completo</span>
+                        </a>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="unidad-titulo u2">
-                <span class="unidad-badge">UNIDAD II.5</span>
-                <span>Diccionario de Tipos de Datos</span>
-            </div>
-
+        <div id="u4" class="tab-content">
             <div class="temas-grid">
-                <div class="tema-card u2-card">
-                    <div>
-                        <div class="tema-meta">Álgebra Numérica</div>
-                        <h3 class="tema-name">5. Tipos de Datos Numéricos</h3>
-                        <p class="tema-desc">Clasificación precisa de almacenamiento numérico según precisión y rango:</p>
-                        <ul>
-                            <li><strong>tinyint:</strong> Entero muy pequeño. Rango de -128 a 127 (o 0 a 255 Unsigned).</li>
-                            <li><strong>smallint:</strong> Entero pequeño. Rango de -32,768 a 32,767.</li>
-                            <li><strong>mediumint:</strong> Entero medio. Rango de -8,388,608 a 8,388,607.</li>
-                            <li><strong>int:</strong> El estándar para números enteros (como el id_cliente).</li>
-                            <li><strong>bigint:</strong> Entero masivo para entornos transaccionales de alta escala.</li>
-                            <li><strong>decimal / Numeric:</strong> Punto fijo para transacciones financieras exactas.</li>
-                            <li><strong>float:</strong> Punto flotante de precisión simple. Menor peso en bytes.</li>
-                            <li><strong>double / real:</strong> Punto flotante de precisión doble para cálculo científico.</li>
-                            <li><strong>bit:</strong> Banderas lógicas binarias (valores discretos 0 y 1).</li>
-                            <li><strong>bool / boolean:</strong> Sinónimo directo de Tinyint(1). Cero es False.</li>
-                        </ul>
+                <div class="tema-card u4-card" id="card-u4t1">
+                    <div class="card-top">
+                        <div class="tema-meta">Operaciones DML</div>
+                        <label class="tracker-container">
+                            <input type="checkbox" onchange="toggleCardProgress('card-u4t1')"> <span>¿Listo?</span>
+                        </label>
                     </div>
-                </div>
-
-                <div class="tema-card u2-card">
-                    <div>
-                        <div class="tema-meta">Cadenas de Bloque</div>
-                        <h3 class="tema-name">6. Tipos de Datos de Cadena (Texto)</h3>
-                        <p class="tema-desc">Estructuras para el resguardo de información alfanumérica:</p>
-                        <ul>
-                            <li><strong>char:</strong> Longitud fija con relleno sintáctico automático de espacios.</li>
-                            <li><strong>varchar:</strong> Longitud variable optimizada más byte de control de longitud.</li>
-                            <li><strong>tinytext:</strong> Texto corto aislado con un límite de 255 caracteres.</li>
-                            <li><strong>text:</strong> Bloques estándar para resguardar descripciones de negocio.</li>
-                            <li><strong>mediumtext:</strong> Diseñado para cuerpos robustos como posts de blogs.</li>
-                            <li><strong>longtext:</strong> Almacenamiento masivo de logs complejos o archivos planos.</li>
-                            <li><strong>enum:</strong> Dominios cerrados con selección unitaria explícita.</li>
-                            <li><strong>set:</strong> Dominio de selección múltiple sobre lista predefinida.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="tema-card u2-card">
-                    <div>
-                        <div class="tema-meta">Líneas de Tiempo</div>
-                        <h3 class="tema-name">7. Tipos de Datos de Fecha y Tiempo</h3>
-                        <p class="tema-desc">Estructuras nativas para el control cronológico y auditorías:</p>
-                        <ul>
-                            <li><strong>date:</strong> Resguardo exclusivo cronológico bajo formato AAAA-MM-DD.</li>
-                            <li><strong>time:</strong> Control temporal aislado en formato estricto HH:MM:SS.</li>
-                            <li><strong>datetime:</strong> Estructura unificada estática de fecha y hora.</li>
-                            <li><strong>timestamp:</strong> Sello dinámico acoplado a la zona horaria del servidor.</li>
-                            <li><strong>year:</strong> Representación discreta anual en formatos de 2 o 4 dígitos.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="tema-card u2-card">
-                    <div>
-                        <div class="tema-meta">Objetos Binarios</div>
-                        <h3 class="tema-name">8. Tipos Binarios y Archivos</h3>
-                        <p class="tema-desc">Tipificación especializada para objetos complejos sin serializar:</p>
-                        <ul>
-                            <li><strong>binary:</strong> Cadenas binarias estáticas de longitud fija rígida.</li>
-                            <li><strong>varbinary:</strong> Estructuras de almacenamiento binario dinámico adaptable.</li>
-                            <li><strong>blob:</strong> Binary Large Object dedicado a iconos y recursos livianos.</li>
-                            <li><strong>tinyblob:</strong> Variación de baja escala del contenedor binario Blob.</li>
-                            <li><strong>mediumblob:</strong> Idóneo para imágenes de perfil de usuarios y multimedia media.</li>
-                            <li><strong>longblob:</strong> Contenedor absoluto para PDFs pesados o secuencias de video.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="unidad-titulo u3">
-                <span class="unidad-badge">UNIDAD II.5</span>
-                <span>Motores de Almacenamiento e Integridad Internacional</span>
-            </div>
-
-            <div class="temas-grid">
-                <div class="tema-card u3-card">
-                    <div>
-                        <div class="tema-meta">Sistemas de Archivo</div>
-                        <h3 class="tema-name">9. Motores de Almacenamiento (Engine)</h3>
-                        <p class="tema-desc">Componentes core encargados de mapear las operaciones del procesador SQL en el almacenamiento físico persistente:</p>
-                        
-                        <div class="data-item"><strong>1. InnoDB:</strong> Estándar industrial transaccional robusto. Garantiza cumplimiento estricto de ACID, bloqueo nativo a nivel de fila y aislamiento avanzado para mitigar condiciones de carrera concurrentes.</div>
-                        <div class="data-item"><strong>2. MyISAM:</strong> Arquitectura clásica no transaccional. Carece de claves foráneas, bloquea tablas completas en escritura, pero mantiene velocidades altas en arquitecturas dedicadas 100% a consultas de lectura.</div>
-                        <div class="data-item"><strong>3. Aria:</strong> Evolución nativa de MyISAM dentro del ecosistema MariaDB. Preserva la velocidad e introduce tolerancia a fallas críticas del sistema.</div>
-                        <div class="data-item"><strong>4. MEMORY:</strong> Mapeo directo sobre memoria RAM voltátil. Velocidad pura idónea para tablas temporales o capas internas de caché. Los datos se destruyen al reiniciar el proceso.</div>
-                        <div class="data-item"><strong>5. CSV:</strong> Formateo plano estructurado en texto delimitado por comas, facilitando integraciones nativas e intercambios sin parsers con suites ofimáticas.</div>
-                        <div class="data-item"><strong>6. SEQUENCE:</strong> Motor virtual especializado en generar sucesiones aritméticas dinámicas en memoria sin generar costo de almacenamiento en disco.</div>
-                    </div>
-                </div>
-
-                <div class="tema-card u3-card">
-                    <div>
-                        <div class="tema-meta">Estructuras Comparativas</div>
-                        <h3 class="tema-name">10. Tabla Comparativa de Motores</h3>
-                        <p class="tema-desc">Matriz técnica para la toma de decisiones arquitectónicas en persistencia:</p>
-                        <table>
-                            <thead>
-                                <tr><th>Motor</th><th>Transaccional</th><th>Bloqueo</th><th>Uso principal</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td>InnoDB</td><td>Sí</td><td>Fila</td><td>Aplicaciones modernas, CRMs, E-commerce.</td></tr>
-                                <tr><td>MyISAM</td><td>No</td><td>Tabla</td><td>Proyectos antiguos o solo lectura.</td></tr>
-                                <tr><td>Memory</td><td>No</td><td>Tabla</td><td>Caché temporal, rapidez extrema.</td></tr>
-                                <tr><td>CSV</td><td>No</td><td>Fila</td><td>Intercambio de datos con Excel.</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="tema-card u3-card">
-                    <div>
-                        <div class="tema-meta">Encoding Avanzado</div>
-                        <h3 class="tema-name">11. Diferencia: utf8 vs utf8mb4</h3>
-                        <p class="tema-desc">Manejo óptimo del esquema de codificación multibyte dentro del servidor de datos:</p>
-                        <ul>
-                            <li><strong>utf8 (utf8mb3):</strong> Limitado a representaciones de máximo 3 bytes. Excluye glifos modernos de la especificación global.</li>
-                            <li><strong>utf8mb4:</strong> Implementación absoluta de UTF-8 de hasta 4 bytes por carácter. Soporta emojis (😂, 🚀), juegos de caracteres complejos orientales y sintaxis algebraica avanzada.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="tema-card u3-card">
-                    <div>
-                        <div class="tema-meta">Cotejamiento Semántico</div>
-                        <h3 class="tema-name">12. Cotejamientos y Reglas de Sufijos</h3>
-                        <p class="tema-desc">Configuraciones de ordenamiento filológico y semántica de comparación de cadenas:</p>
-                        <table>
-                            <thead>
-                                <tr><th>Collation</th><th>Propiedad Técnica</th><th>Uso recomendado</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td>utf8mb4_unicode_ci</td><td>Precisión multiidioma completa. Diferencia caracteres especiales.</td><td>Estándar internacional.</td></tr>
-                                <tr><td>utf8mb4_general_ci</td><td>Rendimiento rápido mediante atajos en algoritmos de comparación.</td><td>Entornos de alta demanda de CPU.</td></tr>
-                                <tr><td>utf8mb4_spanish_ci</td><td>Reglas heredadas del español (ch, ll).</td><td>Proyectos locales específicos.</td></tr>
-                            </tbody>
-                        </table>
-                        
-                        <p class="tema-desc" style="margin-top:15px;"><strong>Significado analítico de sufijos estructurales:</strong></p>
-                        <ul>
-                            <li><strong>_ci (Case Insensitive):</strong> Ignora diferencias explícitas entre mayúsculas y minúsculas (A = a). Ideal para control de accesos.</li>
-                            <li><strong>_bin (Binary):</strong> Evaluación estricta por el peso posicional binario de cada carácter. (A ≠ a).</li>
-                            <li><strong>_ai (Accent Insensitive):</strong> Neutralidad ante tildes y diacríticos. (música = musica).</li>
-                        </ul>
-                        <div class="expert-note">Dato curioso: utf8mb4_unicode_ci es el "todoterreno" que hará que tus búsquedas y ordenamientos funcionen como un usuario normal espera.</div>
-                    </div>
-                </div>
-
-                <div class="tema-card quiz-full-width" id="practica">
-                    <div>
-                        <div class="tema-meta">Módulo Evaluativo Automatizado</div>
-                        <h3 class="tema-name">🔥 Zona de Práctica Interactiva (15 Ejercicios)</h3>
-                        <div class="quiz-header-desc">
-                            Instrucciones: Responde analíticamente basándote en los datos de arquitectura consignados en los módulos técnicos superiores.
-                        </div>
-
-                        <div class="question" id="q1">
-                            <p><strong>1. ¿Es el tipo FLOAT un entero para sistemas masivos?</strong></p>
-                            <div class="options">
-                                <button class="opt-btn" onclick="checkAnswer('q1', false, 'Incorrecto. Según el manual, el FLOAT es un número de punto flotante (decimal). El tipo para sistemas masivos is el BIGINT.')">Verdadero</button>
-                                <button class="opt-btn" onclick="checkAnswer('q1', true, '¡Correcto! El FLOAT es para decimales. El BIGINT es el que se usa para valores masivos o astronómicos.')">Falso</button>
-                            </div>
-                            <div class="feedback" id="fb-q1"></div>
-                        </div>
-
-                        <div class="question" id="q2">
-                            <p><strong>2. ¿Qué motor elegirías para asegurar tus datos ante fallos eléctricos (ACID)?</strong></p>
-                            <div class="options">
-                                <button class="opt-btn" onclick="checkAnswer('q2', true, '¡Exacto! El manual indica que InnoDB soporta ACID, evitando que los datos se corrompan si se corta la energía.')">InnoDB</button>
-                                <button class="opt-btn" onclick="checkAnswer('q2', false, 'No. MyISAM no es transaccional y es común que las tablas se corrompan ante apagones inesperados.')">MyISAM</button>
-                            </div>
-                            <div class="feedback" id="fb-q2"></div>
-                        </div>
-
-                        <div class="question" id="q3">
-                            <p><strong>3. Según la observación del experto, ¿qué 3 casillas deben marcarse obligatoriamente en id_cliente?</strong></p>
-                            <div class="options">
-                                <button class="opt-btn" onclick="checkAnswer('q3', false, 'Faltan elementos críticos. Sin la PK el experto indica que no hay forma de identificar de manera única cada cliente.')">Solo Unsigned y Zerofill</button>
-                                <button class="opt-btn" onclick="checkAnswer('q3', true, '¡Correcto! PK, Not Null y Auto Incr son los tres pilares recomendados para que la tabla sea funcional.')">PK, Not Null y Auto Incr</button>
-                            </div>
-                            <div class="feedback" id="fb-q3"></div>
-                        </div>
-
-                        <div class="question" id="q4">
-                            <p><strong>4. ¿Qué sucede con los datos en el motor MEMORY si se reinicia el servidor?</strong></p>
-                            <div class="options">
-                                <button class="opt-btn" onclick="checkAnswer('q4', true, '¡Correcto! El manual dice que los datos no se guardan en disco duro, sino en la RAM, por lo tanto desaparecen.')">Los datos desaparecen</button>
-                                <button class="opt-btn" onclick="checkAnswer('q4', false, 'No. El manual aclara que son volátiles porque están almacenados físicamente en la memoria RAM.')">Se guardan automáticamente</button>
-                            </div>
-                            <div class="feedback" id="fb-q4"></div>
-                        </div>
-
-                        <div class="question" id="q5">
-                            <p><strong>5. ¿Por qué deberías elegir utf8mb4 in lugar de utf8?</strong></p>
-                            <div class="options">
-                                <button class="opt-btn" onclick="checkAnswer('q5', true, '¡Correcto! utf8mb4 es el verdadero UTF-8 y soporta emojis de 4 bytes y símbolos técnicos avanzados.')">Soporta emojis y símbolos modernos</button>
-                                <button class="opt-btn" onclick="checkAnswer('q5', false, 'No. El manual indica que utf8mb4 usa hasta 4 bytes, lo que lo hace más completo que el utf8 estándar.')">Es más limitado en caracteres</button>
-                            </div>
-                            <div class="feedback" id="fb-q5"></div>
-                        </div>
-
-                        <div class="question" id="q6">
-                            <p><strong>6. ¿Qué tipo de dato usarías para guardar dinero de forma exacta sin redondeos imprecisos?</strong></p>
-                            <div class="options">
-                                <button class="opt-btn" onclick="checkAnswer('q6', true, '¡Excelente! Decimal/Numeric es para valores exactos de punto fijo como el dinero.')">Decimal / Numeric</button>
-                                <button class="opt-btn" onclick="checkAnswer('q6', false, 'No. El manual dice que Float es un punto flotante de precisión simple y es menos preciso.')">Float</button>
-                            </div>
-                            <div class="feedback" id="fb-q6"></div>
-                        </div>
-
-                        <div class="question" id="q7">
-                            <p><strong>7. ¿Qué motor permite abrir el archivo de la base de datos directamente con Excel?</strong></p>
-                            <div class="options">
-                                <button class="opt-btn" onclick="checkAnswer('q7', true, '¡Correcto! El motor CSV guarda los datos en texto separado por comas, compatible con Excel.')">CSV</button>
-                                <button class="opt-btn" onclick="checkAnswer('q7', false, 'No. InnoDB utiliza una estructura de archivos binarios compleja.')">InnoDB</button>
-                            </div>
-                            <div class="feedback" id="fb-q7"></div>
-                        </div>
-
-                        <div class="question" id="q8">
-                            <p><strong>8. Si quieres guardar un video o un PDF pesado, ¿qué tipo de dato es el adecuado?</strong></p>
-                            <div class="options">
-                                <button class="opt-btn" onclick="checkAnswer('q8', false, 'No. Longtext es para bloques de texto extremadamente grandes, no para binarios.')">Longtext</button>
-                                <button class="opt-btn" onclick="checkAnswer('q8', true, '¡Correcto! Longblob es el tipo para archivos binarios grandes como videos o documentos pesados.')">Longblob</button>
-                            </div>
-                            <div class="feedback" id="fb-q8"></div>
-                        </div>
-
-                        <div class="question" id="q9">
-                            <p><strong>9. ¿Qué significa "_ci" al final del nombre de un cotejamiento?</strong></p>
-                            <div class="options">
-                                <button class="opt-btn" onclick="checkAnswer('q9', true, '¡Correcto! Case Insensitive: significa que la base de datos no distingue entre A y a.')">Case Insensitive (No distingue mayúsculas)</button>
-                                <button class="opt-btn" onclick="checkAnswer('q9', false, 'No. Eso sería _bin (Binary), donde A y a sí son diferentes.')">Case Sensitive (Sí distingue mayúsculas)</button>
-                            </div>
-                            <div class="feedback" id="fb-q9"></div>
-                        </div>
-
-                        <div class="question" id="q10">
-                            <p><strong>10. ¿Cuál es la función principal del motor SEQUENCE en MariaDB?</strong></p>
-                            <div class="options">
-                                <button class="opt-btn" onclick="checkAnswer('q10', true, '¡Correcto! Permite generar secuencias numéricas (ej. del 1 al 1000) al vuelo.')">Generar series de números virtualmente</button>
-                                <button class="opt-btn" onclick="checkAnswer('q10', false, 'No. SEQUENCE no guarda datos físicos en el disco duro.')">Almacenar logs de transacciones</button>
-                            </div>
-                            <div class="feedback" id="fb-q10"></div>
-                        </div>
-
-                        <div class="question" id="q11">
-                            <p><strong>11. ¿Qué atributo hace que un ID "1" se visualice como "0001"?</strong></p>
-                            <div class="options">
-                                <button class="opt-btn" onclick="checkAnswer('q11', false, 'No. Unsigned solo evita que existan números negativos.')">Unsigned</button>
-                                <button class="opt-btn" onclick="checkAnswer('q11', true, '¡Correcto! Zerofill rellena con ceros a la izquierda según la longitud del campo.')">Zerofill</button>
-                            </div>
-                            <div class="feedback" id="fb-q11"></div>
-                        </div>
-
-                        <div class="question" id="q12">
-                            <p><strong>12. ¿Para qué se utiliza el tipo de dato ENUM?</strong></p>
-                            <div class="options">
-                                <button class="opt-btn" onclick="checkAnswer('q12', true, '¡Correcto! Permite elegir un solo valor de una lista cerrada predefinida.')">Elegir un valor de una lista predefinida</button>
-                                <button class="opt-btn" onclick="checkAnswer('q12', false, 'No. Eso es la función del tipo de dato SET.')">Elegir múltiples valores de una lista</button>
-                            </div>
-                            <div class="feedback" id="fb-q12"></div>
-                        </div>
-
-                        <div class="question" id="q13">
-                            <p><strong>13. ¿Qué motor es el sucesor de MyISAM y ofrece mejor resistencia a fallos?</strong></p>
-                            <div class="options">
-                                <button class="opt-btn" onclick="checkAnswer('q13', true, '¡Correcto! Aria es el sucesor mejorado que añade resistencia a fallos.')">Aria</button>
-                                <button class="opt-btn" onclick="checkAnswer('q13', false, 'No. MEMORY es un motor que guarda datos en RAM, no es sucesor de MyISAM.')">MEMORY</button>
-                            </div>
-                            <div class="feedback" id="fb-q13"></div>
-                        </div>
-
-                        <div class="question" id="q14">
-                            <p><strong>14. ¿Qué tipo de dato almacena fecha y hora juntas (AAAA-MM-DD HH:MM:SS)?</strong></p>
-                            <div class="options">
-                                <button class="opt-btn" onclick="checkAnswer('q14', false, 'No. Date solo almacena el año, mes y día.')">Date</button>
-                                <button class="opt-btn" onclick="checkAnswer('q14', true, '¡Correcto! Datetime combina fecha y hora en un solo campo.')">Datetime</button>
-                            </div>
-                            <div class="feedback" id="fb-q14"></div>
-                        </div>
-
-                        <div class="question" id="q15">
-                            <p><strong>15. ¿Qué cotejamiento permite que una búsqueda de "musica" encuentre "música"?</strong></p>
-                            <div class="options">
-                                <button class="opt-btn" onclick="checkAnswer('q15', true, '¡Correcto! Al ser inteligente (Unicode), trata las letras con y sin acento como iguales.')">utf8mb4_unicode_ci</button>
-                                <button class="opt-btn" onclick="checkAnswer('q15', false, 'No. El binario compararía el valor numérico exacto del carácter.')">utf8mb4_bin</button>
-                            </div>
-                            <div class="feedback" id="fb-q15"></div>
-                        </div>
+                    <h3 class="tema-name">1. Manipulación de Datos</h3>
+                    <p class="tema-desc">Estudio detallado de la manipulación de registros y análisis profundo del acoplamiento relacional en bases de datos orientadas a la venta de productos.</p>
+                    <div class="links-container">
+                        <a href="unidad4.html" class="btn-link">
+                            <span>📖 Consola y Taller de Relaciones SQL</span>
+                            <span class="badge-tipo">Completo</span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -911,31 +569,103 @@
     </div>
 
     <footer>
-        <p>© 2026 - Sistema de Control y Seguimiento Académico | Módulos Interactivos de Bases de Datos - Prohibida su reproducción con fines comerciales.</p>
+        <p>© 2026 - Sistema de Control y Seguimiento Académico | Módulos Interactivos Estilo Dashboard - Prohibida su reproducción con fines comerciales.</p>
     </footer>
 
     <script>
-        // Función interactiva de respuestas de los ejercicios de UNIDAD2.2.html
-        function checkAnswer(qId, isCorrect, message) {
-            const fb = document.getElementById('fb-' + qId);
-            fb.innerHTML = message;
-            fb.style.display = 'block';
-            fb.className = 'feedback ' + (isCorrect ? 'correct' : 'incorrect');
-        }
+        // LÓGICA DE PESTAÑAS (TABS STYLE APRENDE.ORG)
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
 
-        // Función interactiva para expandir/colapsar el Complemento de la Unidad II de forma dinámica
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetTab = button.getAttribute('data-tab');
+
+                // Cambiar estado activo en botones
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                // Mostrar panel correspondiente
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                    if (content.getAttribute('id') === targetTab) {
+                        content.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // LÓGICA DE COMPLEMENTO DE UNIDAD II
         function toggleComplemento() {
             const complemento = document.getElementById('seccion-complemento');
             const btn = document.getElementById('btn-toggle-comp');
-            
             if (complemento.style.display === "none" || complemento.style.display === "") {
                 complemento.style.display = "block";
-                // Desplazamiento animado suave directo al contenido recien abierto
                 complemento.scrollIntoView({ behavior: 'smooth' });
             } else {
                 complemento.style.display = "none";
                 window.scrollTo({ top: btn.offsetTop - 100, behavior: 'smooth' });
             }
+        }
+
+        // ==========================================
+        //  SISTEMA DE PROGRESO CON LOCALSTORAGE
+        // ==========================================
+        
+        // ID de todas las tarjetas que acumulan progreso del curso
+        const totalCardsList = ['card-u1t1', 'card-u1t2', 'card-u2t1', 'card-u2t2', 'card-u2t3', 'card-u2t4', 'card-u2t5', 'card-u2t6', 'card-u2t7', 'card-u3t1', 'card-u4t1'];
+
+        // Al cargar la página, inicializa los checks guardados
+        document.addEventListener("DOMContentLoaded", () => {
+            totalCardsList.forEach(id => {
+                const cardElement = document.getElementById(id);
+                if (cardElement) {
+                    const isCompleted = localStorage.getItem(id) === "true";
+                    const checkbox = cardElement.querySelector('.tracker-container input');
+                    
+                    if (isCompleted) {
+                        cardElement.classList.add('completed');
+                        if (checkbox) checkbox.checked = true;
+                    }
+                }
+            });
+            updateGlobalProgressBar();
+        });
+
+        // Guarda el cambio de estado y actualiza el Dashboard
+        function toggleCardProgress(cardId) {
+            const cardElement = document.getElementById(cardId);
+            if (!cardElement) return;
+
+            const checkbox = cardElement.querySelector('.tracker-container input');
+            const isChecked = checkbox ? checkbox.checked : false;
+
+            if (isChecked) {
+                cardElement.classList.add('completed');
+                localStorage.setItem(cardId, "true");
+            } else {
+                cardElement.classList.remove('completed');
+                localStorage.setItem(cardId, "false");
+            }
+
+            updateGlobalProgressBar();
+        }
+
+        // Calcula el porcentaje de avance real y renderiza la barra superior
+        function updateGlobalProgressBar() {
+            let completedCount = 0;
+            totalCardsList.forEach(id => {
+                if (localStorage.getItem(id) === "true") {
+                    completedCount++;
+                }
+            });
+
+            const totalItems = totalCardsList.length;
+            const percentage = Math.round((completedCount / totalItems) * 100);
+
+            // Reflejar en la interfaz
+            document.getElementById('progress-percentage').innerText = percentage + "%";
+            document.getElementById('progress-bar').style.width = percentage + "%";
         }
     </script>
 </body>

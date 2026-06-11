@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecosistema de Aprendizaje: Lenguaje Estructurado de Consulta</title>
+    <style>
+        /* CONFIGURACIÓN Y COLORES CORE - IDENTIDAD UNIDAD IV */
+        :root {
+            --primary: #2c3e50;
+            --secondary: #16a085;
+            --accent: #9b59b6;
+            --bg: #f4f7f6;
+            --text: #34495e;
+            --card-bg: #ffffff;
+            --u4-color: #8e44ad; /* Color púrpura institucional para diferenciar la Unidad IV */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--bg);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* ENCABEZADO IDÉNTICO AL ORIGINAL */
+        header {
+            background: linear-gradient(135deg, #2c3e50 0%, #8e44ad 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            margin: 10px 0 0 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* TITULARES DE LAS UNIDADES */
+        .unidad-titulo {
+            font-size: 1.8rem;
+            color: var(--primary);
+            border-bottom: 4px solid var(--u4-color);
+            padding-bottom: 8px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .unidad-badge {
+            background-color: var(--u4-color);
+            color: white;
+            padding: 4px 12px;
+            font-size: 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        /* REJILLA DE TARJETAS (GRID SYSTEM) */
+        .temas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* TARJETAS DE CONTENIDO (CARDS) */
+        .tema-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-left: 5px solid var(--u4-color);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .tema-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .tema-meta {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .tema-name {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin: 0 0 10px 0;
+            font-weight: 700;
+        }
+
+        .tema-desc {
+            font-size: 0.95rem;
+            color: #5d6d7e;
+            margin: 0 0 15px 0;
+        }
+
+        .data-item {
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: #4b5966;
+        }
+        
+        .data-item strong {
+            color: var(--primary);
+        }
+
+        ul {
+            padding-left: 20px;
+            margin: 10px 0;
+            font-size: 0.9rem;
+            color: #5d6d7e;
+        }
+
+        li {
+            margin-bottom: 6px;
+        }
+
+        li strong {
+            color: var(--primary);
+        }
+
+        /* NOTAS DE EXPERTO O ANALOGÍAS COMPLEMENTARIAS */
+        .expert-note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            margin-top: 15px;
+            font-size: 0.88rem;
+            font-style: italic;
+            font-weight: bold;
+            color: #856404;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* CONTENEDOR DE IMÁGENES ANÁLOGAS */
+        .analogy-img-container {
+            text-align: center;
+            margin: 15px 0;
+            background: #fdfefe;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 10px;
+        }
+
+        .analogy-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        /* TABLAS ESTRUCTURADAS */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.85rem;
+            background: white;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        /* SINTAXIS EN CÓDIGO MONOSPACE */
+        code {
+            font-family: 'Consolas', 'Courier New', monospace;
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #c0392b;
+            font-size: 0.9rem;
+        }
+
+        /* ZONA DE PRÁCTICA INTERACTIVA COMPLETA (FULL WIDTH) */
+        .quiz-full-width {
+            grid-column: 1 / -1;
+            background: #fff;
+            border-left: 5px solid var(--secondary) !important;
+        }
+
+        .quiz-header-desc {
+            background-color: #e8f8f5;
+            border: 1px solid #d1f2eb;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            color: #117a65;
+            font-weight: 600;
+        }
+
+        .question {
+            margin-bottom: 25px;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #edf2f7;
+        }
+
+        .question p {
+            margin-top: 0;
+            font-size: 1rem;
+            color: var(--primary);
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .opt-btn {
+            padding: 12px 20px;
+            border: 1px solid #cbd5e1;
+            background: white;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: 0.2s;
+            text-align: left;
+            font-size: 0.9rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .opt-btn:hover {
+            background: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        .feedback {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 6px;
+            display: none;
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+
+        .correct {
+            background: #def7ec;
+            color: #03543f;
+            border: 1px solid #bcf0da;
+        }
+
+        .incorrect {
+            background: #fde8e8;
+            color: #9b1c1c;
+            border: 1px solid #fcd2d2;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 25px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            background-color: #eaeded;
+            border-top: 1px solid #d5dbdb;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Consola de Aprendizaje Estudiantil</h1>
+        <p>Módulo de Ingeniería de Software | IV. Lenguaje Estructurado de Consulta (SQL)</p>
+    </header>
+
+    <div class="main-container">
+
+        <div class="unidad-titulo">
+            <span class="unidad-badge">UNIDAD IV.1</span>
+            <span>Fundamentos de Lenguaje Estructurado de Consulta</span>
+        </div>
+
+        <div class="temas-grid">
+            <div class="tema-card" style="grid-column: 1 / -1;">
+                <div>
+                    <div class="tema-meta">Clasificación de Sentencias</div>
+                    <h3 class="tema-name">Reconocer Sentencias de Definición (DDL) y Manipulación (DML)</h3>
+                    <p class="tema-desc">Las operaciones en SQL están claramente separadas en dos universos de acuerdo a su campo de acción:</p>
+                    <div class="data-item"><strong>DDL (Data Definition Language):</strong> Modifica el esquema, diccionario e infraestructura física (tablas, campos, índices). Comandos: <code>CREATE</code>, <code>ALTER</code>, <code>DROP</code>.</div>
+                    <div class="data-item"><strong>DML (Data Manipulation Language):</strong> Opera sobre las tuplas o registros guardados en los espacios físicos preexistentes. Comandos: <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>, <code>SELECT</code>.</div>
+                    
+                    <div class="analogy-img-container">
+                        <img src="analogia sentencia y manipulacion.png" alt="Analogía Álbum Panini DDL vs DML" class="analogy-img">
+                    </div>
+                    
+                    <div class="expert-note">
+                        💡 Analogía Clave: DDL es imprimir las páginas vacías y diseñar los cuadritos del álbum (Panini). DML representa la acción operativa de comprar los sobres y pegar, cambiar o revisar las estampitas reales dentro de dichos cuadritos.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unidad-titulo">
+            <span class="unidad-badge">UNIDAD IV.2</span>
+            <span>Lenguaje Procedimental y Álgebra Relacional</span>
+        </div>
+
+        <div class="temas-grid">
+            <div class="tema-card" style="grid-column: 1 / -1;">
+                <div>
+                    <div class="tema-meta">Abstracción Formal</div>
+                    <h3 class="tema-name">Operaciones del Álgebra Relacional</h3>
+                    <p class="tema-desc">El álgebra relacional es la base teórica y procedimental que el motor de la base de datos ejecuta tras bambalinas para resolver cualquier consulta:</p>
+                    <ul>
+                        <li><strong>Selección (σ):</strong> Filtra de manera horizontal aquellas tuplas (filas) que cumplen una condición lógica (Predicado).</li>
+                        <li><strong>Proyección (π):</strong> Filtra de manera vertical reteniendo solo las columnas de interés y eliminando duplicados.</li>
+                        <li><strong>Unión (∪):</strong> Combina los registros de dos tablas que poseen esquemas estructurales compatibles.</li>
+                    </ul>
+
+                    <div class="analogy-img-container">
+                        <svg width="100%" height="130" viewBox="0 0 600 130" style="background:#f8fafc; border-radius:4px;">
+                            <g transform="translate(40, 15)">
+                                <rect x="0" y="0" width="180" height="90" rx="6" fill="#ebf5fb" stroke="#2980b9" stroke-width="2"/>
+                                <text x="90" y="25" text-anchor="middle" font-weight="bold" fill="#2c3e50" font-size="13">Selección (σ)</text>
+                                <line x1="15" y1="45" x2="165" y2="45" stroke="#e74c3c" stroke-width="2"/>
+                                <line x1="15" y1="60" x2="165" y2="60" stroke="#27ae60" stroke-width="3" stroke-dasharray="4"/>
+                                <line x1="15" y1="75" x2="165" y2="75" stroke="#e74c3c" stroke-width="2"/>
+                                <text x="90" y="83" text-anchor="middle" font-size="10" fill="#27ae60" font-weight="bold">Filtro Horizontal (Filas)</text>
+                            </g>
+                            <g transform="translate(380, 15)">
+                                <rect x="0" y="0" width="180" height="90" rx="6" fill="#fef9e7" stroke="#f39c12" stroke-width="2"/>
+                                <text x="90" y="25" text-anchor="middle" font-weight="bold" fill="#2c3e50" font-size="13">Proyección (π)</text>
+                                <rect x="35" y="40" width="20" height="40" fill="#f39c12" opacity="0.3"/>
+                                <rect x="80" y="40" width="20" height="40" fill="#27ae60"/>
+                                <rect x="125" y="40" width="20" height="40" fill="#f39c12" opacity="0.3"/>
+                                <text x="90" y="83" text-anchor="middle" font-size="10" fill="#2c3e50" font-weight="bold">Filtro Vertical (Columnas)</text>
+                            </g>
+                        </svg>
+                    </div>
+
+                    <div class="expert-note">
+                        ☕ Analogía Clave: Imagina un filtro de café. La Selección (σ) es como separar los granos grandes de los chicos (filtro por filas), mientras que la Proyección (π) es como extraer únicamente la esencia líquida dejando atrás los contenedores (filtro por columnas).
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unidad-titulo">
+            <span class="unidad-badge">UNIDAD IV.3</span>
+            <span>Lenguaje SQL (DDL, DML)</span>
+        </div>
+
+        <div class="temas-grid">
+            <div class="tema-card" style="grid-column: 1 / -1;">
+                <div>
+                    <div class="tema-meta">Estructura y Sintaxis Estándar</div>
+                    <h3 class="tema-name">Conceptos y Elementos del Lenguaje</h3>
+                    <p class="tema-desc">SQL se basa en la correspondencia rígida de tipos de datos al declarar elementos en el diccionario:</p>
+                    <table>
+                        <thead>
+                            <tr><th>Elemento</th><th>Sintaxis Base</th><th>Garantía del Motor</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>CREATE TABLE</code></td><td>Definición de nuevas entidades físicas.</td><td>Auto-Commit instantáneo en disco duro.</td></tr>
+                            <tr><td><code>VARCHAR(N)</code></td><td>Resguardo de cadenas alfanuméricas dinámicas.</td><td>Asignación elástica más byte descriptor.</td></tr>
+                            <tr><td><code>INT</code></td><td>Campos clave primarios y numéricos exactos.</td><td>Asignación fija en memoria para indexación rápida.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <div class="analogy-img-container">
+                        <svg width="100%" height="90" viewBox="0 0 600 90" style="background:#f8fafc; border-radius:4px;">
+                            <rect x="50" y="15" width="500" height="60" rx="6" fill="#f4f6f7" stroke="#34495e" stroke-width="2"/>
+                            <line x1="210" y1="15" x2="210" y2="75" stroke="#34495e" stroke-width="2"/>
+                            <line x1="380" y1="15" x2="380" y2="75" stroke="#34495e" stroke-width="2"/>
+                            <text x="130" y="40" text-anchor="middle" font-weight="bold" fill="#2c3e50" font-size="11">Sección: INT (Solo números)</text>
+                            <text x="130" y="60" text-anchor="middle" font-size="16">🔢</text>
+                            <text x="295" y="40" text-anchor="middle" font-weight="bold" fill="#2c3e50" font-size="11">Sección: VARCHAR (Solo texto)</text>
+                            <text x="295" y="60" text-anchor="middle" font-size="16">🔤</text>
+                            <text x="465" y="40" text-anchor="middle" font-weight="bold" fill="#2c3e50" font-size="11">Sección: DATE (Solo fechas)</text>
+                            <text x="465" y="60" text-anchor="middle" font-size="16">📅</text>
+                        </svg>
+                    </div>
+
+                    <div class="expert-note">
+                        🗄️ Analogía Clave: Crear una tabla es como comprar un organizador de cajones para herramientas. Si diseñas una ranura exclusiva para llaves numéricas (<code>INT</code>), el sistema rechazará de inmediato cualquier intento de meter textos o descripciones.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unidad-titulo">
+            <span class="unidad-badge">UNIDAD IV.4</span>
+            <span>Operaciones y Consultas de Manipulación</span>
+        </div>
+
+        <div class="temas-grid">
+            <div class="tema-card" style="grid-column: 1 / -1;">
+                <div>
+                    <div class="tema-meta">Procesamiento de Queries</div>
+                    <h3 class="tema-name">Construcción de Sentencias de Consulta</h3>
+                    <p class="tema-desc">Para construir sentencias de consulta eficientes, el alumno debe conocer el orden lógico en que actúa el motor relacional:</p>
+                    <div class="data-item"><strong>1. FROM:</strong> Localiza la tabla de origen.</div>
+                    <div class="data-item"><strong>2. WHERE:</strong> Aplica el filtro horizontal (restricción).</div>
+                    <div class="data-item"><strong>3. SELECT:</strong> Realiza la proyección de campos final hacia la pantalla.</div>
+
+                    <div class="analogy-img-container">
+                        <svg width="100%" height="110" viewBox="0 0 600 110" style="background:#f8fafc; border-radius:4px;">
+                            <polygon points="180,10 420,10 340,70 260,70" fill="#f2f4f4" stroke="#7f8c8d" stroke-width="2"/>
+                            <text x="300" y="30" text-anchor="middle" font-size="11" font-weight="bold" fill="#34495e">1. ENTRADA DE DATOS (FROM)</text>
+                            <line x1="265" y1="45" x2="335" y2="45" stroke="#c0392b" stroke-width="2" stroke-dasharray="3"/>
+                            <text x="300" y="58" text-anchor="middle" font-size="9" fill="#c0392b" font-weight="bold">2. REJILLA DE FILTRADO (WHERE)</text>
+                            <rect x="275" y="70" width="50" height="30" fill="#ebf5fb" stroke="#2980b9" stroke-width="1"/>
+                            <text x="300" y="88" text-anchor="middle" font-size="10" font-weight="bold" fill="#2980b9">3. SALIDA (SELECT)</text>
+                        </svg>
+                    </div>
+
+                    <div class="expert-note">
+                        🌪️ Analogía Clave: Una consulta SQL funciona igual que un embudo extractor en una fábrica. Primero viertes toda la materia prima desde el contenedor origen (<code>FROM</code>), las rejillas internas descartan las piezas defectuosas (<code>WHERE</code>), y por la boquilla inferior sale solo el material seleccionado (<code>SELECT</code>).
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unidad-titulo">
+            <span class="unidad-badge">UNIDAD IV.5</span>
+            <span>Consultas de Múltiples Tablas</span>
+        </div>
+
+        <div class="temas-grid">
+            <div class="tema-card" style="grid-column: 1 / -1;">
+                <div>
+                    <div class="tema-meta">Acoplamientos Relacionales</div>
+                    <h3 class="tema-name">Construcción de Sentencias con Cláusula INNER JOIN</h3>
+                    <p class="tema-desc">En las bases de datos normalizadas, la información está distribuida. La vinculación se efectúa mediante cruzamientos lógicos basados en claves:</p>
+                    <div class="data-item"><strong>INNER JOIN:</strong> Une dos tablas comparando la Clave Primaria (PK) de una contra la Clave Foránea (FK) de otra, devolviendo registros únicamente si existe una coincidencia matemática exacta entre ambas.</div>
+
+                    <div class="analogy-img-container">
+                        <svg width="100%" height="110" viewBox="0 0 600 110" style="background:#f8fafc; border-radius:4px;">
+                            <g transform="translate(130, 15)">
+                                <rect x="0" y="0" width="120" height="70" rx="4" fill="#ebf5fb" stroke="#2980b9" stroke-width="2"/>
+                                <path d="M 120 25 Q 135 35 120 45 Z" fill="#ebf5fb" stroke="#2980b9" stroke-width="2"/>
+                                <text x="60" y="40" text-anchor="middle" font-weight="bold" fill="#2c3e50" font-size="11">Tabla ALUMNO</text>
+                            </g>
+                            <g transform="translate(330, 15)">
+                                <rect x="0" y="0" width="120" height="70" rx="4" fill="#fef4f8" stroke="#e91e63" stroke-width="2"/>
+                                <path d="M 0 25 Q 15 35 0 45 Z" fill="#ffffff" stroke="#e91e63" stroke-width="2"/>
+                                <text x="60" y="40" text-anchor="middle" font-weight="bold" fill="#2c3e50" font-size="11">Tabla GRUPO</text>
+                            </g>
+                            <path d="M 255 50 L 325 50" stroke="#27ae60" stroke-width="2" stroke-dasharray="3"/>
+                            <text x="290" y="45" text-anchor="middle" font-size="12">🤝</text>
+                        </svg>
+                    </div>
+
+                    <div class="expert-note">
+                        🧩 Analogía Clave: Un <code>INNER JOIN</code> es como armar un rompecabezas. Si la clave foránea del alumno embona perfectamente con la clave primaria de la tabla grupos, el registro se une y se muestra; si un alumno no tiene grupo asignado, la pieza no embona y se ignora en el resultado final.
+                    </div>
+                </div>
+            </div>
+
+            <div class="tema-card quiz-full-width" id="laboratorio-interactivo">
+                <div>
+                    <div class="tema-meta">Módulo Evaluativo Automatizado</div>
+                    <h3 class="tema-name">🔥 Zona de Práctica Interactiva (Entrenamiento SQL Continuo)</h3>
+                    <div class="quiz-header-desc">
+                        Instrucciones: Evalúa cada escenario técnico planteado y selecciona el bloque de código o concepto que resuelva el requerimiento de forma óptima. ¡Puedes practicar las veces que consideres necesario!
+                    </div>
+
+                    <div class="question" id="act1">
+                        <p><strong>1. [Saber Hacer IV.1] Necesitas agregar la columna 'curp' (texto variable de 18 posiciones) a la tabla existente 'alumnos'. ¿Cuál es el comando correcto?</strong></p>
+                        <div class="options">
+                            <button class="opt-btn" onclick="checkSQL('act1', true, '¡Excelente! ALTER TABLE pertenece al subconjunto DDL porque altera la infraestructura y el esquema físico del contenedor.')"><code>ALTER TABLE alumnos ADD curp VARCHAR(18);</code></button>
+                            <button class="opt-btn" onclick="checkSQL('act1', false, 'Incorrecto. UPDATE modifica registros operativos internos (DML), no tiene la capacidad de modificar la estructura de campos de una tabla.')"><code>UPDATE alumnos ADD curp VARCHAR(18);</code></button>
+                        </div>
+                        <div class="feedback" id="fb-act1"></div>
+                    </div>
+
+                    <div class="question" id="act2">
+                        <p><strong>2. [Saber Hacer IV.2] En Álgebra Relacional, requieres aislar únicamente la columna 'nombre' de aquellos registros en la tabla MAESTROS que pertenezcan al turno 'Matutino'. ¿Cómo se estructura formalmente?</strong></p>
+                        <div class="options">
+                            <button class="opt-btn" onclick="checkSQL('act2', false, 'No del todo. Esta expresión realiza la selección de filas por turno, pero mantiene todas las columnas originales.')">σ_turno='Matutino' ( MAESTROS )</button>
+                            <button class="opt-btn" onclick="checkSQL('act2', true, '¡Correcto! Primero se realiza la selección horizontal (σ) para filtrar el turno y luego la proyección vertical (π) para extraer solo la columna nombre.')">π_nombre ( σ_turno='Matutino' ( MAESTROS ) )</button>
+                        </div>
+                        <div class="feedback" id="fb-act2"></div>
+                    </div>
+
+                    <div class="question" id="act3">
+                        <p><strong>3. [Saber Hacer IV.3] Requieres inicializar de manera formal una tabla física limpia llamada 'cursos' con un identificador entero numérico. ¿Cuál opción cumple con el estándar SQL?</strong></p>
+                        <div class="options">
+                            <button class="opt-btn" onclick="checkSQL('act3', true, '¡Perfecto! CREATE TABLE es la sentencia de definición estructural por excelencia para instanciar nuevos objetos en la base de datos.')"><code>CREATE TABLE cursos (id_curso INT, nombre VARCHAR(50));</code></button>
+                            <button class="opt-btn" onclick="checkSQL('act3', false, 'Incorrecto. INSERT INTO se utiliza exclusivamente para inyectar filas de contenido (DML), no para construir tablas.')"><code>INSERT INTO TABLE cursos (id_curso INT);</code></button>
+                        </div>
+                        <div class="feedback" id="fb-act3"></div>
+                    </div>
+
+                    <div class="question" id="act4">
+                        <p><strong>4. [Saber Hacer IV.4] Se solicita consultar las columnas 'nombre' y 'sueldo' de la tabla 'empleados' filtrando exclusivamente a quienes ganen más de 15000. ¿Cuál query está bien estructurado?</strong></p>
+                        <div class="options">
+                            <button class="opt-btn" onclick="checkSQL('act4', false, 'Incorrecto. Rompe con el orden sintáctico estricto de SQL. La cláusula WHERE debe posicionarse después de declarar el origen (FROM).')"><code>SELECT nombre, sueldo WHERE sueldo > 15000 FROM empleados;</code></button>
+                            <button class="opt-btn" onclick="checkSQL('act4', true, '¡Es correcto! Cumple rigurosamente el pipeline estándar de filtrado y proyección horizontal/vertical: SELECT -> FROM -> WHERE.')"><code>SELECT nombre, sueldo FROM empleados WHERE sueldo > 15000;</code></button>
+                        </div>
+                        <div class="feedback" id="fb-act4"></div>
+                    </div>
+
+                    <div class="question" id="act5">
+                        <p><strong>5. [Saber Hacer IV.5] Deseas obtener una lista que combine el nombre del alumno y el nombre de su grupo. ¿Cómo se vinculan ambas tablas de forma correcta?</strong></p>
+                        <div class="options">
+                            <button class="opt-btn" onclick="checkSQL('act5', true, '¡Espectacular! El INNER JOIN unifica las entidades en base al acoplamiento relacional de la clave primaria contra la foránea.')"><code>SELECT nombre, nombre_grupo FROM alumnos INNER JOIN grupos ON alumnos.id_grupo = grupos.id_grupo;</code></button>
+                            <button class="opt-btn" onclick="checkSQL('act5', false, 'Incorrecto. Separar las tablas por comas sin una cláusula condicional produce un producto cartesiano masivo de datos sin cohesión.')"><code>SELECT nombre, nombre_grupo FROM alumnos, grupos;</code></button>
+                        </div>
+                        <div class="feedback" id="fb-act5"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>© 2026 - Sistema de Control y Seguimiento Académico | Consola Interactiva Homologada para Educación Superior</p>
+    </footer>
+
+    <script>
+        function checkSQL(qId, isCorrect, msg) {
+            const fb = document.getElementById('fb-' + qId);
+            fb.innerHTML = msg;
+            fb.style.display = 'block';
+            fb.className = 'feedback ' + (isCorrect ? 'correct' : 'incorrect');
+        }
+    </script>
+</body>
+</html>

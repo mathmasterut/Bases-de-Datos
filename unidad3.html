@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIDAD III: Construcción de Base de Datos - Ecosistema Académico</title>
+    <style>
+        /* CONFIGURACIÓN Y COLORES CORE */
+        :root {
+            --primary: #2c3e50;
+            --secondary: #16a085;
+            --accent: #9b59b6;
+            --bg: #f4f7f6;
+            --text: #34495e;
+            --card-bg: #ffffff;
+            --u3-color: #2980b9;
+            --correct-color: #27ae60;
+            --incorrect-color: #c0392b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--bg);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2c3e50 0%, #2980b9 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.3rem;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            margin: 10px 0 0 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-container {
+            max-width: 1150px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .nav-container {
+            margin-bottom: 25px;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            background-color: #ebf5fb;
+            color: var(--u3-color);
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.2s;
+            border: 1px solid #d4e6f1;
+        }
+
+        .btn-back:hover {
+            background-color: var(--u3-color);
+            color: white;
+            border-color: var(--u3-color);
+        }
+
+        .unidad-titulo {
+            font-size: 1.8rem;
+            color: var(--primary);
+            border-bottom: 4px solid var(--u3-color);
+            padding-bottom: 8px;
+            margin-top: 35px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .unidad-badge {
+            background-color: var(--u3-color);
+            color: white;
+            padding: 4px 12px;
+            font-size: 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        /* GRID SYSTEM COHERENTE */
+        .temas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .tema-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-left: 5px solid var(--u3-color);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .tema-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .tema-meta {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .tema-name {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin: 0 0 12px 0;
+            font-weight: 700;
+        }
+
+        .tema-desc {
+            font-size: 0.95rem;
+            color: #5d6d7e;
+            margin: 0 0 15px 0;
+        }
+
+        .data-item {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            color: #4b5966;
+            line-height: 1.5;
+        }
+        
+        .data-item strong {
+            color: var(--primary);
+        }
+
+        ul, ol {
+            padding-left: 20px;
+            margin: 12px 0;
+            font-size: 0.9rem;
+            color: #5d6d7e;
+        }
+
+        li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f1f2f6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #c0392b;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        /* CONTENEDOR DE APOYOS VISUALES ADICIONALES */
+        .visual-diagram-container {
+            background: #fdfefe;
+            border: 1px dashed #bdc3c7;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .visual-caption {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        .expert-note {
+            background: #e8f4f8;
+            border-left: 4px solid var(--u3-color);
+            padding: 12px 15px;
+            margin-top: 15px;
+            font-size: 0.88rem;
+            font-style: italic;
+            font-weight: bold;
+            color: #2471a3;
+            border-radius: 0 4px 4px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.85rem;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        /* --- CONTENEDOR ESPECIAL DEL SABER HACER (INTERACTIVO) --- */
+        .saber-hacer-container {
+            background: #ffffff;
+            border-radius: 12px;
+            border: 2px solid var(--accent);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.06);
+            padding: 30px;
+            margin: 35px 0;
+        }
+
+        .sh-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px dashed #e2e8f0;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .sh-badge {
+            background-color: var(--accent);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .sim-box {
+            background: #fdfefe;
+            border: 1px solid #d5dbdb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .table-preview {
+            background: #f8f9fa;
+            border: 1px dashed #bdc3c7;
+            padding: 12px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            margin: 12px 0;
+            overflow-x: auto;
+        }
+
+        .options-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .opt-btn {
+            background: white;
+            border: 1px solid #cbd5e1;
+            padding: 12px 15px;
+            border-radius: 6px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.92rem;
+            transition: all 0.2s;
+            color: var(--text);
+        }
+
+        .opt-btn:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 12px 15px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: none;
+        }
+
+        .feedback.correct {
+            background-color: #e8f8f5;
+            color: var(--correct-color);
+            border-left: 4px solid var(--correct-color);
+        }
+
+        .feedback.incorrect {
+            background-color: #fceae9;
+            color: var(--incorrect-color);
+            border-left: 4px solid var(--incorrect-color);
+        }
+
+        .sh-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .btn-action {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-action:hover {
+            opacity: 0.9;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 25px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            background-color: #eaeded;
+            border-top: 1px solid #d5dbdb;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Consola de Aprendizaje Estudiantil</h1>
+        <p>Módulo de Contenido Especializado - Unidad de Construcción Física</p>
+    </header>
+
+    <div class="main-container">
+        
+        <div class="nav-container">
+            <a href="index.html" class="btn-back">⬅ Volver al Panel Principal</a>
+        </div>
+
+        <div class="unidad-titulo">
+            <span class="unidad-badge">UNIDAD III.1</span>
+            <span>Gestores de Base de Datos Relacionales</span>
+        </div>
+
+        <div class="temas-grid">
+            <div class="tema-card">
+                <div>
+                    <div class="tema-meta">Sistemas Manejadores</div>
+                    <h3 class="tema-name">1. Concepto y Características de un RDBMS</h3>
+                    <p class="tema-desc">Un Sistema Manejador de Bases de Datos Relacionales (RDBMS) es el software que permite crear, actualizar, administrar y consultar una base de datos relacional basada en el álgebra y el modelo formal de Edgar F. Codd.</p>
+                    
+                    <div class="data-item"><strong>Estructura Relacional:</strong> Organiza la información exclusivamente en forma de tablas bidimensionales (relaciones) compuestas por filas (tuplas) y columnas (atributos).</div>
+                    <div class="data-item"><strong>Lenguaje Estándar:</strong> Implementa de manera nativa SQL (Structured Query Language) para todas las operaciones de definición, manipulación y control de accesos.</div>
+                    <div class="data-item"><strong>Consistencia Transaccional:</strong> Sigue estrictamente las propiedades ACID (Atomicidad, Consistencia, Aislamiento y Durabilidad) para blindar los datos operativos de fallos lógicos o físicos del sistema.</div>
+                    
+                    <div class="visual-diagram-container">
+                        <svg width="220" height="110" viewBox="0 0 220 110">
+                            <rect x="10" y="10" width="200" height="25" rx="4" fill="#2c3e50" />
+                            <text x="110" y="27" text-anchor="middle" fill="white" font-size="11" font-weight="bold">Interfaz SQL de Usuario</text>
+                            <path d="M110 35 L110 55" stroke="#7f8c8d" stroke-width="2" marker-end="url(#arrow-tip)" />
+                            <rect x="40" y="55" width="140" height="45" rx="4" fill="#2980b9" />
+                            <text x="110" y="73" text-anchor="middle" fill="white" font-size="10" font-weight="bold">MOTOR DE ALMACENAMIENTO</text>
+                            <text x="110" y="87" text-anchor="middle" fill="#e8f4f8" font-size="9">Reglas de Validación ACID</text>
+                        </svg>
+                        <div class="visual-caption">Esquema 1: Capa de abstracción transaccional en un RDBMS.</div>
+                    </div>
+
+                    <div class="expert-note">
+                        Nota de arquitectura: La principal diferencia entre un DBMS tradicional de archivos jerárquicos y un RDBMS moderno radica en que este último obliga formalmente al motor a validar restricciones lógicas de claves foráneas e integridad referencial en tiempo real.
+                    </div>
+                </div>
+            </div>
+
+            <div class="tema-card">
+                <div>
+                    <div class="tema-meta">Sistemas de Tipificación</div>
+                    <h3 class="tema-name">2. Tipos de Datos en el Motor Relacional</h3>
+                    <p class="tema-desc">Clasificación estándar de las estructuras de almacenamiento nativas que definen el dominio de valores permitidos y las operaciones válidas por columna:</p>
+                    
+                    <ul>
+                        <li><strong>Numéricos Exactos y Aproximados:</strong> Uso de <code>INT</code> o <code>BIGINT</code> para identificadores atómicos, y <code>DECIMAL(P,S)</code> (punto fijo) para evitar pérdidas de precisión centesimal en cálculos financieros, a diferencia de los tipos aproximados <code>FLOAT</code> o <code>DOUBLE</code>.</li>
+                        <li><strong>Cadenas Alfanuméricas:</strong> Contraste crítico entre <code>CHAR</code> (longitud estática óptima para hashes y códigos ISO fijos) y <code>VARCHAR</code> (longitud variable dinámica con byte de control).</li>
+                        <li><strong>Cronológicos Estrictos:</strong> Modelado preciso con <code>DATE</code>, <code>DATETIME</code> y <code>TIMESTAMP</code>; este último ligado automáticamente al huso horario del sistema para auditorías eficientes de registros.</li>
+                        <li><strong>Objetos Binarios (BLOB):</strong> Contenedores dedicados para el resguardo de bytes puros sin procesar, tales como documentos adjuntos, imágenes codificadas o recursos cifrados.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tema-card">
+                <div>
+                    <div class="tema-meta">Anatomía Interna</div>
+                    <h3 class="tema-name">3. Componentes y Funciones del RDBMS</h3>
+                    <p class="tema-desc">Análisis de los módulos lógicos internos de un motor relacional y el rol crítico que cumple cada sección en la pila transaccional:</p>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Componente Core</th>
+                                <th>Función Técnica Principal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Motor de Almacenamiento (Storage Engine)</strong></td>
+                                <td>Mapea y escribe las filas lógicas de SQL en bloques binarios persistentes en el disco duro o memoria RAM.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Optimizador de Consultas (Query Optimizer)</strong></td>
+                                <td>Analiza los índices disponibles y calcula el camino algebraico más eficiente y rápido para resolver un Query.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Procesador DDL / DML</strong></td>
+                                <td>Compila y ejecuta las sentencias imperativas del usuario en instrucciones de bajo nivel legibles por el sistema operativo.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Gestor de Transacciones y Logs</strong></td>
+                                <td>Monitorea las operaciones concurrentes y gestiona las bitácoras de recuperación inmediata ante fallos eléctricos (Write-Ahead Logging).</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tema-card">
+                <div>
+                    <div class="tema-meta">Gobierno de Datos</div>
+                    <h3 class="tema-name">4. Procedimiento de Selección Corporativa</h3>
+                    <p class="tema-desc">Metodología técnico-institucional para elegir el motor de base de datos relacional óptimo acorde al perfil de requerimientos de la organización:</p>
+                    
+                    <div class="data-item"><strong>1. Análisis de Concurrencia y Carga:</strong> Dimensionar el volumen proyectado de lecturas y escrituras simultáneas por segundo (TPS) para evaluar si el motor soporta escalamiento vertical o replicación horizontal.</div>
+                    <div class="data-item"><strong>2. Costo Total de Propiedad (TCO):</strong> Evaluar los costos de licenciamiento comercial corporativo (ej. Oracle, SQL Server) frente al costo operativo y de infraestructura de soluciones robustas de código abierto (ej. PostgreSQL, MySQL).</div>
+                    <div class="data-item"><strong>3. Ecosistema, Soporte y Seguridad:</strong> Validar el nivel de blindaje criptográfico nativo, cumplimiento de normativas globales de protección de datos (GDPR/ISO) y la disponibilidad de herramientas de diagnóstico.</div>
+                    
+                    <div class="expert-note">
+                        Regla de oro: No existe un RDBMS perfecto, sino el adecuado. Para proyectos corporativos complejos con alta carga de triggers y funciones analíticas, PostgreSQL es el estándar open-source; para soluciones web ligeras y de alta velocidad de lectura, MySQL/MariaDB domina el sector.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="unidad-titulo">
+            <span class="unidad-badge">UNIDAD III.2</span>
+            <span>Gestores de Bases de Datos No Relacionales (NoSQL)</span>
+        </div>
+
+        <div class="temas-grid">
+            <div class="tema-card">
+                <div>
+                    <div class="tema-meta">Sistemas de Tipificación</div>
+                    <h3 class="tema-name">1. Tipos de Datos y Estructuras NoSQL</h3>
+                    <p class="tema-desc">A diferencia de las tablas rígidas, los motores NoSQL manejan esquemas flexibles y dinámicos:</p>
+                    <ul>
+                        <li><strong>Documentos BSON/JSON:</strong> Almacenan pares clave-valor anidados, arreglos internos y objetos complejos independientes de un esquema fijo.</li>
+                        <li><strong>Estructuras de Clave-Valor pura:</strong> Almacenamiento directo en caché donde el valor es un bloque de bytes opaco indexado por un identificador único.</li>
+                        <li><strong>Grafos (Nodos/Aristas):</strong> Representaciones de entidades conectadas directamente sin uniones complejas, ideales para redes sociales y motores de recomendación.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tema-card">
+                <div>
+                    <div class="tema-meta">Arquitectura Core</div>
+                    <h3 class="tema-name">2. Componentes y Funciones de Motores NoSQL</h3>
+                    <p class="tema-desc">Módulos especializados para procesar volúmenes masivos de datos distribuidos en clústeres:</p>
+                    <div class="data-item"><strong>Mecanismo de Sharding:</strong> Fragmenta y distribuye colecciones de datos horizontalmente a lo largo de múltiples servidores físicos automáticos.</div>
+                    <div class="data-item"><strong>Motor de Replicación:</strong> Duplica conjuntos de datos entre nodos primarios y secundarios para asegurar alta disponibilidad y tolerancia a fallos de hardware.</div>
+                    <div class="data-item"><strong>Teorema CAP:</strong> Diseñados priorizando la Disponibilidad (Availability) y Tolerancia al Particionado (Partition tolerance) sacrificando la consistencia inmediata (Consistencia Eventual).</div>
+                </div>
+            </div>
+
+            <div class="tema-card">
+                <div>
+                    <div class="tema-meta">Análisis Comparativo</div>
+                    <h3 class="tema-name">3. Motores NoSQL Más Utilizados en la Industria</h3>
+                    <p class="tema-desc">Clasificación según su modelo de datos y casos de uso óptimos:</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Motor</th>
+                                <th>Modelo</th>
+                                <th>Caso de Uso Principal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>MongoDB</strong></td>
+                                <td>Documental</td>
+                                <td>Portales Web, Catálogos de productos flexibles, CMS.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Redis</strong></td>
+                                <td>Clave-Valor</td>
+                                <td>Gestión de sesiones de usuario, caché en memoria de alta velocidad.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cassandra</strong></td>
+                                <td>Columna Ancha</td>
+                                <td>Registro de logs masivos, analítica en tiempo real (Big Data).</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Neo4j</strong></td>
+                                <td>Grafos</td>
+                                <td>Detección de fraudes financieros, mapas viales y redes complejas.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="unidad-titulo">
+            <span class="unidad-badge">UNIDAD III.3</span>
+            <span>Normalización de Bases de Datos</span>
+        </div>
+
+        <div class="temas-grid">
+            <div class="tema-card">
+                <div>
+                    <div class="tema-meta">Fundamentos Teóricos</div>
+                    <h3 class="tema-name">1. El Concepto de Dependencia Funcional</h3>
+                    <p class="tema-desc">Es una restricción matemática entre dos atributos de una relación. Se dice que un atributo <code>Y</code> depende funcionalmente de un atributo <code>X</code> (X ➔ Y) si y solo si, cada valor de X tiene asociado exactamente un único valor de Y.</p>
+                    
+                    <div class="visual-diagram-container">
+                        <div style="display:inline-flex; align-items:center; gap:8px; font-weight:bold; font-family:monospace; font-size:0.95rem;">
+                            <div style="border:2px solid #2980b9; padding:6px 12px; border-radius:4px; background:#ebf5fb; color:#2980b9;">CURP (X)</div>
+                            <span style="font-size:1.5rem; color:#2980b9;">➔</span>
+                            <div style="border:2px solid #16a085; padding:6px 12px; border-radius:4px; background:#e8f8f5; color:#16a085;">Nombre Completo (Y)</div>
+                        </div>
+                        <div class="visual-caption">Esquema 2: Mapeo inequívoco de una determinante funcional (X determina a Y).</div>
+                    </div>
+
+                    <div class="expert-note">
+                        Ejemplo: El número de RFC o CURP determina funcionalmente el Nombre de un cliente en un sistema. Si conoces el CURP, no puede haber dos nombres distintos asociados.
+                    </div>
+                </div>
+            </div>
+
+            <div class="tema-card">
+                <div>
+                    <div class="tema-meta">Reglas del Diseño</div>
+                    <h3 class="tema-name">2. Las Formas Normales (1FN, 2FN, 3FN)</h3>
+                    <p class="tema-desc">Proceso progresivo para eliminar la redundancia de información y prevenir anomalías de inserción, actualización y borrado:</p>
+                    <ul>
+                        <li><strong>Primera Forma Normal (1FN):</strong> Exige la atomicidad de los datos. Prohíbe terminantemente grupos repetitivos y campos con múltiples valores separados por comas.</li>
+                        <li><strong>Segunda Forma Normal (2FN):</strong> Debe estar en 1FN y asegurar que todo atributo no clave dependa de forma completa de la clave primaria, eliminando dependencias parciales.</li>
+                        <li><strong>Tercera Forma Normal (3FN):</strong> Debe estar en 2FN y garantizar que no existan dependencias transitivas (atributos que dependan de otros atributos que no forman parte de la clave primaria).</li>
+                    </ul>
+
+                    <div class="visual-diagram-container">
+                        <svg width="280" height="60" viewBox="0 0 280 60">
+                            <rect x="5" y="15" width="65" height="30" fill="#e74c3c" rx="3" />
+                            <text x="375%" y="33" text-anchor="middle" fill="white" font-size="9" font-weight="bold">Datos Brutos</text>
+                            <path d="M72 30 L88 30" stroke="#7f8c8d" stroke-width="2" marker-end="url(#arrow-tip)" />
+                            
+                            <rect x="90" y="15" width="50" height="30" fill="#e67e22" rx="3" />
+                            <text x="115" y="33" text-anchor="middle" fill="white" font-size="9" font-weight="bold">1FN (Atómico)</text>
+                            <path d="M142 30 L158 30" stroke="#7f8c8d" stroke-width="2" marker-end="url(#arrow-tip)" />
+                            
+                            <rect x="160" y="15" width="50" height="30" fill="#f1c40f" rx="3" />
+                            <text x="185" y="33" text-anchor="middle" fill="white" font-size="9" font-weight="bold">2FN (Completo)</text>
+                            <path d="M212 30 L228 30" stroke="#7f8c8d" stroke-width="2" marker-end="url(#arrow-tip)" />
+                            
+                            <rect x="230" y="15" width="45" height="30" fill="#27ae60" rx="3" />
+                            <text x="252" y="33" text-anchor="middle" fill="white" font-size="9" font-weight="bold">3FN (Limpio)</text>
+                        </svg>
+                        <div class="visual-caption">Esquema 3: Flujo secuencial y acumulativo de normalización física.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="saber-hacer-container">
+            <div class="sh-header">
+                <div>
+                    <h3 style="margin:0; color:var(--primary); font-size:1.4rem;">Saber Hacer: Verificación del Diseño conforme a Reglas de Normalización</h3>
+                    <p style="margin:5px 0 0 0; color:#5d6d7e; font-size:0.9rem;">Laboratorio Interactivo de Auditoría de Modelos Físicos</p>
+                </div>
+                <span class="sh-badge">ACTIVIDAD INTERACTIVA</span>
+            </div>
+
+            <p class="tema-desc">Analiza el estado de la siguiente estructura temporal de datos y detecta cuál es el error de normalización que viola las reglas formales:</p>
+
+            <div id="interactive-simulator">
+                <div class="sim-box" id="case-box">
+                    <span id="case-number" style="font-weight: bold; color: var(--accent); font-size: 0.9rem; text-transform: uppercase;">Caso Práctico 1 de 3</span>
+                    <h4 id="case-title" style="margin: 10px 0; color: var(--primary);">Tabla temporal: `REPORTES_VENTAS`</h4>
+                    <p id="case-instruction" style="font-size: 0.9rem; margin-bottom: 10px;">Observa detenidamente los registros:</p>
+                    
+                    <div class="table-preview" id="case-table"></div>
+
+                    <div class="options-group" id="case-options"></div>
+                    
+                    <div class="feedback" id="case-feedback"></div>
+                </div>
+            </div>
+
+            <div class="sh-actions">
+                <span style="font-size:0.85rem; color:#7f8c8d; font-style:italic;">Puedes practicar este simulador de auditoría de design de datos de forma ilimitada.</span>
+                <button class="btn-action" id="next-btn" onclick="loadNextCase()" style="display:none;">Siguiente Caso Práctico ➔</button>
+            </div>
+        </div>
+
+
+        <div class="unidad-titulo">
+            <span class="unidad-badge">UNIDAD III.4</span>
+            <span>Lenguaje SQL: Definición de Datos (DDL)</span>
+        </div>
+
+        <div class="temas-grid">
+            <div class="tema-card">
+                <div>
+                    <div class="tema-meta">Lenguaje Estándar</div>
+                    <h3 class="tema-name">1. El Rol de las Sentencias DDL</h3>
+                    <p class="tema-desc">El Data Definition Language (DDL) es el subconjunto de SQL especializado en crear, alterar y destruir las estructuras lógicas del motor de base de datos, modificando de forma directa el diccionario de datos del sistema.</p>
+                    <div class="expert-note">
+                        A diferencia de DML (SELECT, INSERT), las operaciones DDL son estructurales y, en la mayoría de los motores de bases de datos relacionales, ejecutan un Auto-Commit implícito irrevocable.
+                    </div>
+                </div>
+            </div>
+
+            <div class="tema-card">
+                <div>
+                    <div class="tema-meta">Sintaxis de Instrucción</div>
+                    <h3 class="tema-name">2. Estructuras Fundamentales de Sintaxis</h3>
+                    <p class="tema-desc">Las tres operaciones columnas que rigen el ciclo de vida de los objetos en un RDBMS:</p>
+                    <ul>
+                        <li><code>CREATE TABLE alumnos (...);</code><br><span style="font-size:0.8rem; color:#7f8c8d;">Instancia una nueva estructura definiendo nombres de columna, tipos de datos y restricciones de integridad primarias/foráneas.</span></li>
+                        <li><code>ALTER TABLE alumnos ADD COLUMN telefono VARCHAR(15);</code><br><span style="font-size:0.8rem; color:#7f8c8d;">Modifica la estructura de una entidad existente sin corromper ni eliminar los registros previamente almacenados.</span></li>
+                        <li><code>DROP TABLE alumnos;</code><br><span style="font-size:0.8rem; color:#7f8c8d;">Remueve permanentemente tanto la estructura como la totalidad de los datos de la tabla del disco físico.</span></li>
+                    </ul>
+
+                    <div class="visual-diagram-container" style="background:#2c3e50; text-align:left; padding:15px; border-radius:5px; font-family:monospace; line-height:1.4;">
+                        <span style="color:#e67e22; font-weight:bold;">CREATE TABLE</span> <span style="color:#f1c40f;">alumnos</span> (<br>
+                        &nbsp;&nbsp;<span style="color:#3498db;">id_alumno</span> <span style="color:#2ecc71;">INT</span> <span style="color:#e74c3c; font-weight:bold;">PRIMARY KEY</span>,<br>
+                        &nbsp;&nbsp;<span style="color:#3498db;">nombre</span> <span style="color:#2ecc71;">VARCHAR(50)</span><br>
+                        );
+                    </div>
+                    <div class="visual-caption" style="text-align:center;">Esquema 4: Desglose analítico de colores para sentencias DDL estructuradas.</div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="unidad-titulo">
+            <span class="unidad-badge">UNIDAD III.5</span>
+            <span>Construcción Lógica a Física</span>
+        </div>
+
+        <div class="temas-grid" style="grid-template-columns: 1fr;">
+            <div class="tema-card" style="border-left: 5px solid var(--secondary);">
+                <div>
+                    <div class="tema-meta">Ingeniería de Datos</div>
+                    <h3 class="tema-name">Procedimiento de Transformación de Modelos</h3>
+                    <p class="tema-desc">El paso definitivo para materializar las abstracciones analíticas en un entorno de producción operativo controlado sigue este flujo metodológico estricto:</p>
+                    
+                    <ol>
+                        <li><strong>Mapeo de Entidades a Tablas Físicas:</strong> Cada entidad identificada en el Modelo Entidad-Relación o lógico se convierte en una tabla independiente dentro del esquema del motor de destino.</li>
+                        <li><strong>Conversión de Atributos a Columnas Tipificadas:</strong> Se asigna un tipo de dato binario físico optimizado para cada atributo del diseño lógico (por ejemplo, transformar un texto genérico de descripción en un campo estructurado <code>VARCHAR(250)</code> o <code>TEXT</code>).</li>
+                        <li><strong>Implementación de Claves Primarias y Foráneas:</strong> Declaración explícita de restricciones (Constraints) <code>PRIMARY KEY</code> y <code>FOREIGN KEY</code> para garantizar que el motor realice la validación automática de la integridad referencial.</li>
+                        <li><strong>Generación de Índices Físicos y Optimización:</strong> Creación dirigida de estructuras de indexación B-Tree o Hash en aquellas columnas identificadas críticamente como de alta consulta para maximizar el rendimiento transaccional.</li>
+                    </ol>
+
+                    <div class="visual-diagram-container" style="overflow-x:auto;">
+                        <svg width="620" height="70" viewBox="0 0 620 70" style="display:block; margin:0 auto;">
+                            <rect x="5" y="15" width="120" height="35" fill="#2c3e50" rx="4" />
+                            <text x="65" y="37" text-anchor="middle" fill="white" font-size="9" font-weight="bold">1. Mapeo Entidad➔Tabla</text>
+                            <path d="M125 32 L145 32" stroke="#7f8c8d" stroke-width="2" marker-end="url(#arrow-tip)" />
+
+                            <rect x="150" y="15" width="130" height="35" fill="#2980b9" rx="4" />
+                            <text x="215" y="37" text-anchor="middle" fill="white" font-size="9" font-weight="bold">2. Asignar Tipos Físicos</text>
+                            <path d="M280 32 L300 32" stroke="#7f8c8d" stroke-width="2" marker-end="url(#arrow-tip)" />
+
+                            <rect x="305" y="15" width="140" height="35" fill="#16a085" rx="4" />
+                            <text x="375" y="37" text-anchor="middle" fill="white" font-size="9" font-weight="bold">3. Restricciones PK / FK</text>
+                            <path d="M445 32 L465 32" stroke="#7f8c8d" stroke-width="2" marker-end="url(#arrow-tip)" />
+
+                            <rect x="470" y="15" width="140" height="35" fill="#9b59b6" rx="4" />
+                            <text x="540" y="37" text-anchor="middle" fill="white" font-size="9" font-weight="bold">4. Indexación B-Tree / RAM</text>
+                        </svg>
+                        <div class="visual-caption">Esquema 5: Ruta de ingeniería secuencial para la compilación de un esquema físico de producción.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <svg width="0" height="0">
+        <defs>
+            <marker id="arrow-tip" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0 L0,6 L7,3 z" fill="#7f8c8d" />
+            </marker>
+        </defs>
+    </svg>
+
+    <footer>
+        <p>© 2026 - Sistema de Control y Seguimiento Académico | Módulos Interactivos de Bases de Datos - Prohibida su reproducción con fines comerciales.</p>
+    </footer>
+
+    <script>
+        const cases = [
+            {
+                id: 1,
+                title: "Tabla Temporal: `MATRÍCULAS_ALUMNOS`",
+                instruction: "Determina qué regla de normalización está rompiendo el siguiente diseño físico:",
+                table: `ID_ALUMNO | NOMBRE          | TELEFONOS<br>-----------------------------------------------------------<br>101       | Carlos Mendoza  | 5512-3456, 5598-7654<br>102       | Ana María Gómez | 5543-2109`,
+                options: [
+                    { text: "Viola la 1FN porque el campo 'TELEFONOS' contiene valores no atómicos (lista separada por comas).", correct: true, fb: "¡Excelente! La Primera Forma Normal prohíbe grupos repetitivos o colecciones de datos en una sola celda. Se debe atomizar creando una tabla secundaria de teléfonos." },
+                    { text: "Viola la 2FN porque los teléfonos no dependen de la clave ID_ALUMNO.", correct: false, fb: "Incorrecto. Los teléfonos sí pertenecen a ese alumno, pero el problema es cómo están estructurados dentro de la misma celda." },
+                    { text: "La tabla cumple perfectamente las tres formas normales.", correct: false, fb: "Incorrecto. Mira el registro de Carlos Mendoza; tiene dos números guardados en un único espacio físico." }
+                ]
+            },
+            {
+                id: 2,
+                title: "Tabla Temporal: `DETALLE_PEDIDOS` (Clave Compuesta: ID_PEDIDO + ID_ARTICULO)",
+                instruction: "Identifica la falla crítica de dependencias en esta estructura relacional:",
+                table: `ID_PEDIDO (PK) | ID_ARTICULO (PK) | CANTIDAD | NOMBRE_CLIENTE<br>----------------------------------------------------------------------------<br>5001           | ART-99           | 5        | Juan Pérez<br>5001           | ART-12           | 2        | Juan Pérez<br>5002           | ART-99           | 1        | Martha Soto`,
+                options: [
+                    { text: "Está en 3FN porque no hay campos vacíos.", correct: false, fb: "Incorrecto. Estar lleno no significa estar normalizado." },
+                    { text: "Viola la 2FN debido a una dependencia parcial: 'NOMBRE_CLIENTE' depende solo de 'ID_PEDIDO', no de toda la clave compuesta.", correct: true, fb: "¡Exacto! Al tener una clave primaria compuesta, todos los atributos no clave deben depender de AMBOS identificadores. El nombre del cliente depende del pedido, independientemente del artículo comprado." },
+                    { text: "Viola la 1FN porque hay nombres duplicados en las filas.", correct: false, fb: "Incorrecto. Que los valores se repitan en filas diferentes no rompe la atomicidad de la celda de la Primera Forma Normal." }
+                ]
+            },
+            {
+                id: 3,
+                title: "Tabla Temporal: `DATOS_EMPLEADOS` (Clave Primaria: ID_EMPLEADO)",
+                instruction: "Analiza con lupa las dependencias indirectas de la siguiente relación de nómina:",
+                table: `ID_EMPLEADO (PK) | NOMBRE         | ID_DEPARTAMENTO | NOMBRE_DEPARTAMENTO<br>----------------------------------------------------------------------------------------<br>E-01             | Luis Fuentes   | DEP-MARK        | Mercadotecnia<br>E-02             | Sofía Castro   | DEP-SIST        | Sistemas<br>E-03             | Jorge Olvera   | DEP-MARK        | Mercadotecnia`,
+                options: [
+                    { text: "Cumple las reglas porque cada empleado tiene un solo departamento.", correct: false, fb: "Incorrecto. Observa que el nombre del departamento se repite cada vez que se asigna el ID_DEPARTAMENTO." },
+                    { text: "Viola la 3FN porque existe una dependencia transitiva: 'NOMBRE_DEPARTAMENTO' depende de 'ID_DEPARTAMENTO', que a su vez depende de la clave primaria.", correct: true, fb: "¡Brillante! Esto es una dependencia transitiva. Si cambia el nombre de un departamento, tendrías que actualizar múltiples filas de empleados, generando riesgo de inconsistencias." },
+                    { text: "Viola la 1FN porque los códigos de departamento tienen guiones.", correct: false, fb: "Incorrecto. El uso de caracteres especiales o guiones en un código alfanumérico no afecta la atomicidad de la celda." }
+                ]
+            }
+        ];
+
+        let currentCaseIdx = 0;
+
+        function loadCase(index) {
+            const currentCase = cases[index];
+            document.getElementById("case-number").innerText = `Caso Práctico ${currentCase.id} de ${cases.length}`;
+            document.getElementById("case-title").innerText = currentCase.title;
+            document.getElementById("case-instruction").innerText = currentCase.instruction;
+            document.getElementById("case-table").innerHTML = currentCase.table;
+            
+            const optionsContainer = document.getElementById("case-options");
+            optionsContainer.innerHTML = "";
+            
+            currentCase.options.forEach((opt, idx) => {
+                const btn = document.createElement("button");
+                btn.className = "opt-btn";
+                btn.innerText = opt.text;
+                btn.onclick = () => checkCaseAnswer(idx, opt.correct, opt.fb);
+                optionsContainer.appendChild(btn);
+            });
+
+            const fbBox = document.getElementById("case-feedback");
+            fbBox.style.display = "none";
+            document.getElementById("next-btn").style.display = "none";
+        }
+
+        function checkCaseAnswer(optIdx, isCorrect, feedbackText) {
+            const fbBox = document.getElementById("case-feedback");
+            fbBox.innerHTML = feedbackText;
+            fbBox.style.display = "block";
+            
+            if (isCorrect) {
+                fbBox.className = "feedback correct";
+                document.getElementById("next-btn").style.display = "inline-block";
+            } else {
+                fbBox.className = "feedback incorrect";
+            }
+        }
+
+        function loadNextCase() {
+            currentCaseIdx++;
+            if (currentCaseIdx >= cases.length) {
+                currentCaseIdx = 0;
+            }
+            loadCase(currentCaseIdx);
+        }
+
+        window.onload = function() {
+            loadCase(0);
+        };
+    </script>
+</body>
+</html>
