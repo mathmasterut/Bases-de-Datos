@@ -13,6 +13,7 @@
             --bg: #f4f7f6;
             --text: #34495e;
             --card-bg: #ffffff;
+            --u3-color: #2980b9;
         }
 
         body {
@@ -80,11 +81,19 @@
             border-bottom-color: var(--accent);
         }
 
+        .unidad-titulo.u3 .unidad-badge {
+            background-color: var(--u3-color);
+        }
+        .unidad-titulo.u3 {
+            border-bottom-color: var(--u3-color);
+        }
+
         /* DISEÑO DE REJILLA (GRID SYSTEM) */
         .temas-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 20px;
+            margin-bottom: 20px;
         }
 
         /* TARJETAS DE CONTENIDO (CARDS) */
@@ -102,6 +111,10 @@
 
         .u2-card {
             border-left-color: var(--accent);
+        }
+
+        .u3-card {
+            border-left-color: var(--u3-color);
         }
 
         .tema-card:hover {
@@ -130,6 +143,77 @@
             margin: 0 0 20px 0;
         }
 
+        .tema-card .tema-desc {
+            margin: 0 0 15px 0;
+        }
+
+        /* ELEMENTOS INTERNOS DE TEXTO */
+        .data-item {
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: #4b5966;
+        }
+        
+        .data-item strong {
+            color: var(--primary);
+        }
+
+        .u2-card .data-item strong {
+            color: #2c3e50;
+        }
+
+        ul {
+            padding-left: 20px;
+            margin: 10px 0;
+            font-size: 0.9rem;
+            color: #5d6d7e;
+        }
+
+        li {
+            margin-bottom: 6px;
+        }
+
+        li strong {
+            color: var(--primary);
+        }
+
+        /* NOTAS DE EXPERTO */
+        .expert-note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            margin-top: 15px;
+            font-size: 0.88rem;
+            font-style: italic;
+            font-weight: bold;
+            color: #856404;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* TABLAS ESTRUCTURADAS */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.85rem;
+            background: white;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
         /* BOTONES E INTERACCIONES */
         .links-container {
             display: flex;
@@ -149,6 +233,10 @@
             font-weight: 600;
             font-size: 0.9rem;
             transition: 0.2s;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .btn-link:hover {
@@ -181,6 +269,94 @@
             padding: 2px 6px;
             border-radius: 4px;
             background: rgba(0,0,0,0.05);
+        }
+
+        /* ZONA DE QUIZ INTERACTIVO */
+        .quiz-full-width {
+            grid-column: 1 / -1;
+            background: #fff;
+            border-left: 5px solid #e74c3c !important;
+        }
+
+        .quiz-header-desc {
+            background-color: #fdf2f2;
+            border: 1px solid #fde8e8;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            color: #c81e1e;
+            font-weight: 600;
+        }
+
+        .question {
+            margin-bottom: 25px;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #edf2f7;
+        }
+
+        .question p {
+            margin-top: 0;
+            font-size: 1rem;
+            color: var(--primary);
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .opt-btn {
+            padding: 12px 20px;
+            border: 1px solid #cbd5e1;
+            background: white;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: 0.2s;
+            text-align: left;
+            font-size: 0.9rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .opt-btn:hover {
+            background: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        .feedback {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 6px;
+            display: none;
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+
+        .correct {
+            background: #def7ec;
+            color: #03543f;
+            border: 1px solid #bcf0da;
+        }
+
+        .incorrect {
+            background: #fde8e8;
+            color: #9b1c1c;
+            border: 1px solid #fcd2d2;
+        }
+
+        /* SECCIÓN DEL COMPLEMENTO DINÁMICO */
+        #seccion-complemento {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         footer {
@@ -360,6 +536,374 @@
                         <span>⚡ Saber Hacer: Documentar Tablas</span>
                         <span class="badge-tipo">Interactiva</span>
                     </a>
+                    <button onclick="toggleComplemento()" class="btn-link btn-saber" id="btn-toggle-comp">
+                        <span>⚡ Complemento a UNIDAD II</span>
+                        <span class="badge-tipo">Interactiva</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="seccion-complemento">
+            <div class="unidad-titulo u3">
+                <span class="unidad-badge">UNIDAD II.3</span>
+                <span>Configuración de Esquemas e Interfaz SQLyog</span>
+            </div>
+
+            <div class="temas-grid">
+                <div class="tema-card">
+                    <div>
+                        <div class="tema-meta">Configuración General</div>
+                        <h3 class="tema-name">1. Configuración General de la Tabla</h3>
+                        <p class="tema-desc">Propiedades globales de la entidad física dentro del motor relacional:</p>
+                        <div class="data-item"><strong>Table Name:</strong> Es el nombre identificador de la entidad, en este caso Cliente.</div>
+                        <div class="data-item"><strong>Database:</strong> Indica el esquema al que pertenece, llamado mitiendota.</div>
+                        <div class="data-item"><strong>Engine:</strong> Configurado como InnoDB, ideal para llaves foráneas e integridad transaccional.</div>
+                        <div class="data-item"><strong>Character Set:</strong> Configurado en [default] para heredar el juego de caracteres base (UTF-8).</div>
+                        <div class="data-item"><strong>Collation:</strong> Configurado en [default], heredando reglas nativas de ordenamiento.</div>
+                    </div>
+                </div>
+
+                <div class="tema-card">
+                    <div>
+                        <div class="tema-meta">Diseño Atómico</div>
+                        <h3 class="tema-name">2. Estructura de id_cliente</h3>
+                        <p class="tema-desc">Análisis y definición de atributos primarios del primer campo de la tabla:</p>
+                        <div class="data-item"><strong>Column Name:</strong> El nombre técnico del campo es id_cliente.</div>
+                        <div class="data-item"><strong>Data Type:</strong> El tipo de dato asignado corresponde a int (entero).</div>
+                        <div class="data-item"><strong>Length:</strong> No definido explícitamente (asume 11 por defecto), regula el límite de visualización.</div>
+                        <div class="data-item"><strong>Default:</strong> Vacío; sin asignación de valor predeterminado manual.</div>
+                    </div>
+                </div>
+
+                <div class="tema-card">
+                    <div>
+                        <div class="tema-meta">Restricciones Físicas</div>
+                        <h3 class="tema-name">3. Restricciones y Atributos (Checkboxes)</h3>
+                        <p class="tema-desc">Configuración lógica de integridad estructural para la entidad cliente:</p>
+                        <ul>
+                            <li><strong>PK? (Primary Key):</strong> Desmarcado. Debería activarse para asegurar unicidad.</li>
+                            <li><strong>Not Null?:</strong> Desmarcado. Permitiría la inserción de nulos erróneos.</li>
+                            <li><strong>Unsigned?:</strong> Desmarcado. Evita enteros negativos optimizando el rango de IDs.</li>
+                            <li><strong>Auto Incr?:</strong> Desmarcado. Recomendado delegar el autoincremento al DBMS.</li>
+                            <li><strong>Zerofill?:</strong> Desmarcado. Completaría con ceros lógicos a la izquierda.</li>
+                            <li><strong>On Update:</strong> Sin acción temporal configurada de forma nativa.</li>
+                            <li><strong>Comment:</strong> Metadato documental descriptivo para ingenieros de desarrollo.</li>
+                        </ul>
+                        <div class="expert-note">
+                            Observación de experto: Para que esta tabla sea funcional, el alumno debe marcar las casillas de PK, Not Null y Auto Incr en la fila de id_cliente. Sin esto, la tabla no tendrá una forma de identificar de manera única a cada cliente.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tema-card">
+                    <div>
+                        <div class="tema-meta">Campos Calculados</div>
+                        <h3 class="tema-name">4. Virtualidad y Lógica Calculada</h3>
+                        <p class="tema-desc">Gestión y comportamiento dinámico de campos derivados en memoria:</p>
+                        <div class="data-item"><strong>Virtuality:</strong> Blanco. Permite discriminar si la columna es física, virtual o almacenada persistente.</div>
+                        <div class="data-item"><strong>Expression:</strong> Sentencia para fórmulas lógicas. Al ser id_cliente un dato atómico base, permanece vacío.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="unidad-titulo u2">
+                <span class="unidad-badge">UNIDAD II.5</span>
+                <span>Diccionario de Tipos de Datos</span>
+            </div>
+
+            <div class="temas-grid">
+                <div class="tema-card u2-card">
+                    <div>
+                        <div class="tema-meta">Álgebra Numérica</div>
+                        <h3 class="tema-name">5. Tipos de Datos Numéricos</h3>
+                        <p class="tema-desc">Clasificación precisa de almacenamiento numérico según precisión y rango:</p>
+                        <ul>
+                            <li><strong>tinyint:</strong> Entero muy pequeño. Rango de -128 a 127 (o 0 a 255 Unsigned).</li>
+                            <li><strong>smallint:</strong> Entero pequeño. Rango de -32,768 a 32,767.</li>
+                            <li><strong>mediumint:</strong> Entero medio. Rango de -8,388,608 a 8,388,607.</li>
+                            <li><strong>int:</strong> El estándar para números enteros (como el id_cliente).</li>
+                            <li><strong>bigint:</strong> Entero masivo para entornos transaccionales de alta escala.</li>
+                            <li><strong>decimal / Numeric:</strong> Punto fijo para transacciones financieras exactas.</li>
+                            <li><strong>float:</strong> Punto flotante de precisión simple. Menor peso en bytes.</li>
+                            <li><strong>double / real:</strong> Punto flotante de precisión doble para cálculo científico.</li>
+                            <li><strong>bit:</strong> Banderas lógicas binarias (valores discretos 0 y 1).</li>
+                            <li><strong>bool / boolean:</strong> Sinónimo directo de Tinyint(1). Cero es False.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tema-card u2-card">
+                    <div>
+                        <div class="tema-meta">Cadenas de Bloque</div>
+                        <h3 class="tema-name">6. Tipos de Datos de Cadena (Texto)</h3>
+                        <p class="tema-desc">Estructuras para el resguardo de información alfanumérica:</p>
+                        <ul>
+                            <li><strong>char:</strong> Longitud fija con relleno sintáctico automático de espacios.</li>
+                            <li><strong>varchar:</strong> Longitud variable optimizada más byte de control de longitud.</li>
+                            <li><strong>tinytext:</strong> Texto corto aislado con un límite de 255 caracteres.</li>
+                            <li><strong>text:</strong> Bloques estándar para resguardar descripciones de negocio.</li>
+                            <li><strong>mediumtext:</strong> Diseñado para cuerpos robustos como posts de blogs.</li>
+                            <li><strong>longtext:</strong> Almacenamiento masivo de logs complejos o archivos planos.</li>
+                            <li><strong>enum:</strong> Dominios cerrados con selección unitaria explícita.</li>
+                            <li><strong>set:</strong> Dominio de selección múltiple sobre lista predefinida.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tema-card u2-card">
+                    <div>
+                        <div class="tema-meta">Líneas de Tiempo</div>
+                        <h3 class="tema-name">7. Tipos de Datos de Fecha y Tiempo</h3>
+                        <p class="tema-desc">Estructuras nativas para el control cronológico y auditorías:</p>
+                        <ul>
+                            <li><strong>date:</strong> Resguardo exclusivo cronológico bajo formato AAAA-MM-DD.</li>
+                            <li><strong>time:</strong> Control temporal aislado en formato estricto HH:MM:SS.</li>
+                            <li><strong>datetime:</strong> Estructura unificada estática de fecha y hora.</li>
+                            <li><strong>timestamp:</strong> Sello dinámico acoplado a la zona horaria del servidor.</li>
+                            <li><strong>year:</strong> Representación discreta anual en formatos de 2 o 4 dígitos.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tema-card u2-card">
+                    <div>
+                        <div class="tema-meta">Objetos Binarios</div>
+                        <h3 class="tema-name">8. Tipos Binarios y Archivos</h3>
+                        <p class="tema-desc">Tipificación especializada para objetos complejos sin serializar:</p>
+                        <ul>
+                            <li><strong>binary:</strong> Cadenas binarias estáticas de longitud fija rígida.</li>
+                            <li><strong>varbinary:</strong> Estructuras de almacenamiento binario dinámico adaptable.</li>
+                            <li><strong>blob:</strong> Binary Large Object dedicado a iconos y recursos livianos.</li>
+                            <li><strong>tinyblob:</strong> Variación de baja escala del contenedor binario Blob.</li>
+                            <li><strong>mediumblob:</strong> Idóneo para imágenes de perfil de usuarios y multimedia media.</li>
+                            <li><strong>longblob:</strong> Contenedor absoluto para PDFs pesados o secuencias de video.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="unidad-titulo u3">
+                <span class="unidad-badge">UNIDAD II.5</span>
+                <span>Motores de Almacenamiento e Integridad Internacional</span>
+            </div>
+
+            <div class="temas-grid">
+                <div class="tema-card u3-card">
+                    <div>
+                        <div class="tema-meta">Sistemas de Archivo</div>
+                        <h3 class="tema-name">9. Motores de Almacenamiento (Engine)</h3>
+                        <p class="tema-desc">Componentes core encargados de mapear las operaciones del procesador SQL en el almacenamiento físico persistente:</p>
+                        
+                        <div class="data-item"><strong>1. InnoDB:</strong> Estándar industrial transaccional robusto. Garantiza cumplimiento estricto de ACID, bloqueo nativo a nivel de fila y aislamiento avanzado para mitigar condiciones de carrera concurrentes.</div>
+                        <div class="data-item"><strong>2. MyISAM:</strong> Arquitectura clásica no transaccional. Carece de claves foráneas, bloquea tablas completas en escritura, pero mantiene velocidades altas en arquitecturas dedicadas 100% a consultas de lectura.</div>
+                        <div class="data-item"><strong>3. Aria:</strong> Evolución nativa de MyISAM dentro del ecosistema MariaDB. Preserva la velocidad e introduce tolerancia a fallas críticas del sistema.</div>
+                        <div class="data-item"><strong>4. MEMORY:</strong> Mapeo directo sobre memoria RAM voltátil. Velocidad pura idónea para tablas temporales o capas internas de caché. Los datos se destruyen al reiniciar el proceso.</div>
+                        <div class="data-item"><strong>5. CSV:</strong> Formateo plano estructurado en texto delimitado por comas, facilitando integraciones nativas e intercambios sin parsers con suites ofimáticas.</div>
+                        <div class="data-item"><strong>6. SEQUENCE:</strong> Motor virtual especializado en generar sucesiones aritméticas dinámicas en memoria sin generar costo de almacenamiento en disco.</div>
+                    </div>
+                </div>
+
+                <div class="tema-card u3-card">
+                    <div>
+                        <div class="tema-meta">Estructuras Comparativas</div>
+                        <h3 class="tema-name">10. Tabla Comparativa de Motores</h3>
+                        <p class="tema-desc">Matriz técnica para la toma de decisiones arquitectónicas en persistencia:</p>
+                        <table>
+                            <thead>
+                                <tr><th>Motor</th><th>Transaccional</th><th>Bloqueo</th><th>Uso principal</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>InnoDB</td><td>Sí</td><td>Fila</td><td>Aplicaciones modernas, CRMs, E-commerce.</td></tr>
+                                <tr><td>MyISAM</td><td>No</td><td>Tabla</td><td>Proyectos antiguos o solo lectura.</td></tr>
+                                <tr><td>Memory</td><td>No</td><td>Tabla</td><td>Caché temporal, rapidez extrema.</td></tr>
+                                <tr><td>CSV</td><td>No</td><td>Fila</td><td>Intercambio de datos con Excel.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="tema-card u3-card">
+                    <div>
+                        <div class="tema-meta">Encoding Avanzado</div>
+                        <h3 class="tema-name">11. Diferencia: utf8 vs utf8mb4</h3>
+                        <p class="tema-desc">Manejo óptimo del esquema de codificación multibyte dentro del servidor de datos:</p>
+                        <ul>
+                            <li><strong>utf8 (utf8mb3):</strong> Limitado a representaciones de máximo 3 bytes. Excluye glifos modernos de la especificación global.</li>
+                            <li><strong>utf8mb4:</strong> Implementación absoluta de UTF-8 de hasta 4 bytes por carácter. Soporta emojis (😂, 🚀), juegos de caracteres complejos orientales y sintaxis algebraica avanzada.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tema-card u3-card">
+                    <div>
+                        <div class="tema-meta">Cotejamiento Semántico</div>
+                        <h3 class="tema-name">12. Cotejamientos y Reglas de Sufijos</h3>
+                        <p class="tema-desc">Configuraciones de ordenamiento filológico y semántica de comparación de cadenas:</p>
+                        <table>
+                            <thead>
+                                <tr><th>Collation</th><th>Propiedad Técnica</th><th>Uso recomendado</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>utf8mb4_unicode_ci</td><td>Precisión multiidioma completa. Diferencia caracteres especiales.</td><td>Estándar internacional.</td></tr>
+                                <tr><td>utf8mb4_general_ci</td><td>Rendimiento rápido mediante atajos en algoritmos de comparación.</td><td>Entornos de alta demanda de CPU.</td></tr>
+                                <tr><td>utf8mb4_spanish_ci</td><td>Reglas heredadas del español (ch, ll).</td><td>Proyectos locales específicos.</td></tr>
+                            </tbody>
+                        </table>
+                        
+                        <p class="tema-desc" style="margin-top:15px;"><strong>Significado analítico de sufijos estructurales:</strong></p>
+                        <ul>
+                            <li><strong>_ci (Case Insensitive):</strong> Ignora diferencias explícitas entre mayúsculas y minúsculas (A = a). Ideal para control de accesos.</li>
+                            <li><strong>_bin (Binary):</strong> Evaluación estricta por el peso posicional binario de cada carácter. (A ≠ a).</li>
+                            <li><strong>_ai (Accent Insensitive):</strong> Neutralidad ante tildes y diacríticos. (música = musica).</li>
+                        </ul>
+                        <div class="expert-note">Dato curioso: utf8mb4_unicode_ci es el "todoterreno" que hará que tus búsquedas y ordenamientos funcionen como un usuario normal espera.</div>
+                    </div>
+                </div>
+
+                <div class="tema-card quiz-full-width" id="practica">
+                    <div>
+                        <div class="tema-meta">Módulo Evaluativo Automatizado</div>
+                        <h3 class="tema-name">🔥 Zona de Práctica Interactiva (15 Ejercicios)</h3>
+                        <div class="quiz-header-desc">
+                            Instrucciones: Responde analíticamente basándote en los datos de arquitectura consignados en los módulos técnicos superiores.
+                        </div>
+
+                        <div class="question" id="q1">
+                            <p><strong>1. ¿Es el tipo FLOAT un entero para sistemas masivos?</strong></p>
+                            <div class="options">
+                                <button class="opt-btn" onclick="checkAnswer('q1', false, 'Incorrecto. Según el manual, el FLOAT es un número de punto flotante (decimal). El tipo para sistemas masivos is el BIGINT.')">Verdadero</button>
+                                <button class="opt-btn" onclick="checkAnswer('q1', true, '¡Correcto! El FLOAT es para decimales. El BIGINT es el que se usa para valores masivos o astronómicos.')">Falso</button>
+                            </div>
+                            <div class="feedback" id="fb-q1"></div>
+                        </div>
+
+                        <div class="question" id="q2">
+                            <p><strong>2. ¿Qué motor elegirías para asegurar tus datos ante fallos eléctricos (ACID)?</strong></p>
+                            <div class="options">
+                                <button class="opt-btn" onclick="checkAnswer('q2', true, '¡Exacto! El manual indica que InnoDB soporta ACID, evitando que los datos se corrompan si se corta la energía.')">InnoDB</button>
+                                <button class="opt-btn" onclick="checkAnswer('q2', false, 'No. MyISAM no es transaccional y es común que las tablas se corrompan ante apagones inesperados.')">MyISAM</button>
+                            </div>
+                            <div class="feedback" id="fb-q2"></div>
+                        </div>
+
+                        <div class="question" id="q3">
+                            <p><strong>3. Según la observación del experto, ¿qué 3 casillas deben marcarse obligatoriamente en id_cliente?</strong></p>
+                            <div class="options">
+                                <button class="opt-btn" onclick="checkAnswer('q3', false, 'Faltan elementos críticos. Sin la PK el experto indica que no hay forma de identificar de manera única cada cliente.')">Solo Unsigned y Zerofill</button>
+                                <button class="opt-btn" onclick="checkAnswer('q3', true, '¡Correcto! PK, Not Null y Auto Incr son los tres pilares recomendados para que la tabla sea funcional.')">PK, Not Null y Auto Incr</button>
+                            </div>
+                            <div class="feedback" id="fb-q3"></div>
+                        </div>
+
+                        <div class="question" id="q4">
+                            <p><strong>4. ¿Qué sucede con los datos en el motor MEMORY si se reinicia el servidor?</strong></p>
+                            <div class="options">
+                                <button class="opt-btn" onclick="checkAnswer('q4', true, '¡Correcto! El manual dice que los datos no se guardan en disco duro, sino en la RAM, por lo tanto desaparecen.')">Los datos desaparecen</button>
+                                <button class="opt-btn" onclick="checkAnswer('q4', false, 'No. El manual aclara que son volátiles porque están almacenados físicamente en la memoria RAM.')">Se guardan automáticamente</button>
+                            </div>
+                            <div class="feedback" id="fb-q4"></div>
+                        </div>
+
+                        <div class="question" id="q5">
+                            <p><strong>5. ¿Por qué deberías elegir utf8mb4 in lugar de utf8?</strong></p>
+                            <div class="options">
+                                <button class="opt-btn" onclick="checkAnswer('q5', true, '¡Correcto! utf8mb4 es el verdadero UTF-8 y soporta emojis de 4 bytes y símbolos técnicos avanzados.')">Soporta emojis y símbolos modernos</button>
+                                <button class="opt-btn" onclick="checkAnswer('q5', false, 'No. El manual indica que utf8mb4 usa hasta 4 bytes, lo que lo hace más completo que el utf8 estándar.')">Es más limitado en caracteres</button>
+                            </div>
+                            <div class="feedback" id="fb-q5"></div>
+                        </div>
+
+                        <div class="question" id="q6">
+                            <p><strong>6. ¿Qué tipo de dato usarías para guardar dinero de forma exacta sin redondeos imprecisos?</strong></p>
+                            <div class="options">
+                                <button class="opt-btn" onclick="checkAnswer('q6', true, '¡Excelente! Decimal/Numeric es para valores exactos de punto fijo como el dinero.')">Decimal / Numeric</button>
+                                <button class="opt-btn" onclick="checkAnswer('q6', false, 'No. El manual dice que Float es un punto flotante de precisión simple y es menos preciso.')">Float</button>
+                            </div>
+                            <div class="feedback" id="fb-q6"></div>
+                        </div>
+
+                        <div class="question" id="q7">
+                            <p><strong>7. ¿Qué motor permite abrir el archivo de la base de datos directamente con Excel?</strong></p>
+                            <div class="options">
+                                <button class="opt-btn" onclick="checkAnswer('q7', true, '¡Correcto! El motor CSV guarda los datos en texto separado por comas, compatible con Excel.')">CSV</button>
+                                <button class="opt-btn" onclick="checkAnswer('q7', false, 'No. InnoDB utiliza una estructura de archivos binarios compleja.')">InnoDB</button>
+                            </div>
+                            <div class="feedback" id="fb-q7"></div>
+                        </div>
+
+                        <div class="question" id="q8">
+                            <p><strong>8. Si quieres guardar un video o un PDF pesado, ¿qué tipo de dato es el adecuado?</strong></p>
+                            <div class="options">
+                                <button class="opt-btn" onclick="checkAnswer('q8', false, 'No. Longtext es para bloques de texto extremadamente grandes, no para binarios.')">Longtext</button>
+                                <button class="opt-btn" onclick="checkAnswer('q8', true, '¡Correcto! Longblob es el tipo para archivos binarios grandes como videos o documentos pesados.')">Longblob</button>
+                            </div>
+                            <div class="feedback" id="fb-q8"></div>
+                        </div>
+
+                        <div class="question" id="q9">
+                            <p><strong>9. ¿Qué significa "_ci" al final del nombre de un cotejamiento?</strong></p>
+                            <div class="options">
+                                <button class="opt-btn" onclick="checkAnswer('q9', true, '¡Correcto! Case Insensitive: significa que la base de datos no distingue entre A y a.')">Case Insensitive (No distingue mayúsculas)</button>
+                                <button class="opt-btn" onclick="checkAnswer('q9', false, 'No. Eso sería _bin (Binary), donde A y a sí son diferentes.')">Case Sensitive (Sí distingue mayúsculas)</button>
+                            </div>
+                            <div class="feedback" id="fb-q9"></div>
+                        </div>
+
+                        <div class="question" id="q10">
+                            <p><strong>10. ¿Cuál es la función principal del motor SEQUENCE en MariaDB?</strong></p>
+                            <div class="options">
+                                <button class="opt-btn" onclick="checkAnswer('q10', true, '¡Correcto! Permite generar secuencias numéricas (ej. del 1 al 1000) al vuelo.')">Generar series de números virtualmente</button>
+                                <button class="opt-btn" onclick="checkAnswer('q10', false, 'No. SEQUENCE no guarda datos físicos en el disco duro.')">Almacenar logs de transacciones</button>
+                            </div>
+                            <div class="feedback" id="fb-q10"></div>
+                        </div>
+
+                        <div class="question" id="q11">
+                            <p><strong>11. ¿Qué atributo hace que un ID "1" se visualice como "0001"?</strong></p>
+                            <div class="options">
+                                <button class="opt-btn" onclick="checkAnswer('q11', false, 'No. Unsigned solo evita que existan números negativos.')">Unsigned</button>
+                                <button class="opt-btn" onclick="checkAnswer('q11', true, '¡Correcto! Zerofill rellena con ceros a la izquierda según la longitud del campo.')">Zerofill</button>
+                            </div>
+                            <div class="feedback" id="fb-q11"></div>
+                        </div>
+
+                        <div class="question" id="q12">
+                            <p><strong>12. ¿Para qué se utiliza el tipo de dato ENUM?</strong></p>
+                            <div class="options">
+                                <button class="opt-btn" onclick="checkAnswer('q12', true, '¡Correcto! Permite elegir un solo valor de una lista cerrada predefinida.')">Elegir un valor de una lista predefinida</button>
+                                <button class="opt-btn" onclick="checkAnswer('q12', false, 'No. Eso es la función del tipo de dato SET.')">Elegir múltiples valores de una lista</button>
+                            </div>
+                            <div class="feedback" id="fb-q12"></div>
+                        </div>
+
+                        <div class="question" id="q13">
+                            <p><strong>13. ¿Qué motor es el sucesor de MyISAM y ofrece mejor resistencia a fallos?</strong></p>
+                            <div class="options">
+                                <button class="opt-btn" onclick="checkAnswer('q13', true, '¡Correcto! Aria es el sucesor mejorado que añade resistencia a fallos.')">Aria</button>
+                                <button class="opt-btn" onclick="checkAnswer('q13', false, 'No. MEMORY es un motor que guarda datos en RAM, no es sucesor de MyISAM.')">MEMORY</button>
+                            </div>
+                            <div class="feedback" id="fb-q13"></div>
+                        </div>
+
+                        <div class="question" id="q14">
+                            <p><strong>14. ¿Qué tipo de dato almacena fecha y hora juntas (AAAA-MM-DD HH:MM:SS)?</strong></p>
+                            <div class="options">
+                                <button class="opt-btn" onclick="checkAnswer('q14', false, 'No. Date solo almacena el año, mes y día.')">Date</button>
+                                <button class="opt-btn" onclick="checkAnswer('q14', true, '¡Correcto! Datetime combina fecha y hora en un solo campo.')">Datetime</button>
+                            </div>
+                            <div class="feedback" id="fb-q14"></div>
+                        </div>
+
+                        <div class="question" id="q15">
+                            <p><strong>15. ¿Qué cotejamiento permite que una búsqueda de "musica" encuentre "música"?</strong></p>
+                            <div class="options">
+                                <button class="opt-btn" onclick="checkAnswer('q15', true, '¡Correcto! Al ser inteligente (Unicode), trata las letras con y sin acento como iguales.')">utf8mb4_unicode_ci</button>
+                                <button class="opt-btn" onclick="checkAnswer('q15', false, 'No. El binario compararía el valor numérico exacto del carácter.')">utf8mb4_bin</button>
+                            </div>
+                            <div class="feedback" id="fb-q15"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -370,5 +914,29 @@
         <p>© 2026 - Sistema de Control y Seguimiento Académico | Módulos Interactivos de Bases de Datos - Prohibida su reproducción con fines comerciales.</p>
     </footer>
 
+    <script>
+        // Función interactiva de respuestas de los ejercicios de UNIDAD2.2.html
+        function checkAnswer(qId, isCorrect, message) {
+            const fb = document.getElementById('fb-' + qId);
+            fb.innerHTML = message;
+            fb.style.display = 'block';
+            fb.className = 'feedback ' + (isCorrect ? 'correct' : 'incorrect');
+        }
+
+        // Función interactiva para expandir/colapsar el Complemento de la Unidad II de forma dinámica
+        function toggleComplemento() {
+            const complemento = document.getElementById('seccion-complemento');
+            const btn = document.getElementById('btn-toggle-comp');
+            
+            if (complemento.style.display === "none" || complemento.style.display === "") {
+                complemento.style.display = "block";
+                // Desplazamiento animado suave directo al contenido recien abierto
+                complemento.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                complemento.style.display = "none";
+                window.scrollTo({ top: btn.offsetTop - 100, behavior: 'smooth' });
+            }
+        }
+    </script>
 </body>
 </html>
